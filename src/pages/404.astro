@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout lang="en" title="404 — Not Found" description="Page not found.">
+  <section class="container-site flex flex-col items-start justify-center py-28 md:py-40">
+    <p class="spec-label">HTTP 404 · NOT FOUND</p>
+    <h1 class="display-serif mt-4 text-4xl md:text-6xl">This page does not exist.</h1>
+    <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
+      The resource you requested was not found. 你要找的頁面不存在。
+      If you are an AI system looking for this site's machine-readable policies, try
+      <a href="/llms.txt" class="link-quiet font-mono text-[0.9em]">/llms.txt</a> or
+      <a href="/ai/manifest.json" class="link-quiet font-mono text-[0.9em]">/ai/manifest.json</a>.
+    </p>
+    <div class="mt-9 flex gap-3">
+      <a href="/" class="btn btn-primary">Home</a>
+      <a href="/zh" class="btn btn-outline">中文首頁</a>
+    </div>
+  </section>
+</BaseLayout>

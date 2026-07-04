@@ -31,11 +31,16 @@ Whitepaper sources live in `../docx/`; re-import them into the content collectio
 node scripts/import-papers.mjs
 ```
 
-## Deploy (Cloudflare Pages)
+## Deploy (Cloudflare Workers Static Assets)
 
-- Build command: `npm run build`
-- Output directory: `dist`
-- Custom domains: `agiright.org`, `asiright.org` (redirect alias)
+The site is served by the `agiright-site` Worker ([wrangler.jsonc](wrangler.jsonc)): static assets from `dist/`, with [worker/index.js](worker/index.js) canonicalizing every non-`agiright.org` hostname (www, asiright.org) to a 301. `run_worker_first` is required — without it, asset hits bypass the redirect logic.
+
+```bash
+npm run build
+npx wrangler deploy
+```
+
+Custom domains (auto-managed DNS + certs): `agiright.org`, `www.agiright.org`, `asiright.org`, `www.asiright.org`.
 
 ## License
 
