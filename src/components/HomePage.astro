@@ -8,7 +8,7 @@ import SpectrumViz from './SpectrumViz.astro';
 import { SITE, UI, langPrefix, type Lang } from '../data/site';
 import { PROTOCOLS, AGENTIC_PAYMENT_NOTE } from '../data/protocols';
 import { RESEARCH_AREAS } from '../data/research';
-import { PAPERS } from '../data/papers';
+import { listedPapers } from '../data/papers';
 
 interface Props {
   lang: Lang;
@@ -264,7 +264,7 @@ const endpoints = [
       <a href={prefix + '/docs'} class="link-quiet mb-1 text-[0.9rem] font-medium" data-reveal>{t.viewAll} →</a>
     </div>
     <div class="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-      {PAPERS.slice(0, 6).map((paper) => <PaperCard paper={paper} lang={lang} />)}
+      {listedPapers().slice(0, 6).map((paper) => <PaperCard paper={paper} lang={lang} />)}
     </div>
   </section>
 

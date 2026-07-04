@@ -10,6 +10,13 @@ export interface Paper {
   protocols: string[];
   version: string;
   date: string;
+  /** set on language variants: slug of the primary entry; variants are hidden from lists */
+  variantOf?: string;
+}
+
+/** papers shown in lists (language variants excluded) */
+export function listedPapers(): Paper[] {
+  return PAPERS.filter((p) => !p.variantOf);
 }
 
 export const PAPERS: Paper[] = [
@@ -78,8 +85,8 @@ export const PAPERS: Paper[] = [
   },
   {
     slug: 'aicl-ai-ingestion-capability-layer',
-    sourceFile: 'AICL：AI Ingestion & Capability Layer.md',
-    lang: 'mixed',
+    sourceFile: 'AICL_AI_Ingestion_and_Capability_Layer_EN.md',
+    lang: 'en',
     title: {
       en: 'AICL: AI Ingestion & Capability Layer',
       zh: 'AICL:AI 攝取與能力層',
@@ -91,6 +98,28 @@ export const PAPERS: Paper[] = [
     abstract: {
       en: 'Distinct from human UI, SEO, or plain APIs, the AI Ingestion & Capability Layer gives websites a machine-facing architecture: a Manifest Layer (entry points like /llms.txt and /ai/manifest.json), a Corpus Layer (machine-readable knowledge), a Capability Layer (agent-callable tools), and a Governance Layer (provenance, licensing, versioning). Static-first, upgradeable toward APIs and MCP. Note: in this paper AICL names the ingestion architecture; on this site\'s protocol pages AICL refers to the AI Content Licensing Layer.',
       zh: '不同於人類 UI、SEO 或單純 API,AI 攝取與能力層給網站一個面向機器的架構:清單層(/llms.txt、/ai/manifest.json 等入口)、語料層(機器可讀知識)、能力層(Agent 可調用工具)、治理層(來源、授權、版本)。靜態優先,可逐步升級至 API 與 MCP。註:本文的 AICL 指攝取架構;本站協議頁的 AICL 則指 AI 內容授權連接層。',
+    },
+    keyConcepts: ['ingestion surface', 'capability surface', 'manifest layer', 'corpus layer', 'governance layer', 'MCP'],
+    protocols: ['aicl'],
+    version: 'v0.1 Draft',
+    date: '2026-06',
+  },
+  {
+    slug: 'aicl-ai-ingestion-capability-layer-zh',
+    sourceFile: 'AICL：AI Ingestion & Capability Layer.md',
+    lang: 'zh-Hant',
+    variantOf: 'aicl-ai-ingestion-capability-layer',
+    title: {
+      en: 'AICL: AI Ingestion & Capability Layer (Chinese original)',
+      zh: 'AICL:AI 攝取與能力層(中文原稿)',
+    },
+    oneLiner: {
+      en: 'The original Chinese manuscript of the AICL ingestion-layer paper.',
+      zh: 'AICL 攝取層論文的中文原始稿。',
+    },
+    abstract: {
+      en: 'This is the original Chinese manuscript; see the English edition for the canonical published version.',
+      zh: '此為中文原始稿;正式發布版本請見英文版。',
     },
     keyConcepts: ['ingestion surface', 'capability surface', 'manifest layer', 'corpus layer', 'governance layer', 'MCP'],
     protocols: ['aicl'],

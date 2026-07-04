@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { UI, langPrefix, type Lang } from '../data/site';
 import { getResearchArea, RESEARCH_AREAS } from '../data/research';
 import { PROTOCOLS } from '../data/protocols';
-import { PAPERS } from '../data/papers';
+import { listedPapers } from '../data/papers';
 
 interface Props {
   lang: Lang;
@@ -14,7 +14,7 @@ const t = UI[lang];
 const prefix = langPrefix(lang);
 const r = getResearchArea(slug);
 const relatedProtocols = PROTOCOLS.filter((p) => r.protocols.includes(p.id));
-const relatedPapers = PAPERS.filter((paper) =>
+const relatedPapers = listedPapers().filter((paper) =>
   paper.protocols.some((pid) => r.protocols.includes(pid))
 );
 const others = RESEARCH_AREAS.filter((x) => x.slug !== r.slug);

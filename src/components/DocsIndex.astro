@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from './PageHeader.astro';
 import PaperCard from './PaperCard.astro';
 import { UI, langPrefix, type Lang } from '../data/site';
-import { PAPERS } from '../data/papers';
+import { listedPapers } from '../data/papers';
 
 interface Props {
   lang: Lang;
@@ -22,7 +22,7 @@ const intro =
   <PageHeader kicker={lang === 'zh' ? '文件庫' : 'Document library'} title={title} intro={intro} />
   <div class="container-site py-14 md:py-20">
     <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-      {PAPERS.map((paper) => <PaperCard paper={paper} lang={lang} />)}
+      {listedPapers().map((paper) => <PaperCard paper={paper} lang={lang} />)}
     </div>
     <div class="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2" data-reveal>
       <a href={prefix + '/docs/examples'} class="card group flex flex-col gap-1.5 p-6 no-underline cursor-pointer">

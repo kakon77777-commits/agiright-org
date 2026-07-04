@@ -31,8 +31,13 @@ const PAPERS = [
   },
   {
     slug: 'aicl-ai-ingestion-capability-layer',
-    file: 'AICL：AI Ingestion & Capability Layer.md',
+    file: 'AICL_AI_Ingestion_and_Capability_Layer_EN.md',
     title: 'AICL: AI Ingestion & Capability Layer',
+  },
+  {
+    slug: 'aicl-ai-ingestion-capability-layer-zh',
+    file: 'AICL：AI Ingestion & Capability Layer.md',
+    title: 'AICL:AI 攝取與能力層(中文原稿)',
   },
   {
     slug: 'ai-content-payment-democratic-economy',
