@@ -16,6 +16,9 @@ Status: all protocols are open research drafts, version 0.1.
 - https://agiright.org/research : research areas index
 - https://agiright.org/research/ai-network-democratic-economy : AI network democratic economy
 - https://agiright.org/docs : whitepapers index
+- https://agiright.org/docs/examples : policy examples library (7 ready-to-use policies)
+- https://agiright.org/docs/changelog : version history
+- https://agiright.org/playground : AICR/AICL generators and schema validator (in-browser)
 
 ## Whitepapers
 
@@ -44,6 +47,10 @@ Status: all protocols are open research drafts, version 0.1.
 
 - Reading, summarization, quotation (max 200 words), and RAG use: allowed with attribution.
 - Model training, fine-tuning, commercial use, redistribution: not allowed without a license; contact contact@agiright.org.
+
+## Source
+
+- https://github.com/kakon77777-commits/agiright-org : public repository of this site
 
 ## Citation
 

@@ -51,6 +51,10 @@
     "aicr": "https://agiright.org/.well-known/aicr.json",
     "aicl": "https://agiright.org/.well-known/aicl.json",
     "ai_rights": "https://agiright.org/.well-known/ai-rights.json",
+    "examples": "https://agiright.org/docs/examples",
+    "changelog": "https://agiright.org/docs/changelog",
+    "playground": "https://agiright.org/playground",
+    "repository": "https://github.com/kakon77777-commits/agiright-org",
     "sitemap": "https://agiright.org/sitemap-index.xml",
     "feed": "https://agiright.org/feed.xml"
   },

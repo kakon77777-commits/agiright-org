@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from './PageHeader.astro';
+import type { Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const title = lang === 'zh' ? '更新紀錄' : 'Changelog';
+const intro =
+  lang === 'zh'
+    ? '本站與各協議草案的版本紀錄。規格的重大變更都會記在這裡。'
+    : 'Version history of this site and its protocol drafts. Breaking spec changes are recorded here.';
+
+const ENTRIES = [
+  {
+    version: 'v0.2',
+    date: '2026-07-04',
+    tag: { en: 'Tools', zh: '工具' },
+    items: {
+      en: [
+        'Playground: working AICR generator, AICL generator, and schema validator (in-browser, ajv, draft 2020-12).',
+        'Policy examples library at /docs/examples — seven copy-paste-ready policies including a pay-per-crawl style HTTP 402 response.',
+        'This changelog. GitHub repository linked site-wide.',
+        'Pending for a later 0.2.x: English versions of the remaining Chinese-language whitepapers.',
+      ],
+      zh: [
+        '實驗工具:可用的 AICR 產生器、AICL 產生器與 schema 驗證器(瀏覽器內執行,ajv,draft 2020-12)。',
+        '政策範例庫 /docs/examples——七個可直接取用的政策,含 pay-per-crawl 式 HTTP 402 回應。',
+        '本更新紀錄。全站加上 GitHub repository 連結。',
+        '留待 0.2.x:其餘中文白皮書的英文版。',
+      ],
+    },
+  },
+  {
+    version: 'v0.1',
+    date: '2026-07-04',
+    tag: { en: 'Initial release', zh: '首次發布' },
+    items: {
+      en: [
+        'Site launched at agiright.org (asiright.org 301-redirects to the canonical domain).',
+        'Four protocol drafts published: AICR, AICL, AIRS, AILP — each with definition, scope, JSON example, limitations, and JSON Schema.',
+        'Six research whitepapers published under CC BY 4.0.',
+        'Machine-readable governance layer deployed: llms.txt, /ai/ manifests, /.well-known/ policies, /schemas/.',
+        'Bilingual: English root + Traditional Chinese under /zh.',
+      ],
+      zh: [
+        '網站於 agiright.org 上線(asiright.org 以 301 指向主域)。',
+        '發布四個協議草案:AICR、AICL、AIRS、AILP——各含定義、範圍、JSON 範例、限制與 JSON Schema。',
+        '以 CC BY 4.0 發布六篇研究白皮書。',
+        '部署機器可讀治理層:llms.txt、/ai/ 清單、/.well-known/ 政策、/schemas/。',
+        '雙語:英文主站 + /zh 繁體中文。',
+      ],
+    },
+  },
+];
+---
+
+<BaseLayout lang={lang} title={title} description={intro}>
+  <PageHeader kicker={lang === 'zh' ? '文件' : 'Docs'} title={title} intro={intro} />
+  <div class="container-site max-w-3xl py-14 md:py-20">
+    <div class="space-y-14">
+      {
+        ENTRIES.map((entry) => (
+          <section class="relative border-l-2 border-line pl-7" data-reveal>
+            <span class="absolute -left-[7px] top-1.5 h-3 w-3 rounded-full border-2 border-paper bg-primary" aria-hidden="true" />
+            <div class="flex flex-wrap items-center gap-3">
+              <h2 class="font-mono text-xl font-medium text-navy">{entry.version}</h2>
+              <span class="badge">{entry.date}</span>
+              <span class="badge badge-live">{entry.tag[lang]}</span>
+            </div>
+            <ul class="mt-5 space-y-3">
+              {entry.items[lang].map((item) => (
+                <li class="flex gap-3 text-[0.95rem] leading-relaxed text-ink-soft">
+                  <span class="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-line-strong" aria-hidden="true" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

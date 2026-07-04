@@ -11,39 +11,484 @@ const { lang } = Astro.props;
 const title = lang === 'zh' ? '實驗工具' : 'Playground';
 const intro =
   lang === 'zh'
-    ? 'AICR / AICL 政策產生器與驗證器,即將推出。'
-    : 'Coming soon: AICR / AICL policy generator and validator.';
+    ? '在瀏覽器內產生與驗證機器可讀政策檔。所有工具皆在本地執行,不上傳任何資料。'
+    : 'Generate and validate machine-readable policy files, entirely in your browser. Nothing is uploaded.';
 
-const planned = [
-  { en: 'AICR JSON generator', zh: 'AICR JSON 產生器' },
-  { en: 'AICL license catalog generator', zh: 'AICL 授權目錄產生器' },
-  { en: 'Schema validator', zh: 'Schema 驗證器' },
-  { en: 'Rights spectrum visualizer', zh: '權利光譜視覺化工具' },
-  { en: 'HTTP 402 response builder', zh: 'HTTP 402 回應產生器' },
-  { en: 'License token demo', zh: '授權憑證 demo' },
-  { en: 'Crawler policy tester', zh: '爬蟲政策測試器' },
-  { en: 'Site audit checker', zh: '網站政策稽核工具' },
+const T = {
+  tabAicr: lang === 'zh' ? 'AICR 產生器' : 'AICR generator',
+  tabAicl: lang === 'zh' ? 'AICL 產生器' : 'AICL generator',
+  tabValidate: lang === 'zh' ? '驗證器' : 'Validator',
+  publisher: lang === 'zh' ? '發布者(網站名稱)' : 'Publisher (site name)',
+  contact: lang === 'zh' ? '授權聯絡 email' : 'Licensing contact email',
+  rights: lang === 'zh' ? '權利設定' : 'Rights',
+  allowed: lang === 'zh' ? '允許' : 'Allowed',
+  licenseRequired: lang === 'zh' ? '需授權' : 'License required',
+  denied: lang === 'zh' ? '拒絕' : 'Denied',
+  attribution: lang === 'zh' ? '需署名' : 'Attribution',
+  maxWords: lang === 'zh' ? '引用字數上限' : 'Max excerpt words',
+  retention: lang === 'zh' ? '保存天數' : 'Retention days',
+  output: lang === 'zh' ? '輸出' : 'Output',
+  copy: lang === 'zh' ? '複製' : 'Copy',
+  copied: lang === 'zh' ? '已複製 ✓' : 'Copied ✓',
+  download: lang === 'zh' ? '下載' : 'Download',
+  deployHint:
+    lang === 'zh'
+      ? '將產生的檔案放到你網站的 /.well-known/ 目錄,並在 llms.txt 中宣告。'
+      : 'Place the generated file under /.well-known/ on your site and declare it in llms.txt.',
+  presets: lang === 'zh' ? '授權級距' : 'License tiers',
+  presetFree: lang === 'zh' ? '免費讀取+摘要(需署名)' : 'Free read + summarize (attribution)',
+  presetRag: lang === 'zh' ? '研究用 RAG(免費、30 天保存)' : 'Research RAG (free, 30-day retention)',
+  presetCommercial: lang === 'zh' ? '訓練/商用(聯絡授權)' : 'Training / commercial (contact)',
+  customTier: lang === 'zh' ? '自訂級距' : 'Custom tier',
+  customEnable: lang === 'zh' ? '加入自訂級距' : 'Add a custom tier',
+  tierId: lang === 'zh' ? '級距 ID' : 'Tier id',
+  tierRights: lang === 'zh' ? '包含權利' : 'Rights included',
+  price: lang === 'zh' ? '價格' : 'Price',
+  currency: lang === 'zh' ? '幣別' : 'Currency',
+  conditions: lang === 'zh' ? '條件(逗號分隔)' : 'Conditions (comma-separated)',
+  requiresContact: lang === 'zh' ? '需聯絡洽談' : 'Requires contact',
+  schema: 'Schema',
+  autoDetect: lang === 'zh' ? '自動偵測' : 'Auto-detect',
+  pasteJson: lang === 'zh' ? '貼上要驗證的 JSON' : 'Paste JSON to validate',
+  validate: lang === 'zh' ? '驗證' : 'Validate',
+  valid: lang === 'zh' ? '✓ 有效 — 符合' : '✓ Valid against',
+  invalid: lang === 'zh' ? '✗ 不符合 schema' : '✗ Does not match schema',
+  syntaxError: lang === 'zh' ? 'JSON 語法錯誤' : 'JSON syntax error',
+  loadExample: lang === 'zh' ? '載入本站範例' : 'Load this site’s file',
+  localNote:
+    lang === 'zh'
+      ? '// 完全在本地執行 — 你的政策內容不會離開瀏覽器。'
+      : '// Runs entirely locally — your policy never leaves the browser.',
+};
+
+const RIGHTS: { key: string; label: string; attr?: boolean; words?: boolean; retention?: boolean; def: string }[] = [
+  { key: 'read_access', label: lang === 'zh' ? '讀取' : 'Read access', def: 'allowed' },
+  { key: 'summarization', label: lang === 'zh' ? '摘要' : 'Summarization', attr: true, def: 'allowed' },
+  { key: 'quotation', label: lang === 'zh' ? '引用' : 'Quotation', attr: true, words: true, def: 'allowed' },
+  { key: 'rag_use', label: 'RAG', attr: true, retention: true, def: 'allowed' },
+  { key: 'transformation', label: lang === 'zh' ? '轉換' : 'Transformation', def: 'license_required' },
+  { key: 'training', label: lang === 'zh' ? '訓練' : 'Training', def: 'license_required' },
+  { key: 'commercial_use', label: lang === 'zh' ? '商業使用' : 'Commercial use', def: 'license_required' },
+  { key: 'redistribution', label: lang === 'zh' ? '再分發' : 'Redistribution', def: 'denied' },
 ];
+
+const AICL_RIGHT_OPTIONS = ['read', 'summarize', 'quote', 'rag', 'transform', 'training', 'fine_tuning', 'commercial_use'];
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>
-  <PageHeader kicker={lang === 'zh' ? '工具' : 'Tools'} title={title} intro={intro} badges={[lang === 'zh' ? '規劃中 · v0.2+' : 'Planned · v0.2+']} />
-  <div class="container-site max-w-4xl py-14 md:py-20">
-    <h2 class="spec-label !text-accent" data-reveal>{lang === 'zh' ? '規劃中的功能' : 'Planned tools'}</h2>
-    <div class="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2" data-reveal>
-      {
-        planned.map((item, i) => (
-          <div class="flex items-center gap-4 bg-surface px-5 py-4">
-            <span class="font-mono text-[0.72rem] font-medium text-muted">{String(i + 1).padStart(2, '0')}</span>
-            <p class="text-[0.92rem] text-ink-soft">{lang === 'zh' ? item.zh : item.en}</p>
-          </div>
-        ))
-      }
+  <PageHeader kicker={lang === 'zh' ? '工具' : 'Tools'} title={title} intro={intro} badges={['v0.2', lang === 'zh' ? '瀏覽器內執行' : 'runs in-browser']} />
+
+  <div class="container-site py-12 md:py-16" data-playground data-lang={lang}>
+    <!-- tabs -->
+    <div role="tablist" aria-label="Playground tools" class="flex flex-wrap gap-2" data-reveal>
+      <button class="tab-btn" role="tab" id="tab-aicr" aria-selected="true" aria-controls="panel-aicr" data-tab="aicr">{T.tabAicr}</button>
+      <button class="tab-btn" role="tab" id="tab-aicl" aria-selected="false" aria-controls="panel-aicl" data-tab="aicl">{T.tabAicl}</button>
+      <button class="tab-btn" role="tab" id="tab-validate" aria-selected="false" aria-controls="panel-validate" data-tab="validate">{T.tabValidate}</button>
     </div>
-    <p class="mt-8 max-w-2xl text-[0.9rem] leading-relaxed text-muted" data-reveal>
-      {lang === 'zh'
-        ? '在工具上線之前,可以先閱讀協議草案,或直接下載 JSON Schema 自行驗證政策檔。'
-        : 'Until the tools ship, you can read the protocol drafts or download the JSON Schemas to validate policy files yourself.'}
-    </p>
+    <p class="mt-3 font-mono text-[0.72rem] text-muted" data-reveal>{T.localNote}</p>
+
+    <!-- ============ AICR GENERATOR ============ -->
+    <section id="panel-aicr" role="tabpanel" aria-labelledby="tab-aicr" class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2" data-panel="aicr">
+      <div class="card p-6 md:p-7">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="aicr-publisher">{T.publisher}</label>
+            <input class="field-input" id="aicr-publisher" type="text" value="example.org" data-aicr-publisher />
+          </div>
+          <div>
+            <label class="field-label" for="aicr-contact">{T.contact}</label>
+            <input class="field-input" id="aicr-contact" type="email" value="contact@example.org" data-aicr-contact />
+          </div>
+        </div>
+
+        <p class="field-label mt-7">{T.rights}</p>
+        <div class="overflow-hidden rounded-md border border-line">
+          {
+            RIGHTS.map((r, i) => (
+              <div class:list={['bg-surface px-4 py-3.5', i > 0 && 'border-t border-line']} data-right={r.key}>
+                <div class="flex flex-wrap items-center gap-3">
+                  <span class="w-32 shrink-0 font-mono text-[0.78rem] font-medium text-navy">{r.key}</span>
+                  <select class="field-select !w-auto flex-none text-[0.85rem]" aria-label={`${r.label} mode`} data-mode>
+                    <option value="allowed" selected={r.def === 'allowed'}>{T.allowed}</option>
+                    <option value="license_required" selected={r.def === 'license_required'}>{T.licenseRequired}</option>
+                    <option value="denied" selected={r.def === 'denied'}>{T.denied}</option>
+                  </select>
+                  {r.attr && (
+                    <label class="field-check">
+                      <input type="checkbox" checked data-attr />
+                      {T.attribution}
+                    </label>
+                  )}
+                  {r.words && (
+                    <label class="field-check gap-2">
+                      <span class="text-[0.78rem] text-muted">{T.maxWords}</span>
+                      <input class="field-input !w-20 !py-1 text-[0.85rem]" type="number" min="0" value="200" data-max-words />
+                    </label>
+                  )}
+                  {r.retention && (
+                    <label class="field-check gap-2">
+                      <span class="text-[0.78rem] text-muted">{T.retention}</span>
+                      <input class="field-input !w-20 !py-1 text-[0.85rem]" type="number" min="0" value="30" data-retention />
+                    </label>
+                  )}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between gap-3">
+          <p class="field-label !mb-0">{T.output} — aicr.json</p>
+          <div class="flex gap-2">
+            <button class="btn btn-outline !px-3 !py-2 !text-[0.8rem]" data-copy="aicr">{T.copy}</button>
+            <button class="btn btn-primary !px-3 !py-2 !text-[0.8rem]" data-download="aicr" data-filename="aicr.json">{T.download}</button>
+          </div>
+        </div>
+        <figure class="terminal mt-3">
+          <pre class="max-h-[32rem] overflow-auto p-4"><code data-output="aicr"></code></pre>
+        </figure>
+        <p class="mt-3 text-[0.8rem] leading-relaxed text-muted">{T.deployHint}</p>
+      </div>
+    </section>
+
+    <!-- ============ AICL GENERATOR ============ -->
+    <section id="panel-aicl" role="tabpanel" aria-labelledby="tab-aicl" class="mt-8 hidden grid-cols-1 gap-8 lg:grid-cols-2" data-panel="aicl">
+      <div class="card p-6 md:p-7">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="aicl-publisher">{T.publisher}</label>
+            <input class="field-input" id="aicl-publisher" type="text" value="example.org" data-aicl-publisher />
+          </div>
+          <div>
+            <label class="field-label" for="aicl-contact">{T.contact}</label>
+            <input class="field-input" id="aicl-contact" type="email" value="contact@example.org" data-aicl-contact />
+          </div>
+        </div>
+
+        <p class="field-label mt-7">{T.presets}</p>
+        <div class="space-y-2.5">
+          <label class="field-check"><input type="checkbox" checked data-preset="public_read_summary" /> {T.presetFree}</label><br />
+          <label class="field-check"><input type="checkbox" checked data-preset="research_rag" /> {T.presetRag}</label><br />
+          <label class="field-check"><input type="checkbox" checked data-preset="commercial_or_training_license" /> {T.presetCommercial}</label>
+        </div>
+
+        <p class="field-label mt-7">{T.customTier}</p>
+        <label class="field-check"><input type="checkbox" data-custom-enable /> {T.customEnable}</label>
+        <div class="mt-4 hidden space-y-4 rounded-md border border-line bg-paper px-4 py-4" data-custom-fields>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div>
+              <label class="field-label" for="aicl-tier-id">{T.tierId}</label>
+              <input class="field-input" id="aicl-tier-id" type="text" value="premium_rag" data-tier-id />
+            </div>
+            <div>
+              <label class="field-label" for="aicl-price">{T.price}</label>
+              <input class="field-input" id="aicl-price" type="text" value="0.01" data-tier-price />
+            </div>
+            <div>
+              <label class="field-label" for="aicl-currency">{T.currency}</label>
+              <input class="field-input" id="aicl-currency" type="text" value="USD" data-tier-currency />
+            </div>
+          </div>
+          <div>
+            <p class="field-label">{T.tierRights}</p>
+            <div class="flex flex-wrap gap-x-4 gap-y-2">
+              {
+                AICL_RIGHT_OPTIONS.map((r) => (
+                  <label class="field-check">
+                    <input type="checkbox" checked={r === 'read' || r === 'rag'} data-tier-right={r} />
+                    <span class="font-mono text-[0.78rem]">{r}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </div>
+          <div>
+            <label class="field-label" for="aicl-conditions">{T.conditions}</label>
+            <input class="field-input" id="aicl-conditions" type="text" value="attribution_required, retention_days_30" data-tier-conditions />
+          </div>
+          <label class="field-check"><input type="checkbox" data-tier-contact /> {T.requiresContact}</label>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between gap-3">
+          <p class="field-label !mb-0">{T.output} — aicl.json</p>
+          <div class="flex gap-2">
+            <button class="btn btn-outline !px-3 !py-2 !text-[0.8rem]" data-copy="aicl">{T.copy}</button>
+            <button class="btn btn-primary !px-3 !py-2 !text-[0.8rem]" data-download="aicl" data-filename="aicl.json">{T.download}</button>
+          </div>
+        </div>
+        <figure class="terminal mt-3">
+          <pre class="max-h-[32rem] overflow-auto p-4"><code data-output="aicl"></code></pre>
+        </figure>
+        <p class="mt-3 text-[0.8rem] leading-relaxed text-muted">{T.deployHint}</p>
+      </div>
+    </section>
+
+    <!-- ============ VALIDATOR ============ -->
+    <section id="panel-validate" role="tabpanel" aria-labelledby="tab-validate" class="mt-8 hidden grid-cols-1 gap-8 lg:grid-cols-2" data-panel="validate">
+      <div class="card p-6 md:p-7">
+        <div class="flex flex-wrap items-end gap-4">
+          <div>
+            <label class="field-label" for="val-schema">{T.schema}</label>
+            <select class="field-select !w-auto" id="val-schema" data-val-schema>
+              <option value="auto">{T.autoDetect}</option>
+              <option value="aicr">aicr.schema.json</option>
+              <option value="aicl">aicl.schema.json</option>
+              <option value="airs">airs.schema.json</option>
+              <option value="ailp">ailp.schema.json</option>
+            </select>
+          </div>
+          <button class="btn btn-outline !px-3 !py-2.5 !text-[0.8rem]" data-val-load>{T.loadExample}</button>
+        </div>
+        <label class="field-label mt-5" for="val-input">{T.pasteJson}</label>
+        <textarea class="field-textarea" id="val-input" spellcheck="false" data-val-input placeholder='{"version":"0.1", ...}'></textarea>
+        <button class="btn btn-primary mt-4" data-val-run>{T.validate}</button>
+      </div>
+
+      <div>
+        <p class="field-label">{T.output}</p>
+        <div class="rounded-md border border-line bg-surface p-5 min-h-40" data-val-result>
+          <p class="text-[0.85rem] text-muted">—</p>
+        </div>
+      </div>
+    </section>
   </div>
+
+  <script>
+    // ------------------------------------------------------------------
+    // tabs
+    // ------------------------------------------------------------------
+    const root = document.querySelector('[data-playground]')!;
+    const tabs = root.querySelectorAll<HTMLButtonElement>('[data-tab]');
+    const panels = root.querySelectorAll<HTMLElement>('[data-panel]');
+    tabs.forEach((tab) =>
+      tab.addEventListener('click', () => {
+        tabs.forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
+        panels.forEach((p) => {
+          const active = p.dataset.panel === tab.dataset.tab;
+          p.classList.toggle('hidden', !active);
+          p.classList.toggle('grid', active);
+        });
+      })
+    );
+
+    const today = new Date().toISOString().slice(0, 10);
+    const render = (key: string, obj: unknown) => {
+      const out = root.querySelector(`[data-output="${key}"]`);
+      if (out) out.textContent = JSON.stringify(obj, null, 2);
+    };
+
+    // ------------------------------------------------------------------
+    // AICR generator
+    // ------------------------------------------------------------------
+    function buildAicr() {
+      const publisher = (root.querySelector('[data-aicr-publisher]') as HTMLInputElement).value.trim() || 'example.org';
+      const contact = (root.querySelector('[data-aicr-contact]') as HTMLInputElement).value.trim();
+      const policy: Record<string, Record<string, unknown>> = {};
+      root.querySelectorAll<HTMLElement>('[data-right]').forEach((row) => {
+        const key = row.dataset.right!;
+        const mode = (row.querySelector('[data-mode]') as HTMLSelectElement).value;
+        const rule: Record<string, unknown> = {};
+        if (mode === 'allowed') rule.allowed = true;
+        else {
+          rule.allowed = false;
+          if (mode === 'license_required') {
+            rule.license_required = true;
+            if (contact) rule.permission_contact = contact;
+          }
+        }
+        const attr = row.querySelector<HTMLInputElement>('[data-attr]');
+        if (attr?.checked && mode === 'allowed') rule.attribution_required = true;
+        const words = row.querySelector<HTMLInputElement>('[data-max-words]');
+        if (words && mode === 'allowed' && words.value) rule.max_excerpt_words = Number(words.value);
+        const ret = row.querySelector<HTMLInputElement>('[data-retention]');
+        if (ret && mode === 'allowed' && ret.value) rule.retention_days = Number(ret.value);
+        policy[key] = rule;
+      });
+      return {
+        version: '0.1',
+        protocol: 'AICR',
+        publisher,
+        updated: today,
+        schema: 'https://agiright.org/schemas/aicr.schema.json',
+        default_policy: policy,
+      };
+    }
+
+    // ------------------------------------------------------------------
+    // AICL generator
+    // ------------------------------------------------------------------
+    const PRESET_TIERS: Record<string, object> = {
+      public_read_summary: {
+        id: 'public_read_summary',
+        rights: ['read', 'summarize', 'quote'],
+        price: { amount: '0', currency: 'USD' },
+        conditions: ['attribution_required', 'no_model_training', 'no_commercial_redistribution'],
+      },
+      research_rag: {
+        id: 'research_rag',
+        rights: ['read', 'summarize', 'rag'],
+        price: { amount: '0', currency: 'USD' },
+        conditions: ['attribution_required', 'retention_days_30', 'no_model_training'],
+      },
+      commercial_or_training_license: {
+        id: 'commercial_or_training_license',
+        rights: ['training', 'fine_tuning', 'commercial_use'],
+        requires_contact: true,
+      },
+    };
+
+    function buildAicl() {
+      const publisher = (root.querySelector('[data-aicl-publisher]') as HTMLInputElement).value.trim() || 'example.org';
+      const contact = (root.querySelector('[data-aicl-contact]') as HTMLInputElement).value.trim();
+      const licenses: object[] = [];
+      root.querySelectorAll<HTMLInputElement>('[data-preset]').forEach((cb) => {
+        if (!cb.checked) return;
+        const tier = structuredClone(PRESET_TIERS[cb.dataset.preset!]) as Record<string, unknown>;
+        if (tier.requires_contact && contact) tier.contact = contact;
+        licenses.push(tier);
+      });
+      const customOn = root.querySelector<HTMLInputElement>('[data-custom-enable]')?.checked;
+      if (customOn) {
+        const rights: string[] = [];
+        root.querySelectorAll<HTMLInputElement>('[data-tier-right]').forEach((cb) => {
+          if (cb.checked) rights.push(cb.dataset.tierRight!);
+        });
+        const tier: Record<string, unknown> = {
+          id: (root.querySelector('[data-tier-id]') as HTMLInputElement).value.trim() || 'custom_tier',
+          rights,
+        };
+        const amount = (root.querySelector('[data-tier-price]') as HTMLInputElement).value.trim();
+        const currency = (root.querySelector('[data-tier-currency]') as HTMLInputElement).value.trim() || 'USD';
+        if (amount) tier.price = { amount, currency };
+        const conditions = (root.querySelector('[data-tier-conditions]') as HTMLInputElement).value
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
+        if (conditions.length) tier.conditions = conditions;
+        if (root.querySelector<HTMLInputElement>('[data-tier-contact]')?.checked) {
+          tier.requires_contact = true;
+          if (contact) tier.contact = contact;
+        }
+        licenses.push(tier);
+      }
+      return {
+        version: '0.1',
+        protocol: 'AICL',
+        publisher,
+        updated: today,
+        schema: 'https://agiright.org/schemas/aicl.schema.json',
+        licenses,
+      };
+    }
+
+    // custom tier show/hide
+    root.querySelector('[data-custom-enable]')?.addEventListener('change', (e) => {
+      root.querySelector('[data-custom-fields]')?.classList.toggle('hidden', !(e.target as HTMLInputElement).checked);
+    });
+
+    // live regeneration
+    const refresh = () => {
+      render('aicr', buildAicr());
+      render('aicl', buildAicl());
+    };
+    root.querySelectorAll('input, select').forEach((el) => {
+      el.addEventListener('input', refresh);
+      el.addEventListener('change', refresh);
+    });
+    refresh();
+
+    // copy / download
+    root.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) =>
+      btn.addEventListener('click', async () => {
+        const text = root.querySelector(`[data-output="${btn.dataset.copy}"]`)?.textContent ?? '';
+        await navigator.clipboard.writeText(text);
+        const original = btn.textContent;
+        btn.textContent = root.getAttribute('data-lang') === 'zh' ? '已複製 ✓' : 'Copied ✓';
+        setTimeout(() => (btn.textContent = original), 1500);
+      })
+    );
+    root.querySelectorAll<HTMLButtonElement>('[data-download]').forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const text = root.querySelector(`[data-output="${btn.dataset.download}"]`)?.textContent ?? '';
+        const blob = new Blob([text], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = btn.dataset.filename ?? 'policy.json';
+        a.click();
+        URL.revokeObjectURL(a.href);
+      })
+    );
+
+    // ------------------------------------------------------------------
+    // validator (ajv, draft 2020-12)
+    // ------------------------------------------------------------------
+    import Ajv2020 from 'ajv/dist/2020';
+    import addFormats from 'ajv-formats';
+
+    const ajv = new Ajv2020({ allErrors: true, strict: false });
+    addFormats(ajv);
+    const schemaCache = new Map<string, ReturnType<typeof ajv.compile>>();
+
+    async function getValidator(id: string) {
+      if (!schemaCache.has(id)) {
+        const schema = await fetch(`/schemas/${id}.schema.json`).then((r) => r.json());
+        schemaCache.set(id, ajv.compile(schema));
+      }
+      return schemaCache.get(id)!;
+    }
+
+    const valInput = root.querySelector('[data-val-input]') as HTMLTextAreaElement;
+    const valResult = root.querySelector('[data-val-result]') as HTMLElement;
+    const valSchema = root.querySelector('[data-val-schema]') as HTMLSelectElement;
+    const isZh = root.getAttribute('data-lang') === 'zh';
+
+    function detectSchema(data: unknown): string {
+      const p = (data as Record<string, unknown>)?.protocol;
+      if (typeof p === 'string' && ['AICR', 'AICL', 'AIRS', 'AILP'].includes(p)) return p.toLowerCase();
+      const d = data as Record<string, unknown>;
+      if (d?.default_policy) return 'aicr';
+      if (d?.licenses) return 'aicl';
+      if (d?.spectrum) return 'airs';
+      if (d?.default) return 'ailp';
+      return 'aicr';
+    }
+
+    root.querySelector('[data-val-load]')?.addEventListener('click', async () => {
+      const pick = valSchema.value === 'auto' ? 'aicr' : valSchema.value;
+      const url = pick === 'airs' || pick === 'ailp' ? '/ai/rights-spectrum.json' : `/.well-known/${pick}.json`;
+      valInput.value = JSON.stringify(await fetch(url).then((r) => r.json()), null, 2);
+    });
+
+    root.querySelector('[data-val-run]')?.addEventListener('click', async () => {
+      let data: unknown;
+      try {
+        data = JSON.parse(valInput.value);
+      } catch (e) {
+        valResult.innerHTML = `<p class="font-mono text-[0.85rem]" style="color:var(--color-deny)">${isZh ? 'JSON 語法錯誤' : 'JSON syntax error'}: ${(e as Error).message}</p>`;
+        return;
+      }
+      const id = valSchema.value === 'auto' ? detectSchema(data) : valSchema.value;
+      try {
+        const validate = await getValidator(id);
+        const ok = validate(data);
+        if (ok) {
+          valResult.innerHTML = `<p class="font-mono text-[0.9rem]" style="color:var(--color-ok)">${isZh ? `✓ 有效 — 符合 ${id}.schema.json` : `✓ Valid against ${id}.schema.json`}</p>`;
+        } else {
+          const rows = (validate.errors ?? [])
+            .map(
+              (err) =>
+                `<li class="flex gap-3 py-2 border-t border-line first:border-t-0"><code class="font-mono text-[0.78rem] text-navy shrink-0">${err.instancePath || '/'}</code><span class="text-[0.82rem] text-ink-soft">${err.message ?? ''}</span></li>`
+            )
+            .join('');
+          valResult.innerHTML = `<p class="font-mono text-[0.9rem]" style="color:var(--color-deny)">${isZh ? `✗ 不符合 ${id}.schema.json` : `✗ Does not match ${id}.schema.json`}</p><ul class="mt-3">${rows}</ul>`;
+        }
+      } catch (e) {
+        valResult.innerHTML = `<p class="font-mono text-[0.85rem]" style="color:var(--color-deny)">schema load error: ${(e as Error).message}</p>`;
+      }
+    });
+  </script>
 </BaseLayout>

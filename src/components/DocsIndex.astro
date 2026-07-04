@@ -2,13 +2,14 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from './PageHeader.astro';
 import PaperCard from './PaperCard.astro';
-import { UI, type Lang } from '../data/site';
+import { UI, langPrefix, type Lang } from '../data/site';
 import { PAPERS } from '../data/papers';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
+const prefix = langPrefix(lang);
 
 const title = lang === 'zh' ? '白皮書與文件' : 'Whitepapers & Docs';
 const intro =
@@ -23,7 +24,28 @@ const intro =
     <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
       {PAPERS.map((paper) => <PaperCard paper={paper} lang={lang} />)}
     </div>
-    <div class="mt-12 rounded-md border-l-2 border-line-strong bg-surface px-5 py-4" data-reveal>
+    <div class="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2" data-reveal>
+      <a href={prefix + '/docs/examples'} class="card group flex flex-col gap-1.5 p-6 no-underline cursor-pointer">
+        <span class="spec-label !text-accent">{lang === 'zh' ? '範例' : 'Examples'}</span>
+        <span class="font-serif text-lg font-semibold text-navy group-hover:text-primary transition-colors duration-200">
+          {lang === 'zh' ? '政策範例庫' : 'Policy examples library'}
+        </span>
+        <span class="text-[0.85rem] text-muted">
+          {lang === 'zh' ? '七個可直接取用的機器可讀政策,含 HTTP 402 回應。' : 'Seven copy-paste-ready machine-readable policies, incl. an HTTP 402 response.'}
+        </span>
+      </a>
+      <a href={prefix + '/docs/changelog'} class="card group flex flex-col gap-1.5 p-6 no-underline cursor-pointer">
+        <span class="spec-label !text-accent">{lang === 'zh' ? '版本' : 'Versions'}</span>
+        <span class="font-serif text-lg font-semibold text-navy group-hover:text-primary transition-colors duration-200">
+          {lang === 'zh' ? '更新紀錄' : 'Changelog'}
+        </span>
+        <span class="text-[0.85rem] text-muted">
+          {lang === 'zh' ? '本站與協議草案的版本歷史。' : 'Version history of this site and its protocol drafts.'}
+        </span>
+      </a>
+    </div>
+
+    <div class="mt-8 rounded-md border-l-2 border-line-strong bg-surface px-5 py-4" data-reveal>
       <p class="spec-label">{lang === 'zh' ? '引用' : 'Citation'}</p>
       <p class="mt-2 max-w-3xl font-mono text-[0.82rem] leading-relaxed text-ink-soft">
         {lang === 'zh'
