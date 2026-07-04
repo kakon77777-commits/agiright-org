@@ -1,0 +1,55 @@
+{
+  "version": "0.1",
+  "publisher": "AGIRight.org",
+  "updated": "2026-07-04",
+  "protocols": [
+    {
+      "id": "aicr",
+      "abbr": "AICR",
+      "name": "AI Content Rights / AI Content Rules",
+      "status": "draft-0.1",
+      "page": "https://agiright.org/protocols/aicr",
+      "schema": "https://agiright.org/schemas/aicr.schema.json",
+      "well_known": "/.well-known/aicr.json",
+      "summary": "Machine-readable declaration of what AI systems may do with content: read, summarize, quote, RAG, transform, train, commercial use, redistribute."
+    },
+    {
+      "id": "aicl",
+      "abbr": "AICL",
+      "name": "AI Content License / AI Content Licensing Layer",
+      "status": "draft-0.1",
+      "page": "https://agiright.org/protocols/aicl",
+      "schema": "https://agiright.org/schemas/aicl.schema.json",
+      "well_known": "/.well-known/aicl.json",
+      "summary": "Licensing and transaction layer on top of AICR: license tiers, quote/pay/verify/revoke endpoints, license tokens, audit logs, HTTP 402 interoperability."
+    },
+    {
+      "id": "airs",
+      "abbr": "AIRS",
+      "name": "AI Rights Spectrum",
+      "status": "draft-0.1",
+      "page": "https://agiright.org/protocols/airs",
+      "schema": "https://agiright.org/schemas/airs.schema.json",
+      "live_instance": "https://agiright.org/ai/rights-spectrum.json",
+      "summary": "AI rights over content as a graduated spectrum of eight levels, each independently licensable and auditable."
+    },
+    {
+      "id": "ailp",
+      "abbr": "AILP",
+      "name": "AI Learning Permission Protocol",
+      "status": "draft-0.1",
+      "page": "https://agiright.org/protocols/ailp",
+      "schema": "https://agiright.org/schemas/ailp.schema.json",
+      "summary": "Dimension-level learning permissions: access, indexing, inference input, embedding, training, fine-tuning, distillation, memory, attribution, compensation."
+    }
+  ],
+  "related_tracks": [
+    {
+      "id": "agentic-payment",
+      "name": "Agentic Payment",
+      "status": "research",
+      "page": "https://agiright.org/research/agentic-access",
+      "summary": "Bounded agent payments for licensed content: human-approved budgets, request-bound tokens, audit trails; AI never handles raw card data."
+    }
+  ]
+}

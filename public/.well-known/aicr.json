@@ -1,0 +1,39 @@
+{
+  "version": "0.1",
+  "protocol": "AICR",
+  "publisher": "AGIRight.org",
+  "updated": "2026-07-04",
+  "schema": "https://agiright.org/schemas/aicr.schema.json",
+  "default_policy": {
+    "read_access": {
+      "allowed": true
+    },
+    "summarization": {
+      "allowed": true,
+      "attribution_required": true
+    },
+    "quotation": {
+      "allowed": true,
+      "max_excerpt_words": 200,
+      "attribution_required": true
+    },
+    "rag_use": {
+      "allowed": true,
+      "attribution_required": true,
+      "retention_days": 30
+    },
+    "training": {
+      "allowed": false,
+      "license_required": true,
+      "permission_contact": "contact@agiright.org"
+    },
+    "commercial_use": {
+      "allowed": false,
+      "license_required": true,
+      "permission_contact": "contact@agiright.org"
+    },
+    "redistribution": {
+      "allowed": false
+    }
+  }
+}

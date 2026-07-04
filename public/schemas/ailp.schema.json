@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agiright.org/schemas/ailp.schema.json",
+  "title": "AILP Schema",
+  "description": "AI Learning Permission Protocol schema — dimension-level learning permissions. Draft v0.1.",
+  "type": "object",
+  "required": ["version", "publisher", "default"],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "protocol": {
+      "type": "string",
+      "const": "AILP"
+    },
+    "publisher": {
+      "type": "string"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date"
+    },
+    "default": {
+      "$ref": "#/$defs/permissionProfile"
+    },
+    "path_overrides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "profile"],
+        "properties": {
+          "path": { "type": "string" },
+          "profile": { "$ref": "#/$defs/permissionProfile" }
+        }
+      }
+    },
+    "contact": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "permissionValue": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["allowed", "denied", "license_required", "required", "contact"]
+        },
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      ]
+    },
+    "permissionProfile": {
+      "type": "object",
+      "properties": {
+        "access": { "$ref": "#/$defs/permissionValue" },
+        "indexing": { "$ref": "#/$defs/permissionValue" },
+        "inference_input": { "$ref": "#/$defs/permissionValue" },
+        "embedding": { "$ref": "#/$defs/permissionValue" },
+        "training": { "$ref": "#/$defs/permissionValue" },
+        "fine_tuning": { "$ref": "#/$defs/permissionValue" },
+        "distillation": { "$ref": "#/$defs/permissionValue" },
+        "verbatim_memory": { "$ref": "#/$defs/permissionValue" },
+        "attribution": { "$ref": "#/$defs/permissionValue" },
+        "compensation": { "$ref": "#/$defs/permissionValue" }
+      },
+      "additionalProperties": { "$ref": "#/$defs/permissionValue" }
+    }
+  }
+}

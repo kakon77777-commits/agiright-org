@@ -1,0 +1,64 @@
+{
+  "version": "0.1",
+  "site": "AGIRight.org",
+  "url": "https://agiright.org",
+  "alias_domains": ["https://asiright.org"],
+  "description": "Independent research and protocol hub for AI rights, AI content licensing, agentic access, machine-readable governance, and democratic AI network economics.",
+  "publisher": "EveMissLab",
+  "author": "Neo.K",
+  "primary_language": "en",
+  "secondary_language": "zh-TW",
+  "status": "draft",
+  "updated": "2026-07-04",
+  "protocols": [
+    {
+      "id": "aicr",
+      "name": "AI Content Rights",
+      "url": "https://agiright.org/protocols/aicr",
+      "schema": "https://agiright.org/schemas/aicr.schema.json",
+      "live_instance": "https://agiright.org/.well-known/aicr.json",
+      "status": "draft-0.1"
+    },
+    {
+      "id": "aicl",
+      "name": "AI Content Licensing Layer",
+      "url": "https://agiright.org/protocols/aicl",
+      "schema": "https://agiright.org/schemas/aicl.schema.json",
+      "live_instance": "https://agiright.org/.well-known/aicl.json",
+      "status": "draft-0.1"
+    },
+    {
+      "id": "airs",
+      "name": "AI Rights Spectrum",
+      "url": "https://agiright.org/protocols/airs",
+      "schema": "https://agiright.org/schemas/airs.schema.json",
+      "live_instance": "https://agiright.org/ai/rights-spectrum.json",
+      "status": "draft-0.1"
+    },
+    {
+      "id": "ailp",
+      "name": "AI Learning Permission Protocol",
+      "url": "https://agiright.org/protocols/ailp",
+      "schema": "https://agiright.org/schemas/ailp.schema.json",
+      "status": "draft-0.1"
+    }
+  ],
+  "entry_points": {
+    "llms_txt": "https://agiright.org/llms.txt",
+    "content_policy": "https://agiright.org/ai/content-policy.json",
+    "rights_spectrum": "https://agiright.org/ai/rights-spectrum.json",
+    "protocol_index": "https://agiright.org/ai/protocol-index.json",
+    "aicr": "https://agiright.org/.well-known/aicr.json",
+    "aicl": "https://agiright.org/.well-known/aicl.json",
+    "ai_rights": "https://agiright.org/.well-known/ai-rights.json",
+    "sitemap": "https://agiright.org/sitemap-index.xml",
+    "feed": "https://agiright.org/feed.xml"
+  },
+  "citation": {
+    "format": "Neo.K / EveMissLab, \"Page Title\", version, AGIRight.org, URL",
+    "attribution_required": true
+  },
+  "contact": {
+    "email": "contact@agiright.org"
+  }
+}

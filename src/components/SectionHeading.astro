@@ -1,0 +1,20 @@
+---
+interface Props {
+  kicker: string;
+  title: string;
+  num?: string;
+  intro?: string;
+  class?: string;
+}
+const { kicker, title, num, intro, class: className = '' } = Astro.props;
+---
+
+<div class={`max-w-2xl ${className}`} data-reveal>
+  <p class="spec-label flex items-center gap-3">
+    {num && <span class="text-accent">§{num}</span>}
+    <span>{kicker}</span>
+    <span class="h-px flex-1 max-w-16 bg-line-strong" aria-hidden="true"></span>
+  </p>
+  <h2 class="display-serif mt-4 text-3xl md:text-4xl">{title}</h2>
+  {intro && <p class="mt-5 text-[1.02rem] leading-relaxed text-ink-soft">{intro}</p>}
+</div>

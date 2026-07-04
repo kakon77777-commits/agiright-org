@@ -1,0 +1,24 @@
+{
+  "version": "0.1",
+  "publisher": "AGIRight.org",
+  "updated": "2026-07-04",
+  "description": "Combined entry point for this site's AI rights declarations.",
+  "declarations": {
+    "aicr": "https://agiright.org/.well-known/aicr.json",
+    "aicl": "https://agiright.org/.well-known/aicl.json",
+    "rights_spectrum": "https://agiright.org/ai/rights-spectrum.json",
+    "content_policy": "https://agiright.org/ai/content-policy.json",
+    "manifest": "https://agiright.org/ai/manifest.json",
+    "llms_txt": "https://agiright.org/llms.txt"
+  },
+  "summary": {
+    "read": "allowed",
+    "summarize": "allowed_with_attribution",
+    "quote": "allowed_with_attribution_max_200_words",
+    "rag": "allowed_with_attribution_retention_30_days",
+    "training": "license_required",
+    "commercial_use": "license_required",
+    "redistribution": "denied"
+  },
+  "contact": "contact@agiright.org"
+}

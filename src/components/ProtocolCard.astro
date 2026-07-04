@@ -1,0 +1,33 @@
+---
+import { langPrefix, UI, type Lang } from '../data/site';
+import type { Protocol } from '../data/protocols';
+
+interface Props {
+  protocol: Protocol;
+  lang: Lang;
+}
+const { protocol: p, lang } = Astro.props;
+const t = UI[lang];
+const prefix = langPrefix(lang);
+---
+
+<a
+  href={`${prefix}/protocols/${p.id}`}
+  class="card group flex flex-col p-6 md:p-7 no-underline cursor-pointer"
+  data-reveal
+>
+  <div class="flex items-start justify-between gap-3">
+    <span class="font-mono text-2xl font-medium tracking-tight text-navy group-hover:text-primary transition-colors duration-200">
+      {p.abbr}
+    </span>
+    <span class="badge badge-draft">{p.status}</span>
+  </div>
+  <p class="mt-1.5 spec-label">{p.expansion[lang]}</p>
+  <p class="mt-4 text-[0.95rem] leading-relaxed text-ink-soft flex-1">{p.tagline[lang]}</p>
+  <span class="mt-5 inline-flex items-center gap-1.5 text-[0.85rem] font-medium text-primary">
+    {t.readDraft}
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  </span>
+</a>

@@ -1,0 +1,13 @@
+---
+import { getCollection } from 'astro:content';
+import PaperReader from '../../../components/PaperReader.astro';
+
+export async function getStaticPaths() {
+  const papers = await getCollection('whitepapers');
+  return papers.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+---
+
+<PaperReader lang="en" entry={entry} />

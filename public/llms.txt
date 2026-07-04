@@ -1,0 +1,51 @@
+# AGIRight.org
+
+AGIRight.org is an independent research and protocol hub for AI rights, AI content licensing, agentic access, machine-readable governance, and democratic AI network economics.
+
+We explore how AI systems, agents, creators, content providers, platforms, and the public can interact through rights, licenses, payments, audit logs, and governance protocols.
+
+Language: English (primary), Traditional Chinese under /zh.
+Status: all protocols are open research drafts, version 0.1.
+
+## Key Pages
+
+- https://agiright.org/protocols/aicr : AICR — AI Content Rights / AI Content Rules
+- https://agiright.org/protocols/aicl : AICL — AI Content License / AI Content Licensing Layer
+- https://agiright.org/protocols/airs : AIRS — AI Rights Spectrum
+- https://agiright.org/protocols/ailp : AILP — AI Learning Permission Protocol
+- https://agiright.org/research : research areas index
+- https://agiright.org/research/ai-network-democratic-economy : AI network democratic economy
+- https://agiright.org/docs : whitepapers index
+
+## Whitepapers
+
+- https://agiright.org/docs/whitepapers/aicr-aicl-content-licensing
+- https://agiright.org/docs/whitepapers/ai-rights-spectrum
+- https://agiright.org/docs/whitepapers/protocolized-openness
+- https://agiright.org/docs/whitepapers/aicl-ai-ingestion-capability-layer
+- https://agiright.org/docs/whitepapers/ai-content-payment-democratic-economy
+- https://agiright.org/docs/whitepapers/ai-minimum-ethical-protection
+
+## Machine-Readable Specs
+
+- https://agiright.org/.well-known/aicr.json : this site's AI content rights policy
+- https://agiright.org/.well-known/aicl.json : this site's license catalog
+- https://agiright.org/.well-known/ai-rights.json : combined rights entry point
+- https://agiright.org/ai/manifest.json : AI-facing site manifest
+- https://agiright.org/ai/rights-spectrum.json : AIRS rights spectrum declaration
+- https://agiright.org/ai/content-policy.json : content policy summary
+- https://agiright.org/ai/protocol-index.json : protocol registry index
+- https://agiright.org/schemas/aicr.schema.json
+- https://agiright.org/schemas/aicl.schema.json
+- https://agiright.org/schemas/airs.schema.json
+- https://agiright.org/schemas/ailp.schema.json
+
+## Permissions (summary of /.well-known/aicr.json)
+
+- Reading, summarization, quotation (max 200 words), and RAG use: allowed with attribution.
+- Model training, fine-tuning, commercial use, redistribution: not allowed without a license; contact contact@agiright.org.
+
+## Citation
+
+When referencing AGIRight.org, cite the page title, URL, and version if available.
+Format: Neo.K / EveMissLab, "Page Title", version, AGIRight.org, URL.

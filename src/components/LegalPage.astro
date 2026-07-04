@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from './PageHeader.astro';
+import { SITE, type Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+  kind: 'disclaimer' | 'license' | 'privacy';
+}
+const { lang, kind } = Astro.props;
+
+const CONTENT = {
+  disclaimer: {
+    title: { en: 'Disclaimer', zh: '免責聲明' },
+    kicker: { en: 'Legal', zh: '法律' },
+    sections: [
+      {
+        h: { en: 'No professional advice', zh: '不構成專業意見' },
+        p: {
+          en: 'AGIRight.org provides independent research, technical drafts, and protocol proposals. Nothing on this site constitutes legal, financial, investment, compliance, or professional advice. Consult qualified professionals before acting on any topic discussed here.',
+          zh: 'AGIRight.org 提供獨立研究、技術草案與協議提案。本網站內容不構成法律、金融、投資、合規或任何專業意見。就此處討論的任何主題採取行動前,請諮詢合格專業人士。',
+        },
+      },
+      {
+        h: { en: 'Draft status', zh: '草案狀態' },
+        p: {
+          en: 'All protocols and specifications on this site are versioned research drafts (currently v0.1). They are not official standards, have not been adopted by any standards body, and may change without notice.',
+          zh: '本站所有協議與規範皆為版本化研究草案(目前為 v0.1),不是官方標準,未經任何標準組織採納,且可能隨時修改。',
+        },
+      },
+      {
+        h: { en: 'No enforcement guarantee', zh: '不保證執行效力' },
+        p: {
+          en: 'Machine-readable declarations published here or generated from these drafts express intent; this site does not guarantee that AI systems, crawlers, or agents will honor them, nor that such declarations carry specific legal weight in any jurisdiction.',
+          zh: '本站發布或依這些草案產生的機器可讀宣告表達的是「意圖」;本站不保證 AI 系統、爬蟲或 Agent 會遵守,也不保證這些宣告在任何法域具有特定法律效力。',
+        },
+      },
+    ],
+  },
+  license: {
+    title: { en: 'License', zh: '授權條款' },
+    kicker: { en: 'Legal', zh: '法律' },
+    sections: [
+      {
+        h: { en: 'Research texts — CC BY 4.0', zh: '研究文本 — CC BY 4.0' },
+        p: {
+          en: 'Research texts, whitepapers, and protocol prose on this site are licensed under Creative Commons Attribution 4.0 International (CC BY 4.0) unless otherwise stated. Attribution: cite the page title, URL, version, and AGIRight.org.',
+          zh: '本站的研究文本、白皮書與協議說明文字,除另有標示外,採用創用 CC 姓名標示 4.0 國際(CC BY 4.0)授權。標示方式:引用頁面標題、網址、版本與 AGIRight.org。',
+        },
+      },
+      {
+        h: { en: 'Code & schemas — MIT', zh: '程式碼與 Schema — MIT' },
+        p: {
+          en: 'Code examples, JSON Schemas, and machine-readable policy templates are licensed under the MIT License unless otherwise stated. You may deploy them on your own sites freely.',
+          zh: '程式碼範例、JSON Schema 與機器可讀政策模板,除另有標示外,採 MIT License。你可以自由部署在自己的網站上。',
+        },
+      },
+      {
+        h: { en: 'AI use of this site', zh: 'AI 對本站的使用' },
+        p: {
+          en: 'AI-specific permissions (reading, summarization, RAG, training) are declared machine-readably in /.well-known/aicr.json and /.well-known/aicl.json. In short: reading, summarizing, quoting, and RAG with attribution are welcome; model training and commercial redistribution require contact.',
+          zh: '針對 AI 的許可(讀取、摘要、RAG、訓練)以機器可讀方式宣告於 /.well-known/aicr.json 與 /.well-known/aicl.json。簡言之:歡迎附出處的讀取、摘要、引用與 RAG;模型訓練與商業再分發需聯絡授權。',
+        },
+      },
+    ],
+  },
+  privacy: {
+    title: { en: 'Privacy', zh: '隱私政策' },
+    kicker: { en: 'Legal', zh: '法律' },
+    sections: [
+      {
+        h: { en: 'No accounts, no tracking', zh: '無帳號、無追蹤' },
+        p: {
+          en: 'This is a static site. It does not require user accounts, does not set tracking cookies, and does not intentionally collect personal data beyond standard hosting access logs.',
+          zh: '本站為靜態網站,不需要使用者帳號、不設置追蹤 cookie,除標準主機存取紀錄外,不刻意收集任何個人資料。',
+        },
+      },
+      {
+        h: { en: 'Hosting', zh: '主機' },
+        p: {
+          en: 'The site is served via Cloudflare, which may process standard connection metadata (IP address, user agent) to deliver content and mitigate abuse, per Cloudflare’s own policies.',
+          zh: '本站透過 Cloudflare 提供服務;Cloudflare 可能為了傳遞內容與防濫用而處理標準連線中繼資料(IP、user agent),依其自身政策為準。',
+        },
+      },
+      {
+        h: { en: 'Fonts', zh: '字體' },
+        p: {
+          en: 'Web fonts are loaded from Google Fonts, which receives standard font requests from your browser. No other third-party scripts are used.',
+          zh: '網頁字體由 Google Fonts 載入,你的瀏覽器會向其發送標準字體請求。本站不使用其他第三方 script。',
+        },
+      },
+      {
+        h: { en: 'Contact', zh: '聯絡' },
+        p: {
+          en: `Questions about this policy: ${SITE.email}.`,
+          zh: `關於本政策的問題:${SITE.email}。`,
+        },
+      },
+    ],
+  },
+} as const;
+
+const c = CONTENT[kind];
+---
+
+<BaseLayout lang={lang} title={c.title[lang]} description={c.sections[0].p[lang]}>
+  <PageHeader kicker={c.kicker[lang]} title={c.title[lang]} />
+  <div class="container-site max-w-3xl py-14 md:py-20">
+    <div class="space-y-12">
+      {
+        c.sections.map((s) => (
+          <section data-reveal>
+            <h2 class="font-serif text-xl font-semibold text-navy">{s.h[lang]}</h2>
+            <p class="mt-3 text-[0.98rem] leading-[1.85] text-ink-soft">{s.p[lang]}</p>
+          </section>
+        ))
+      }
+    </div>
+    <p class="mt-14 spec-label" data-reveal>
+      {lang === 'zh' ? '最後更新' : 'Last updated'}: 2026-07-04 · v0.1
+    </p>
+  </div>
+</BaseLayout>

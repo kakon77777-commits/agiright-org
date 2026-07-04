@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { UI, langPrefix, type Lang } from '../data/site';
+import { getResearchArea, RESEARCH_AREAS } from '../data/research';
+import { PROTOCOLS } from '../data/protocols';
+import { PAPERS } from '../data/papers';
+
+interface Props {
+  lang: Lang;
+  slug: string;
+}
+const { lang, slug } = Astro.props;
+const t = UI[lang];
+const prefix = langPrefix(lang);
+const r = getResearchArea(slug);
+const relatedProtocols = PROTOCOLS.filter((p) => r.protocols.includes(p.id));
+const relatedPapers = PAPERS.filter((paper) =>
+  paper.protocols.some((pid) => r.protocols.includes(pid))
+);
+const others = RESEARCH_AREAS.filter((x) => x.slug !== r.slug);
+---
+
+<BaseLayout lang={lang} title={r.title[lang]} description={r.summary[lang]}>
+  <section class="border-b border-line bg-surface">
+    <div class="container-site py-14 md:py-18">
+      <nav class="spec-label" aria-label="Breadcrumb" data-hero-line>
+        <a href={prefix + '/research'} class="hover:text-navy transition-colors duration-200">{lang === 'zh' ? '研究' : 'Research'}</a>
+        <span class="mx-2 text-line-strong">/</span>
+        <span class="text-navy">{r.num}</span>
+      </nav>
+      <h1 class="display-serif mt-6 max-w-3xl text-4xl md:text-5xl" data-hero-line>{r.title[lang]}</h1>
+      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-ink-soft" data-hero-line>{r.summary[lang]}</p>
+    </div>
+  </section>
+
+  <div class="container-site grid grid-cols-1 gap-14 py-14 md:py-20 lg:grid-cols-12">
+    <div class="lg:col-span-8">
+      <h2 class="spec-label !text-accent" data-reveal>
+        {lang === 'zh' ? '研究問題' : 'Questions under study'}
+      </h2>
+      <div class="mt-6 overflow-hidden rounded-lg border border-line" data-reveal>
+        {
+          r.topics[lang].map((topic, i) => (
+            <div class:list={['flex gap-4 bg-surface px-5 py-4', i > 0 && 'border-t border-line']}>
+              <span class="font-mono text-[0.72rem] font-medium text-muted pt-1 w-6 shrink-0">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <p class="text-[0.95rem] leading-relaxed text-ink-soft">{topic}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      {
+        relatedPapers.length > 0 && (
+          <div class="mt-14" data-reveal>
+            <h2 class="spec-label !text-accent">{lang === 'zh' ? '相關白皮書' : 'Related whitepapers'}</h2>
+            <ul class="mt-6 space-y-3">
+              {relatedPapers.map((paper) => (
+                <li>
+                  <a
+                    href={`${prefix}/docs/whitepapers/${paper.slug}`}
+                    class="card group flex flex-col gap-1.5 p-5 no-underline cursor-pointer"
+                  >
+                    <span class="font-serif text-lg font-semibold leading-snug text-navy group-hover:text-primary transition-colors duration-200">
+                      {paper.title[lang]}
+                    </span>
+                    <span class="text-[0.85rem] text-muted">{paper.oneLiner[lang]}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+
+    <aside class="lg:col-span-4">
+      <div class="lg:sticky lg:top-24 space-y-8">
+        {
+          relatedProtocols.length > 0 && (
+            <div data-reveal>
+              <p class="spec-label mb-4">{t.relatedProtocols}</p>
+              <ul class="space-y-3">
+                {relatedProtocols.map((p) => (
+                  <li>
+                    <a
+                      href={`${prefix}/protocols/${p.id}`}
+                      class="group block rounded-md border border-line bg-surface p-4 no-underline cursor-pointer hover:border-line-strong transition-colors duration-200"
+                    >
+                      <span class="font-mono text-[0.95rem] font-medium text-navy group-hover:text-primary transition-colors duration-200">
+                        {p.abbr}
+                      </span>
+                      <span class="mt-1 block text-[0.8rem] leading-snug text-muted">{p.expansion[lang]}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+        <div data-reveal>
+          <p class="spec-label mb-4">{t.allResearch}</p>
+          <ul class="space-y-2">
+            {
+              others.map((o) => (
+                <li>
+                  <a href={`${prefix}/research/${o.slug}`} class="group flex items-baseline gap-3 py-1 no-underline cursor-pointer">
+                    <span class="font-mono text-[0.75rem] text-accent">{o.num}</span>
+                    <span class="text-[0.88rem] font-medium text-ink-soft group-hover:text-navy transition-colors duration-200">
+                      {o.title[lang]}
+                    </span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </div>
+</BaseLayout>

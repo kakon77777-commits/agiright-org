@@ -1,0 +1,37 @@
+---
+import { SPECTRUM } from '../data/spectrum';
+import type { Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+  class?: string;
+}
+const { lang, class: className = '' } = Astro.props;
+---
+
+<div class={`select-none ${className}`} data-spectrum role="img" aria-label={lang === 'zh' ? 'AIRS AI 權利光譜:八個層級,從禁止 AI 存取到可商業再分發' : 'AIRS AI Rights Spectrum: eight levels from No AI Access to Commercial Redistribution'}>
+  <div class="grid grid-cols-4 gap-x-3 gap-y-6 sm:grid-cols-8 sm:gap-x-2">
+    {
+      SPECTRUM.map((s) => (
+        <div class="flex flex-col items-stretch gap-2.5">
+          <div class="flex h-28 items-end sm:h-36">
+            <div
+              class="w-full rounded-t-sm"
+              data-spectrum-bar
+              style={`background:${s.color}; height:${18 + s.level * 11.5}%`}
+            />
+          </div>
+          <div data-spectrum-label>
+            <p class="font-mono text-[0.7rem] font-medium text-muted">L{s.level}</p>
+            <p class="mt-0.5 text-[0.78rem] font-medium leading-snug text-ink">{s.name[lang]}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <div class="mt-6 flex items-center justify-between border-t border-line pt-3">
+    <span class="spec-label !text-deny">{lang === 'zh' ? '封閉' : 'Closed'}</span>
+    <span class="spec-label">{lang === 'zh' ? '每一級皆可獨立授權與稽核' : 'each level independently licensable & auditable'}</span>
+    <span class="spec-label !text-ok">{lang === 'zh' ? '開放' : 'Open'}</span>
+  </div>
+</div>

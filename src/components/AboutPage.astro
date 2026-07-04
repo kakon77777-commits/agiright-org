@@ -1,0 +1,145 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from './PageHeader.astro';
+import { SITE, type Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const title = lang === 'zh' ? '關於' : 'About';
+const intro =
+  lang === 'zh'
+    ? 'AGIRight.org 是一個研究 AI 權利、AI 內容授權、Agent 存取、機器可讀治理與 AI 網路民主化經濟的獨立協議型研究站。'
+    : 'AGIRight.org is an independent research and protocol hub for AI rights, AI content licensing, agentic access, machine-readable governance, and democratic AI network economics.';
+
+const isItems =
+  lang === 'zh'
+    ? [
+        '一個公開研究站:研究頁、白皮書與協議草案',
+        '一個協議文件庫:AICR、AICL、AIRS、AILP 的版本化規範',
+        '一個機器可讀權利規範入口:llms.txt、/ai/、/.well-known/、JSON Schema',
+        '一個未來 AI / Agent 治理的實驗站:本站自身即為可運作範例',
+      ]
+    : [
+        'A public research site: research pages, whitepapers, and protocol drafts',
+        'A protocol document library: versioned specifications for AICR, AICL, AIRS, AILP',
+        'A machine-readable rights entry point: llms.txt, /ai/, /.well-known/, JSON Schemas',
+        'An experiment in AI/agent governance: this site is itself a working example',
+      ];
+
+const isNotItems =
+  lang === 'zh'
+    ? [
+        '不是官方 AGI 權利標準,也不是國際標準組織',
+        '不聲稱解決所有 AI 著作權爭議,或保證 AI 公司付費',
+        '不提供法律意見,也不定義 AGI 法律人格',
+        '不是商業付款網關,不處理支付合規',
+        '不代表所有創作者或內容方',
+      ]
+    : [
+        'Not an official AGI rights standard, nor an international standards body',
+        'Not a claim to resolve all AI copyright disputes, or a guarantee that AI companies will pay',
+        'Not legal advice, and not a definition of AGI legal personhood',
+        'Not a commercial payment gateway; payment compliance is out of scope',
+        'Not a representative of all creators or content providers',
+      ];
+
+const roadmap = [
+  {
+    v: 'v0.1',
+    now: true,
+    en: 'Static research site, four protocol drafts, machine-readable layer, whitepapers — this release.',
+    zh: '靜態研究站、四個協議草案、機器可讀層、白皮書——本次發布。',
+  },
+  {
+    v: 'v0.2',
+    en: 'AICR/AICL generators, schema validator, more examples, English versions of remaining papers, changelog.',
+    zh: 'AICR/AICL 產生器、schema 驗證器、更多範例、其餘論文英文版、changelog。',
+  },
+  {
+    v: 'v0.3',
+    en: 'Protocol registry, signed license token demo, HTTP 402 mock responses, crawler policy tester, OpenAPI spec.',
+    zh: '協議 registry、簽章授權憑證 demo、HTTP 402 模擬回應、爬蟲政策測試器、OpenAPI 規格。',
+  },
+  {
+    v: 'v1.0',
+    en: 'Stable protocol specs, full bilingual site, developer documentation, community feedback loop.',
+    zh: '穩定協議規格、完整雙語站、開發者文件、社群回饋機制。',
+  },
+];
+---
+
+<BaseLayout lang={lang} title={title} description={intro}>
+  <PageHeader kicker={lang === 'zh' ? '關於本站' : 'About this site'} title={title} intro={intro} />
+  <div class="container-site max-w-4xl py-14 md:py-20 space-y-16">
+    <section data-reveal>
+      <h2 class="spec-label !text-accent">{lang === 'zh' ? '這個網站是什麼' : 'What this site is'}</h2>
+      <ul class="mt-5 space-y-3.5">
+        {
+          isItems.map((item) => (
+            <li class="flex gap-3 text-[0.98rem] leading-relaxed text-ink-soft">
+              <svg class="mt-1.5 h-3.5 w-3.5 shrink-0 text-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 12l5 5L20 6" />
+              </svg>
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section data-reveal>
+      <h2 class="spec-label !text-warn">{lang === 'zh' ? '這個網站不是什麼' : 'What this site is not'}</h2>
+      <ul class="mt-5 space-y-3.5">
+        {
+          isNotItems.map((item) => (
+            <li class="flex gap-3 text-[0.95rem] leading-relaxed text-muted">
+              <svg class="mt-1.5 h-3.5 w-3.5 shrink-0 text-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-6 rounded-md border-l-2 border-line-strong bg-surface px-5 py-3.5 text-[0.9rem] text-ink-soft">
+        {lang === 'zh'
+          ? '正確定位:獨立研究草案、協議提案與開放規範實驗站。'
+          : 'Correct positioning: independent research drafts, protocol proposals, and an open specification experiment.'}
+      </p>
+    </section>
+
+    <section data-reveal>
+      <h2 class="spec-label !text-accent">{lang === 'zh' ? '誰在做這件事' : 'Who is behind it'}</h2>
+      <p class="mt-5 max-w-2xl text-[1rem] leading-[1.85] text-ink-soft">
+        {lang === 'zh'
+          ? `本站由 ${SITE.author}(${SITE.org})發起與維護。相關研究亦發布於 EveMissLab 的其他站點與開源專案;本站的協議草案同時實際部署在這些站點上,作為機器可讀治理的實例。`
+          : `This site is initiated and maintained by ${SITE.author} (${SITE.org}). Related research is also published across other EveMissLab sites and open-source projects; the protocol drafts here are deployed on those sites in practice, as working examples of machine-readable governance.`}
+      </p>
+      <p class="mt-4 font-mono text-[0.8rem] text-muted">
+        agiright.org · asiright.org ({lang === 'zh' ? '同站別名' : 'alias domain'}) · {SITE.email}
+      </p>
+    </section>
+
+    <section data-reveal>
+      <h2 class="spec-label !text-accent">{lang === 'zh' ? '路線圖' : 'Roadmap'}</h2>
+      <div class="mt-6 overflow-hidden rounded-lg border border-line">
+        {
+          roadmap.map((r, i) => (
+            <div class:list={['flex gap-5 bg-surface px-5 py-4', i > 0 && 'border-t border-line']}>
+              <span class:list={['font-mono text-[0.85rem] font-medium w-10 shrink-0 pt-0.5', r.now ? 'text-ok' : 'text-muted']}>
+                {r.v}
+              </span>
+              <p class="text-[0.92rem] leading-relaxed text-ink-soft">
+                {r.now && <span class="badge badge-live mr-2">{lang === 'zh' ? '現在' : 'now'}</span>}
+                {lang === 'zh' ? r.zh : r.en}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</BaseLayout>

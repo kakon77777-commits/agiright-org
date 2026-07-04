@@ -1,0 +1,107 @@
+---
+import { NAV, UI, SITE, langPrefix, type Lang } from '../data/site';
+import { PROTOCOLS } from '../data/protocols';
+import Logo from './Logo.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = UI[lang];
+const prefix = langPrefix(lang);
+const year = new Date().getFullYear();
+
+const machineLinks = [
+  { href: '/llms.txt', label: 'llms.txt' },
+  { href: '/ai/manifest.json', label: 'ai/manifest.json' },
+  { href: '/ai/rights-spectrum.json', label: 'ai/rights-spectrum.json' },
+  { href: '/.well-known/aicr.json', label: '.well-known/aicr.json' },
+  { href: '/.well-known/aicl.json', label: '.well-known/aicl.json' },
+  { href: '/sitemap-index.xml', label: 'sitemap.xml' },
+];
+---
+
+<footer class="border-t border-line bg-paper-deep/60 mt-24">
+  <div class="container-site py-14">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+      <div class="md:col-span-5">
+        <a href={prefix || '/'} class="inline-flex items-center gap-2.5">
+          <Logo class="h-8 w-8" />
+          <span class="font-serif text-xl font-semibold text-navy">AGIRight<span class="text-muted font-normal">.org</span></span>
+        </a>
+        <p class="mt-4 max-w-sm text-[0.9rem] leading-relaxed text-muted">
+          {t.footerTagline}
+        </p>
+        <p class="mt-4 spec-label">
+          {SITE.org} · {SITE.author} · {lang === 'zh' ? '亦可經' : 'also at'} asiright.org
+        </p>
+      </div>
+
+      <div class="md:col-span-2">
+        <p class="spec-label mb-4">{lang === 'zh' ? '網站' : 'Site'}</p>
+        <ul class="space-y-2.5 text-[0.9rem]">
+          {
+            NAV.map((item) => (
+              <li>
+                <a href={prefix + item.href} class="text-ink-soft hover:text-navy transition-colors duration-200">
+                  {item[lang]}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            <a href={prefix + '/contact'} class="text-ink-soft hover:text-navy transition-colors duration-200">
+              {lang === 'zh' ? '聯絡' : 'Contact'}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-2">
+        <p class="spec-label mb-4">{lang === 'zh' ? '協議' : 'Protocols'}</p>
+        <ul class="space-y-2.5 text-[0.9rem]">
+          {
+            PROTOCOLS.map((p) => (
+              <li>
+                <a href={`${prefix}/protocols/${p.id}`} class="text-ink-soft hover:text-navy transition-colors duration-200">
+                  {p.abbr}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            <a href={prefix + '/specs'} class="text-ink-soft hover:text-navy transition-colors duration-200">
+              {lang === 'zh' ? '規範總覽' : 'All specs'}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-3">
+        <p class="spec-label mb-4">{lang === 'zh' ? '機器可讀' : 'Machine-readable'}</p>
+        <ul class="space-y-2.5">
+          {
+            machineLinks.map((l) => (
+              <li>
+                <a href={l.href} class="font-mono text-[0.78rem] text-spec hover:text-navy transition-colors duration-200">
+                  /{l.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="hairline mt-12 pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <p class="text-[0.8rem] text-muted">
+        © {year} {SITE.org} · {t.footerRights}
+      </p>
+      <div class="flex items-center gap-5 text-[0.8rem]">
+        <a href={prefix + '/legal/disclaimer'} class="text-muted hover:text-navy transition-colors duration-200">Disclaimer</a>
+        <a href={prefix + '/legal/license'} class="text-muted hover:text-navy transition-colors duration-200">License</a>
+        <a href={prefix + '/legal/privacy'} class="text-muted hover:text-navy transition-colors duration-200">Privacy</a>
+      </div>
+    </div>
+  </div>
+</footer>

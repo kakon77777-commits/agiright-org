@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from './PageHeader.astro';
+import { SITE, type Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const title = lang === 'zh' ? '聯絡' : 'Contact';
+const intro =
+  lang === 'zh'
+    ? '研究回饋、協議討論、授權洽詢,或想在自己的網站上部署這些協議——都歡迎來信。'
+    : 'Research feedback, protocol discussion, licensing inquiries, or deploying these protocols on your own site — all welcome.';
+
+const reasons = [
+  {
+    en: 'Feedback on protocol drafts (AICR / AICL / AIRS / AILP)',
+    zh: '對協議草案的回饋(AICR / AICL / AIRS / AILP)',
+  },
+  { en: 'Training or commercial licensing of this site’s content', zh: '本站內容的訓練或商業授權' },
+  { en: 'Research collaboration or citation questions', zh: '研究合作或引用問題' },
+  { en: 'Deploying machine-readable policies on your site', zh: '在你的網站部署機器可讀政策' },
+];
+---
+
+<BaseLayout lang={lang} title={title} description={intro}>
+  <PageHeader kicker={lang === 'zh' ? '聯絡我們' : 'Get in touch'} title={title} intro={intro} />
+  <div class="container-site max-w-4xl py-14 md:py-20">
+    <div class="card p-8 md:p-10" data-reveal>
+      <p class="spec-label">{lang === 'zh' ? '電子郵件' : 'Email'}</p>
+      <a href={`mailto:${SITE.email}`} class="mt-3 inline-block font-mono text-xl text-primary hover:text-accent transition-colors duration-200 md:text-2xl">
+        {SITE.email}
+      </a>
+      <ul class="mt-8 space-y-3">
+        {
+          reasons.map((r) => (
+            <li class="flex gap-3 text-[0.95rem] leading-relaxed text-ink-soft">
+              <svg class="mt-1.5 h-3.5 w-3.5 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+              {lang === 'zh' ? r.zh : r.en}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-8 border-t border-line pt-5 text-[0.85rem] leading-relaxed text-muted">
+        {lang === 'zh'
+          ? '機器可讀的授權洽詢入口,見 /.well-known/aicl.json 中的 contact 欄位。'
+          : 'For machine-readable licensing inquiries, see the contact field in /.well-known/aicl.json.'}
+      </p>
+    </div>
+  </div>
+</BaseLayout>

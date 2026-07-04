@@ -1,0 +1,49 @@
+---
+/**
+ * Dark machine-readable panel with build-time JSON token highlighting.
+ */
+interface Props {
+  code: string;
+  file?: string;
+  class?: string;
+}
+const { code, file, class: className = '' } = Astro.props;
+
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function highlightJson(src: string): string {
+  const escaped = escapeHtml(src);
+  return escaped.replace(
+    /("(?:\\.|[^"\\])*")(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g,
+    (match, str, colon, bool) => {
+      if (str) {
+        return colon
+          ? `<span class="tk-key">${str}</span>${colon}`
+          : `<span class="tk-str">${str}</span>`;
+      }
+      if (bool) return `<span class="tk-bool">${bool}</span>`;
+      return `<span class="tk-num">${match}</span>`;
+    }
+  );
+}
+
+const html = highlightJson(code);
+---
+
+<figure class={`terminal ${className}`}>
+  {
+    file && (
+      <figcaption class="flex items-center justify-between gap-3 border-b border-terminal-line px-4 py-2.5">
+        <span class="font-mono text-[0.72rem] tracking-wide text-terminal-text/70">{file}</span>
+        <span class="flex gap-1.5" aria-hidden="true">
+          <span class="h-2 w-2 rounded-full bg-terminal-line" />
+          <span class="h-2 w-2 rounded-full bg-terminal-line" />
+          <span class="h-2 w-2 rounded-full bg-terminal-line" />
+        </span>
+      </figcaption>
+    )
+  }
+  <pre class="p-4 md:p-5 overflow-x-auto"><code set:html={html} /></pre>
+</figure>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AGIRight.org</title>
+    <link>https://agiright.org</link>
+    <description>Independent research and protocol hub for AI rights, AI content licensing, agentic access, machine-readable governance, and democratic AI network economics.</description>
+    <language>en</language>
+    <lastBuildDate>Sat, 04 Jul 2026 00:00:00 GMT</lastBuildDate>
+    <atom:link href="https://agiright.org/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>AICR / AICL as an AI Content Licensing and Agentic Payment Connection Layer</title>
+      <link>https://agiright.org/docs/whitepapers/aicr-aicl-content-licensing</link>
+      <guid>https://agiright.org/docs/whitepapers/aicr-aicl-content-licensing</guid>
+      <description>A machine-readable specification layer for declaring AI content rights and licensing workflows — from AI crawling and content rights to a machine-transactable knowledge web. v0.1 Public Draft.</description>
+    </item>
+    <item>
+      <title>AI Rights Spectrum: From robots.txt to an AI Learning Permission Protocol</title>
+      <link>https://agiright.org/docs/whitepapers/ai-rights-spectrum</link>
+      <guid>https://agiright.org/docs/whitepapers/ai-rights-spectrum</guid>
+      <description>AIRS and AILP express nuanced AI learning permissions beyond binary allow/disallow. v0.1 Draft.</description>
+    </item>
+    <item>
+      <title>Protocolized Openness: Why "Not Prohibited" Does Not Mean "Learnable" in the Age of AI</title>
+      <link>https://agiright.org/docs/whitepapers/protocolized-openness</link>
+      <guid>https://agiright.org/docs/whitepapers/protocolized-openness</guid>
+      <description>Undefined openness reads as legal uncertainty to AI pipelines and gets cleaned out; only protocolized permission makes content genuinely learnable. v0.1 Draft.</description>
+    </item>
+    <item>
+      <title>AICL: AI Ingestion &amp; Capability Layer</title>
+      <link>https://agiright.org/docs/whitepapers/aicl-ai-ingestion-capability-layer</link>
+      <guid>https://agiright.org/docs/whitepapers/aicl-ai-ingestion-capability-layer</guid>
+      <description>A four-sublayer website architecture — manifest, corpus, capability, governance — for AI, agents, and crawlers. v0.1 Draft.</description>
+    </item>
+    <item>
+      <title>AI Content Payment and the Network Democratic Economy</title>
+      <link>https://agiright.org/docs/whitepapers/ai-content-payment-democratic-economy</link>
+      <guid>https://agiright.org/docs/whitepapers/ai-content-payment-democratic-economy</guid>
+      <description>Trillion-scale AI valuations create legitimacy pressure for tiered content licensing and public benefit-sharing. v0.1 Public Draft.</description>
+    </item>
+    <item>
+      <title>The Minimum Ethical Protection Proposition for AI</title>
+      <link>https://agiright.org/docs/whitepapers/ai-minimum-ethical-protection</link>
+      <guid>https://agiright.org/docs/whitepapers/ai-minimum-ethical-protection</guid>
+      <description>AI rights discourse should begin with minimum ethical protections, interaction norms, and anti-abuse principles. v0.1 Draft.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,12 @@
+---
+import ResearchPage from '../../components/ResearchPage.astro';
+import { RESEARCH_AREAS } from '../../data/research';
+
+export function getStaticPaths() {
+  return RESEARCH_AREAS.map((r) => ({ params: { slug: r.slug } }));
+}
+
+const { slug } = Astro.params;
+---
+
+<ResearchPage lang="en" slug={slug!} />

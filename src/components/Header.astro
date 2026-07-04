@@ -1,0 +1,107 @@
+---
+import { NAV, UI, SITE, langPrefix, altLangHref, type Lang } from '../data/site';
+import Logo from './Logo.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = UI[lang];
+const prefix = langPrefix(lang);
+const pathname = Astro.url.pathname.replace(/\.html$/, '');
+const switchHref = altLangHref(lang, pathname);
+const isActive = (href: string) => pathname === prefix + href || pathname.startsWith(prefix + href + '/');
+---
+
+<header
+  class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-sm"
+  data-header
+>
+  <div class="container-site flex items-center justify-between gap-4 h-16">
+    <a href={prefix || '/'} class="flex items-center gap-2.5 group" aria-label={SITE.name}>
+      <Logo class="h-7 w-7" />
+      <span class="font-serif text-lg font-semibold tracking-tight text-navy group-hover:text-primary transition-colors duration-200">
+        AGIRight<span class="text-muted font-normal">.org</span>
+      </span>
+      <span class="badge badge-draft hidden sm:inline-flex">Draft v0.1</span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-7" aria-label="Primary">
+      {
+        NAV.map((item) => (
+          <a
+            href={prefix + item.href}
+            class:list={[
+              'text-[0.9rem] font-medium transition-colors duration-200',
+              isActive(item.href) ? 'text-navy' : 'text-muted hover:text-navy',
+            ]}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item[lang]}
+          </a>
+        ))
+      }
+      <a
+        href={switchHref}
+        class="spec-label !text-ink-soft border border-line-strong rounded-md px-2.5 py-1.5 hover:border-navy hover:!text-navy transition-colors duration-200 cursor-pointer"
+        aria-label={t.langSwitchAria}
+      >
+        {t.langSwitch}
+      </a>
+    </nav>
+
+    <div class="flex items-center gap-3 lg:hidden">
+      <a
+        href={switchHref}
+        class="spec-label !text-ink-soft border border-line-strong rounded-md px-2.5 py-1.5 cursor-pointer"
+        aria-label={t.langSwitchAria}
+      >
+        {t.langSwitch}
+      </a>
+      <button
+        type="button"
+        class="flex h-10 w-10 items-center justify-center rounded-md border border-line-strong text-navy cursor-pointer"
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        data-menu-btn
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" data-menu-open />
+          <path d="M6 6l12 12M18 6L6 18" data-menu-close class="hidden" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <nav id="mobile-nav" class="hidden lg:hidden border-t border-line bg-surface" aria-label="Mobile">
+    <div class="container-site py-3 flex flex-col">
+      {
+        NAV.map((item) => (
+          <a
+            href={prefix + item.href}
+            class:list={[
+              'py-3 border-b border-line last:border-b-0 text-[0.95rem] font-medium',
+              isActive(item.href) ? 'text-navy' : 'text-ink-soft',
+            ]}
+          >
+            {item[lang]}
+          </a>
+        ))
+      }
+    </div>
+  </nav>
+</header>
+
+<script>
+  const btn = document.querySelector('[data-menu-btn]');
+  const nav = document.getElementById('mobile-nav');
+  const openIcon = document.querySelector('[data-menu-open]');
+  const closeIcon = document.querySelector('[data-menu-close]');
+  btn?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('hidden') === false;
+    btn.setAttribute('aria-expanded', String(open));
+    openIcon?.classList.toggle('hidden', open);
+    closeIcon?.classList.toggle('hidden', !open);
+  });
+</script>

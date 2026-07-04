@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from './PageHeader.astro';
+import { langPrefix, type Lang } from '../data/site';
+import { PROTOCOLS } from '../data/protocols';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const prefix = langPrefix(lang);
+
+const title = lang === 'zh' ? '機器可讀規範' : 'Machine-Readable Specs';
+const intro =
+  lang === 'zh'
+    ? '所有協議的版本化規格、JSON Schema 與本站實際部署的政策檔。每個檔案都可直接下載、驗證與引用。'
+    : 'Versioned specifications, JSON Schemas, and the policy files actually deployed on this site. Every file can be downloaded, validated, and cited directly.';
+
+const liveFiles = [
+  { path: '/llms.txt', desc: { en: 'Site guide for AI systems', zh: 'AI 系統的網站導覽' } },
+  { path: '/robots.txt', desc: { en: 'Crawler access rules', zh: '爬蟲存取規則' } },
+  { path: '/ai/manifest.json', desc: { en: 'AI-facing site manifest', zh: '面向 AI 的站點清單' } },
+  { path: '/ai/rights-spectrum.json', desc: { en: 'AIRS spectrum declaration', zh: 'AIRS 光譜宣告' } },
+  { path: '/ai/content-policy.json', desc: { en: 'Content policy summary', zh: '內容政策摘要' } },
+  { path: '/ai/protocol-index.json', desc: { en: 'Protocol registry index', zh: '協議索引' } },
+  { path: '/.well-known/aicr.json', desc: { en: 'AICR policy of this site', zh: '本站 AICR 政策' } },
+  { path: '/.well-known/aicl.json', desc: { en: 'AICL license catalog of this site', zh: '本站 AICL 授權目錄' } },
+  { path: '/.well-known/ai-rights.json', desc: { en: 'Combined rights entry point', zh: '整合權利入口' } },
+  { path: '/.well-known/security.txt', desc: { en: 'Security contact', zh: '安全聯絡' } },
+];
+---
+
+<BaseLayout lang={lang} title={title} description={intro}>
+  <PageHeader kicker={lang === 'zh' ? '規範' : 'Specifications'} title={title} intro={intro} badges={['Draft v0.1']} />
+  <div class="container-site py-14 md:py-20 space-y-16">
+    <section>
+      <h2 class="spec-label !text-accent" data-reveal>{lang === 'zh' ? '協議規格' : 'Protocol specifications'}</h2>
+      <div class="mt-6 overflow-hidden rounded-lg border border-line" data-reveal>
+        <div class="hidden md:grid md:grid-cols-12 gap-4 bg-paper-deep px-5 py-3 border-b border-line">
+          {[
+            lang === 'zh' ? '協議' : 'Protocol',
+            lang === 'zh' ? '名稱' : 'Name',
+            lang === 'zh' ? '狀態' : 'Status',
+            'Schema',
+          ].map((h, i) => (
+            <p class:list={['spec-label', i === 0 && 'md:col-span-2', i === 1 && 'md:col-span-5', i === 2 && 'md:col-span-2', i === 3 && 'md:col-span-3']}>{h}</p>
+          ))}
+        </div>
+        {
+          PROTOCOLS.map((p, i) => (
+            <div class:list={['grid grid-cols-1 gap-2 bg-surface px-5 py-4 md:grid-cols-12 md:items-center md:gap-4', i > 0 && 'border-t border-line']}>
+              <a href={`${prefix}/protocols/${p.id}`} class="font-mono text-[0.95rem] font-medium text-navy hover:text-primary transition-colors duration-200 md:col-span-2">
+                {p.abbr}
+              </a>
+              <p class="text-[0.88rem] text-ink-soft md:col-span-5">{p.expansion[lang]}</p>
+              <p class="md:col-span-2"><span class="badge badge-draft">{p.status}</span></p>
+              <a href={p.schemaUrl} class="font-mono text-[0.78rem] text-spec hover:text-navy transition-colors duration-200 md:col-span-3" download>
+                {p.schemaUrl.split('/').pop()} ↓
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section>
+      <h2 class="spec-label !text-accent" data-reveal>{lang === 'zh' ? '本站部署的檔案' : 'Files deployed on this site'}</h2>
+      <div class="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2" data-reveal>
+        {
+          liveFiles.map((f) => (
+            <a href={f.path} class="group flex flex-col gap-1 bg-surface p-4.5 px-5 py-4 no-underline cursor-pointer hover:bg-primary-soft/40 transition-colors duration-200">
+              <span class="font-mono text-[0.82rem] font-medium text-spec group-hover:text-navy transition-colors duration-200">{f.path}</span>
+              <span class="text-[0.8rem] text-muted">{f.desc[lang]}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="rounded-md border-l-2 border-line-strong bg-surface px-5 py-4" data-reveal>
+      <p class="spec-label">{lang === 'zh' ? '版本策略' : 'Versioning'}</p>
+      <p class="mt-2 max-w-3xl text-[0.9rem] leading-relaxed text-ink-soft">
+        {lang === 'zh'
+          ? '規格以 Draft → Experimental → Proposal → Stable 標示狀態;目前全部為 Draft v0.1。欄位與語意在 v1.0 前可能變動,重大變更會記錄於 changelog。'
+          : 'Specs are labeled Draft → Experimental → Proposal → Stable; everything is currently Draft v0.1. Fields and semantics may change before v1.0; breaking changes will be recorded in a changelog.'}
+      </p>
+    </section>
+  </div>
+</BaseLayout>

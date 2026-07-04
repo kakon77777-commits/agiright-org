@@ -1,0 +1,11 @@
+# AGIRight.org — robots.txt
+# Crawling for reading and indexing is welcome.
+# AI-specific permissions (summarization, RAG, training) are declared in:
+#   https://agiright.org/.well-known/aicr.json
+#   https://agiright.org/.well-known/aicl.json
+#   https://agiright.org/llms.txt
+
+User-agent: *
+Allow: /
+
+Sitemap: https://agiright.org/sitemap-index.xml

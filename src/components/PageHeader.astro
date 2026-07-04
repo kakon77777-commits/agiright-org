@@ -1,0 +1,31 @@
+---
+interface Props {
+  kicker: string;
+  title: string;
+  intro?: string;
+  badges?: string[];
+}
+const { kicker, title, intro, badges = [] } = Astro.props;
+---
+
+<section class="border-b border-line bg-surface">
+  <div class="container-site py-14 md:py-20">
+    <div class="max-w-3xl">
+      <p class="spec-label flex items-center gap-3" data-hero-line>
+        <span>{kicker}</span>
+        <span class="h-px flex-1 max-w-16 bg-line-strong" aria-hidden="true"></span>
+      </p>
+      <h1 class="display-serif mt-4 text-4xl md:text-5xl" data-hero-line>{title}</h1>
+      {intro && <p class="mt-6 text-lg leading-relaxed text-ink-soft" data-hero-line>{intro}</p>}
+      {
+        badges.length > 0 && (
+          <div class="mt-6 flex flex-wrap gap-2" data-hero-line>
+            {badges.map((b) => (
+              <span class="badge badge-draft">{b}</span>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>

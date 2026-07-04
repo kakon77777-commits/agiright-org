@@ -1,0 +1,65 @@
+{
+  "version": "0.1",
+  "protocol": "AIRS",
+  "publisher": "AGIRight.org",
+  "updated": "2026-07-04",
+  "description": "AI Rights Spectrum — AI rights over content expressed as graduated, independently licensable levels.",
+  "spectrum": [
+    {
+      "level": 0,
+      "name": "No AI Access",
+      "description": "AI systems may not access the resource."
+    },
+    {
+      "level": 1,
+      "name": "Read Only",
+      "description": "AI systems may read the resource but may not summarize, store, transform, or train."
+    },
+    {
+      "level": 2,
+      "name": "Read and Summarize",
+      "description": "AI systems may read and summarize with attribution."
+    },
+    {
+      "level": 3,
+      "name": "RAG Use",
+      "description": "AI systems may use the resource for retrieval-augmented generation under retention and attribution rules."
+    },
+    {
+      "level": 4,
+      "name": "Transform",
+      "description": "AI systems may transform the resource into structured data under license conditions."
+    },
+    {
+      "level": 5,
+      "name": "Fine-Tuning Use",
+      "description": "AI systems may use the resource for fine-tuning if explicitly licensed."
+    },
+    {
+      "level": 6,
+      "name": "Training Use",
+      "description": "AI systems may use the resource for model training if explicitly licensed."
+    },
+    {
+      "level": 7,
+      "name": "Commercial Redistribution",
+      "description": "AI systems may commercially redistribute derived outputs if explicitly licensed."
+    }
+  ],
+  "this_site": {
+    "declared_level": 3,
+    "note": "AGIRight.org content is open through Level 3 (RAG with attribution, retention 30 days). Levels 4-7 require a license: contact@agiright.org.",
+    "ailp_profile": {
+      "access": "allowed",
+      "indexing": "allowed",
+      "inference_input": "allowed",
+      "embedding": "allowed",
+      "training": "license_required",
+      "fine_tuning": "license_required",
+      "distillation": "denied",
+      "verbatim_memory": "denied",
+      "attribution": "required",
+      "compensation": "contact"
+    }
+  }
+}

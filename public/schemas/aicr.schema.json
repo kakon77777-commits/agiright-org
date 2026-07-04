@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agiright.org/schemas/aicr.schema.json",
+  "title": "AICR Schema",
+  "description": "AI Content Rights / AI Content Rules schema. Draft v0.1.",
+  "type": "object",
+  "required": ["version", "publisher", "default_policy"],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "protocol": {
+      "type": "string",
+      "const": "AICR"
+    },
+    "publisher": {
+      "type": "string"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date"
+    },
+    "schema": {
+      "type": "string",
+      "format": "uri"
+    },
+    "default_policy": {
+      "type": "object",
+      "properties": {
+        "read_access": { "$ref": "#/$defs/rightRule" },
+        "summarization": { "$ref": "#/$defs/rightRule" },
+        "quotation": { "$ref": "#/$defs/rightRule" },
+        "rag_use": { "$ref": "#/$defs/rightRule" },
+        "transformation": { "$ref": "#/$defs/rightRule" },
+        "training": { "$ref": "#/$defs/rightRule" },
+        "commercial_use": { "$ref": "#/$defs/rightRule" },
+        "redistribution": { "$ref": "#/$defs/rightRule" }
+      },
+      "additionalProperties": { "$ref": "#/$defs/rightRule" }
+    },
+    "resource_overrides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path"],
+        "properties": {
+          "path": { "type": "string" },
+          "policy": { "type": "object" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "rightRule": {
+      "type": "object",
+      "properties": {
+        "allowed": { "type": "boolean" },
+        "license_required": { "type": "boolean" },
+        "attribution_required": { "type": "boolean" },
+        "max_excerpt_words": { "type": "integer", "minimum": 0 },
+        "retention_days": { "type": "integer", "minimum": 0 },
+        "permission_contact": { "type": "string" }
+      }
+    }
+  }
+}

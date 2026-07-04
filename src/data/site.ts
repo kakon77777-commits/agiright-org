@@ -1,0 +1,179 @@
+export type Lang = 'en' | 'zh';
+
+export const SITE = {
+  name: 'AGIRight.org',
+  url: 'https://agiright.org',
+  altDomain: 'asiright.org',
+  email: 'contact@agiright.org',
+  org: 'EveMissLab',
+  author: 'Neo.K',
+  version: 'v0.1',
+  status: 'Draft',
+  title: {
+    en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
+    zh: 'AGIRight.org — AI 權利、內容授權與機器可讀治理研究站',
+  },
+  description: {
+    en: 'Independent research and protocol hub for AI rights, AI content licensing, agentic access, machine-readable governance, and democratic AI network economics.',
+    zh: '研究 AI 權利、AI 內容授權、Agent 存取、機器可讀治理與 AI 網路民主化經濟的獨立協議型研究站。',
+  },
+} as const;
+
+export function langPrefix(lang: Lang): string {
+  return lang === 'zh' ? '/zh' : '';
+}
+
+export function altLangHref(lang: Lang, pathname: string): string {
+  // strip any /zh prefix, then re-apply for the other language
+  const bare = pathname.replace(/^\/zh(?=\/|$)/, '') || '/';
+  if (lang === 'zh') return bare; // link to EN
+  return bare === '/' ? '/zh' : `/zh${bare}`;
+}
+
+export const NAV = [
+  { href: '/research', en: 'Research', zh: '研究' },
+  { href: '/protocols', en: 'Protocols', zh: '協議' },
+  { href: '/specs', en: 'Specs', zh: '規範' },
+  { href: '/docs', en: 'Whitepapers', zh: '白皮書' },
+  { href: '/playground', en: 'Playground', zh: '實驗工具' },
+  { href: '/about', en: 'About', zh: '關於' },
+] as const;
+
+export const UI = {
+  en: {
+    skipToContent: 'Skip to content',
+    heroKicker: 'Independent research & protocol hub',
+    heroTitle: 'AI rights, content licensing, agentic access, and machine-readable governance for the next web.',
+    heroSub:
+      'We explore protocols for how AI systems, agents, creators, content providers, platforms, and the public can interact through rights, licenses, payments, audit logs, and governance rules.',
+    ctaPrimary: 'Explore the protocols',
+    ctaSecondary: 'Read the whitepapers',
+    ctaSpecs: 'Machine-readable specs',
+    missionKicker: 'Mission',
+    missionTitle: 'From “not prohibited” to protocolized openness.',
+    missionBody:
+      'The web was built for human readers. AI systems now read, summarize, index, learn from, and transact over the same content — with no shared layer to express what is permitted, licensed, or owed. AGIRight.org drafts that layer: open, machine-readable protocols for AI content rights, learning permission, licensing, and agentic access.',
+    protocolsKicker: 'Protocol drafts',
+    protocolsTitle: 'Four protocols for the AI-readable web.',
+    protocolsIntro:
+      'Each protocol is published as an open draft — human-readable pages, machine-readable JSON, and versioned schemas.',
+    researchKicker: 'Research areas',
+    researchTitle: 'Six questions this site studies.',
+    spectrumKicker: 'AIRS — AI Rights Spectrum',
+    spectrumTitle: 'AI access is not a yes/no switch. It is a spectrum.',
+    spectrumIntro:
+      'AIRS expresses AI rights over content as graduated levels — from no access, to read, summarize, retrieve, transform, fine-tune, train, and redistribute — each licensable and auditable on its own terms.',
+    machineKicker: 'Machine-readable governance',
+    machineTitle: 'This site practices what it proposes.',
+    machineIntro:
+      'AGIRight.org publishes its own rights policy in the formats it drafts. Every AI system, crawler, or agent reading this site can discover its permissions programmatically.',
+    papersKicker: 'Whitepapers',
+    papersTitle: 'Current research drafts.',
+    whyKicker: 'Why this matters',
+    whyTitle: 'The rules of the AI-era web are being written now.',
+    whyBody:
+      'Trillion-dollar AI systems are trained on the open web, while the creators, publishers, and communities that produced that knowledge have no protocol to express consent, conditions, or compensation. Binary tools like robots.txt cannot carry that meaning. Whoever defines the rights layer defines the economics of the next web — we believe it should be defined in the open, as public infrastructure.',
+    disclaimerTitle: 'Status & disclaimer',
+    disclaimerBody:
+      'AGIRight.org publishes independent research drafts and protocol proposals — not official standards, and not legal, financial, or compliance advice. All specifications are versioned drafts open to revision and feedback.',
+    footerTagline: 'A protocol-first research site for the AI rights and AI content licensing layer of the next web.',
+    footerRights: 'Research texts CC BY 4.0 · Code & schemas MIT · unless otherwise stated.',
+    readDraft: 'Read draft',
+    readPaper: 'Read paper',
+    viewAll: 'View all',
+    status: 'Status',
+    version: 'Version',
+    updated: 'Updated',
+    author: 'Author',
+    language: 'Language',
+    schema: 'Schema',
+    download: 'Download',
+    relatedProtocols: 'Related protocols',
+    onThisSite: 'On this site',
+    backTo: 'Back to',
+    allProtocols: 'All protocols',
+    allResearch: 'All research areas',
+    allPapers: 'All whitepapers',
+    definition: 'Definition',
+    purpose: 'Purpose',
+    scope: 'Scope',
+    example: 'Machine-readable example',
+    limitations: 'Limitations',
+    namingNote: 'Naming note',
+    keyConcepts: 'Key concepts',
+    abstract: 'Abstract',
+    citeAs: 'Cite as',
+    contactCta: 'Questions, feedback, or licensing inquiries',
+    langSwitch: '中文',
+    langSwitchAria: 'Switch to Traditional Chinese',
+    draftBanner:
+      'All protocols on this site are open drafts (v0.1). They are research proposals, not established standards.',
+  },
+  zh: {
+    skipToContent: '跳至主要內容',
+    heroKicker: '獨立研究與協議站',
+    heroTitle: '面向下一代網路的 AI 權利、內容授權、Agent 存取與機器可讀治理。',
+    heroSub:
+      '我們研究 AI 系統、Agent、創作者、內容方、平台與公眾,如何透過權利、授權、付款、審計紀錄與治理規則,形成更可持續的互動秩序。',
+    ctaPrimary: '探索協議',
+    ctaSecondary: '閱讀白皮書',
+    ctaSpecs: '機器可讀規範',
+    missionKicker: '使命',
+    missionTitle: '從「不禁止」走向「協議化開放」。',
+    missionBody:
+      '網路是為人類讀者設計的。如今 AI 系統在同一批內容上讀取、摘要、索引、學習、交易——卻沒有一個共通層可以表達「什麼被允許、什麼需授權、什麼應回報」。AGIRight.org 起草這一層:開放、機器可讀的 AI 內容權利、學習許可、授權與 Agent 存取協議。',
+    protocolsKicker: '協議草案',
+    protocolsTitle: '為 AI 可讀網路設計的四個協議。',
+    protocolsIntro: '每個協議皆以開放草案發布——人類可讀頁面、機器可讀 JSON,以及版本化 schema。',
+    researchKicker: '研究領域',
+    researchTitle: '本站研究的六個問題。',
+    spectrumKicker: 'AIRS — AI 權利光譜',
+    spectrumTitle: 'AI 存取不是開關,而是光譜。',
+    spectrumIntro:
+      'AIRS 將 AI 對內容的權利表達為分級光譜——從禁止存取、讀取、摘要、檢索、轉換、微調、訓練到再分發——每一級都可獨立授權、可稽核。',
+    machineKicker: '機器可讀治理',
+    machineTitle: '本站實踐自己提出的協議。',
+    machineIntro:
+      'AGIRight.org 以自己起草的格式發布本站的權利政策。任何讀取本站的 AI 系統、爬蟲或 Agent,都能以程式化方式取得授權範圍。',
+    papersKicker: '白皮書',
+    papersTitle: '目前的研究草案。',
+    whyKicker: '為什麼重要',
+    whyTitle: 'AI 時代網路的規則,正在此刻被寫下。',
+    whyBody:
+      '兆元級的 AI 系統以開放網路為訓練材料,而產出這些知識的創作者、出版者與社群,卻沒有任何協議能表達同意、條件或補償。robots.txt 這類二元工具承載不了這些語意。誰定義了權利層,誰就定義了下一代網路的經濟結構——我們認為它應該以公共基礎設施的方式,在開放中被定義。',
+    disclaimerTitle: '狀態與免責聲明',
+    disclaimerBody:
+      'AGIRight.org 發布獨立研究草案與協議提案——不是官方標準,也不構成法律、金融或合規意見。所有規範皆為版本化草案,開放修訂與回饋。',
+    footerTagline: '面向下一代網路 AI 權利與 AI 內容授權層的協議優先研究站。',
+    footerRights: '研究文本採 CC BY 4.0 · 程式碼與 schema 採 MIT · 除非另有標示。',
+    readDraft: '閱讀草案',
+    readPaper: '閱讀論文',
+    viewAll: '查看全部',
+    status: '狀態',
+    version: '版本',
+    updated: '更新',
+    author: '作者',
+    language: '語言',
+    schema: 'Schema',
+    download: '下載',
+    relatedProtocols: '相關協議',
+    onThisSite: '本站入口',
+    backTo: '返回',
+    allProtocols: '所有協議',
+    allResearch: '所有研究領域',
+    allPapers: '所有白皮書',
+    definition: '定義',
+    purpose: '目的',
+    scope: '範圍',
+    example: '機器可讀範例',
+    limitations: '限制與邊界',
+    namingNote: '命名說明',
+    keyConcepts: '核心概念',
+    abstract: '摘要',
+    citeAs: '引用格式',
+    contactCta: '問題、回饋或授權洽詢',
+    langSwitch: 'EN',
+    langSwitchAria: '切換至英文',
+    draftBanner: '本站所有協議皆為開放草案(v0.1),屬研究提案,尚非既定標準。',
+  },
+} as const;

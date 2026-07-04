@@ -1,0 +1,20 @@
+{
+  "version": "0.1",
+  "publisher": "AGIRight.org",
+  "updated": "2026-07-04",
+  "summary": "Reading, summarization, quotation (max 200 words), and RAG with attribution are allowed. Model training, fine-tuning, commercial use, and redistribution require a license.",
+  "policy_files": {
+    "aicr": "https://agiright.org/.well-known/aicr.json",
+    "aicl": "https://agiright.org/.well-known/aicl.json",
+    "rights_spectrum": "https://agiright.org/ai/rights-spectrum.json"
+  },
+  "license": {
+    "research_texts": "CC BY 4.0",
+    "code_and_schemas": "MIT"
+  },
+  "attribution": {
+    "required": true,
+    "format": "Neo.K / EveMissLab, \"Page Title\", version, AGIRight.org, URL"
+  },
+  "contact": "contact@agiright.org"
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agiright.org/schemas/airs.schema.json",
+  "title": "AIRS Schema",
+  "description": "AI Rights Spectrum schema — graduated levels of AI rights over content. Draft v0.1.",
+  "type": "object",
+  "required": ["version", "spectrum"],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "protocol": {
+      "type": "string",
+      "const": "AIRS"
+    },
+    "publisher": {
+      "type": "string"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date"
+    },
+    "spectrum": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["level", "name"],
+        "properties": {
+          "level": { "type": "integer", "minimum": 0 },
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "this_site": {
+      "type": "object",
+      "properties": {
+        "declared_level": { "type": "integer", "minimum": 0 },
+        "note": { "type": "string" },
+        "ailp_profile": { "type": "object" }
+      }
+    }
+  }
+}

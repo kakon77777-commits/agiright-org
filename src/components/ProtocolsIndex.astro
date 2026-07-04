@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from './PageHeader.astro';
+import ProtocolCard from './ProtocolCard.astro';
+import { UI, type Lang } from '../data/site';
+import { PROTOCOLS, AGENTIC_PAYMENT_NOTE } from '../data/protocols';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = UI[lang];
+
+const title = lang === 'zh' ? '協議' : 'Protocols';
+const intro =
+  lang === 'zh'
+    ? '四個開放草案,構成 AI 可讀網路的權利與授權層:AICR 宣告權利、AICL 執行授權、AIRS 定義光譜、AILP 治理學習。'
+    : 'Four open drafts that form the rights and licensing layer of an AI-readable web: AICR declares rights, AICL executes licensing, AIRS defines the spectrum, AILP governs learning.';
+---
+
+<BaseLayout lang={lang} title={title} description={intro}>
+  <PageHeader
+    kicker={lang === 'zh' ? '協議草案' : 'Protocol drafts'}
+    title={title}
+    intro={intro}
+    badges={['Draft v0.1', 'Open specification experiment']}
+  />
+  <div class="container-site py-14 md:py-20">
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      {PROTOCOLS.map((p) => <ProtocolCard protocol={p} lang={lang} />)}
+    </div>
+    <div class="mt-10 rounded-md border-l-2 border-accent bg-accent-soft/50 px-5 py-4" data-reveal>
+      <p class="spec-label !text-accent">Agentic Payment</p>
+      <p class="mt-2 max-w-3xl text-[0.9rem] leading-relaxed text-ink-soft">{AGENTIC_PAYMENT_NOTE[lang]}</p>
+    </div>
+    <p class="mt-10 max-w-3xl text-[0.85rem] leading-relaxed text-muted" data-reveal>
+      {UI[lang].draftBanner}
+    </p>
+  </div>
+</BaseLayout>

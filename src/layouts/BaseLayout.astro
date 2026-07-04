@@ -1,0 +1,93 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, altLangHref, type Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+}
+
+const { lang, title, description } = Astro.props;
+
+const pageTitle = title ? `${title} · ${SITE.name}` : SITE.title[lang];
+const pageDesc = description ?? SITE.description[lang];
+const pathname = Astro.url.pathname.replace(/\.html$/, '');
+const canonical = new URL(pathname, SITE.url).href;
+const altHref = new URL(altLangHref(lang, pathname), SITE.url).href;
+const htmlLang = lang === 'zh' ? 'zh-Hant' : 'en';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE.name,
+  url: SITE.url,
+  description: SITE.description.en,
+  inLanguage: ['en', 'zh-Hant'],
+  publisher: {
+    '@type': 'Organization',
+    name: SITE.org,
+    email: SITE.email,
+  },
+};
+---
+
+<!doctype html>
+<html lang={htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={lang === 'zh' ? 'en' : 'zh-Hant'} href={altHref} />
+    <link rel="alternate" hreflang={htmlLang} href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/feed.xml" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'zh' ? 'zh_TW' : 'en_US'} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDesc} />
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;600&display=swap"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <!-- mark JS availability before paint so GSAP entrance states apply cleanly -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-navy focus:text-white focus:px-4 focus:py-2 focus:rounded-md"
+      >{lang === 'zh' ? '跳至主要內容' : 'Skip to content'}</a
+    >
+    <Header lang={lang} />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <script>
+      import { initAnimations } from '../scripts/animations';
+      initAnimations();
+    </script>
+  </body>
+</html>

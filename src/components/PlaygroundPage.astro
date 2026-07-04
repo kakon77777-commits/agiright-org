@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from './PageHeader.astro';
+import type { Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const title = lang === 'zh' ? '實驗工具' : 'Playground';
+const intro =
+  lang === 'zh'
+    ? 'AICR / AICL 政策產生器與驗證器,即將推出。'
+    : 'Coming soon: AICR / AICL policy generator and validator.';
+
+const planned = [
+  { en: 'AICR JSON generator', zh: 'AICR JSON 產生器' },
+  { en: 'AICL license catalog generator', zh: 'AICL 授權目錄產生器' },
+  { en: 'Schema validator', zh: 'Schema 驗證器' },
+  { en: 'Rights spectrum visualizer', zh: '權利光譜視覺化工具' },
+  { en: 'HTTP 402 response builder', zh: 'HTTP 402 回應產生器' },
+  { en: 'License token demo', zh: '授權憑證 demo' },
+  { en: 'Crawler policy tester', zh: '爬蟲政策測試器' },
+  { en: 'Site audit checker', zh: '網站政策稽核工具' },
+];
+---
+
+<BaseLayout lang={lang} title={title} description={intro}>
+  <PageHeader kicker={lang === 'zh' ? '工具' : 'Tools'} title={title} intro={intro} badges={[lang === 'zh' ? '規劃中 · v0.2+' : 'Planned · v0.2+']} />
+  <div class="container-site max-w-4xl py-14 md:py-20">
+    <h2 class="spec-label !text-accent" data-reveal>{lang === 'zh' ? '規劃中的功能' : 'Planned tools'}</h2>
+    <div class="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2" data-reveal>
+      {
+        planned.map((item, i) => (
+          <div class="flex items-center gap-4 bg-surface px-5 py-4">
+            <span class="font-mono text-[0.72rem] font-medium text-muted">{String(i + 1).padStart(2, '0')}</span>
+            <p class="text-[0.92rem] text-ink-soft">{lang === 'zh' ? item.zh : item.en}</p>
+          </div>
+        ))
+      }
+    </div>
+    <p class="mt-8 max-w-2xl text-[0.9rem] leading-relaxed text-muted" data-reveal>
+      {lang === 'zh'
+        ? '在工具上線之前,可以先閱讀協議草案,或直接下載 JSON Schema 自行驗證政策檔。'
+        : 'Until the tools ship, you can read the protocol drafts or download the JSON Schemas to validate policy files yourself.'}
+    </p>
+  </div>
+</BaseLayout>
