@@ -1,0 +1,21 @@
+{
+  "version": "0.1",
+  "site": "your-site.example",
+  "url": "https://your-site.example",
+  "description": "<one-line description of this site>",
+  "primary_language": "en",
+  "entry_points": {
+    "llms_txt": "https://your-site.example/llms.txt",
+    "aicr": "https://your-site.example/.well-known/aicr.json",
+    "aicl": "https://your-site.example/.well-known/aicl.json",
+    "rights_spectrum": "https://your-site.example/ai/rights-spectrum.json"
+  },
+  "citation": {
+    "format": "\"Page Title\", your-site.example, URL",
+    "attribution_required": true
+  },
+  "contact": {
+    "email": "contact@your-site.example"
+  },
+  "generated_with": "https://agiright.org (protocol drafts v0.1)"
+}

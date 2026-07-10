@@ -53,6 +53,11 @@ Status: all protocols are open research drafts, version 0.1.
 - GET https://agiright.org/api/mock/402 : a real AICL-style HTTP 402 response, safe for agents to call
 - GET https://agiright.org/api/crawler-check?origin=https://example.org : inspect a site's machine-readable policy surface
 
+## Adoption
+
+- https://agiright.org/downloads/agiright-policy-starter.zip : deployable starter template (minimal site + full policy layer)
+- https://agiright.org/playground : site audit with adoption score, starter-kit generation, AI crawler simulator
+
 ## Permissions (summary of /.well-known/aicr.json)
 
 - Reading, summarization, quotation (max 200 words), and RAG use: allowed with attribution.

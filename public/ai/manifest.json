@@ -64,6 +64,7 @@
     "playground": "https://agiright.org/playground",
     "registry": "https://agiright.org/ai/registry.json",
     "openapi": "https://agiright.org/ai/openapi.json",
+    "starter_template": "https://agiright.org/downloads/agiright-policy-starter.zip",
     "repository": "https://github.com/kakon77777-commits/agiright-org",
     "sitemap": "https://agiright.org/sitemap-index.xml",
     "feed": "https://agiright.org/feed.xml"

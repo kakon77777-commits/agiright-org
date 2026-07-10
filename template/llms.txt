@@ -1,0 +1,21 @@
+# your-site.example
+
+<one-line description of this site>
+
+## Machine-Readable Policies
+
+- https://your-site.example/.well-known/aicr.json : AI content rights (AICR)
+- https://your-site.example/.well-known/aicl.json : license catalog (AICL)
+- https://your-site.example/ai/rights-spectrum.json : learning permissions (AIRS/AILP)
+- https://your-site.example/ai/manifest.json : machine entry manifest
+
+## Permissions (summary)
+
+- Reading, summarization, quotation, and RAG: allowed with attribution.
+- Model training, fine-tuning, commercial use, redistribution: license required — contact@your-site.example.
+
+## Citation
+
+Cite the page title, URL, and your-site.example.
+
+# Template from https://agiright.org (protocol drafts v0.1)

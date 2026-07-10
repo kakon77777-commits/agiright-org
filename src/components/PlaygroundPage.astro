@@ -102,8 +102,26 @@ const T = {
   testerInvalid: lang === 'zh' ? '不符合 schema' : 'schema-invalid',
   testerNote:
     lang === 'zh'
-      ? '檢查任一網站的機器可讀政策層:robots.txt、llms.txt、AICR/AICL 政策檔與權利光譜宣告,並以本站草案 schema 驗證。'
-      : 'Inspect any site’s machine-readable policy surface: robots.txt, llms.txt, AICR/AICL policies, and rights-spectrum declarations — validated against this site’s draft schemas.',
+      ? '檢查任一網站的機器可讀政策層:robots.txt、llms.txt、AICR/AICL 政策檔與權利光譜宣告,並以本站草案 schema 驗證。附採用度評分、改善建議,以及一鍵產生的 starter kit。'
+      : 'Inspect any site’s machine-readable policy surface: robots.txt, llms.txt, AICR/AICL policies, and rights-spectrum declarations — validated against this site’s draft schemas. Includes an adoption score, recommendations, and a one-click starter kit.',
+  auditScore: lang === 'zh' ? '採用度' : 'Adoption score',
+  auditRecs: lang === 'zh' ? '建議' : 'Recommendations',
+  auditKit: lang === 'zh' ? '為這個網站產生 starter kit' : 'Generate a starter kit for this site',
+  auditKitNote:
+    lang === 'zh'
+      ? '依照該網域預填的四個檔案——放進網站根目錄即可宣告 AI 政策。內容可再用產生器分頁細調。'
+      : 'Four files prefilled for that domain — drop them into the site root to declare its AI policy. Fine-tune them in the generator tabs.',
+  // --- crawler simulator ---
+  tabSim: lang === 'zh' ? '爬蟲模擬器' : 'Crawler simulator',
+  simNote:
+    lang === 'zh'
+      ? '模擬四種 AI 角色如何解讀一個網站的宣告:搜尋索引器、RAG 助理、模型訓練管線、商業再分發者。未宣告的權利會被高風險管線視為不確定性——這正是《協議化開放》的核心論點。'
+      : 'Simulates how four AI personas would interpret a site’s declarations: a search indexer, a RAG assistant, a model-training pipeline, and a commercial redistributor. Undeclared rights read as uncertainty to high-risk pipelines — the core thesis of “Protocolized Openness”.',
+  simRun: lang === 'zh' ? '模擬' : 'Simulate',
+  simAllowed: lang === 'zh' ? '可進行(附條件)' : 'may proceed (with conditions)',
+  simLicense: lang === 'zh' ? '需授權' : 'license required',
+  simDenied: lang === 'zh' ? '不允許' : 'not permitted',
+  simUndeclared: lang === 'zh' ? '未宣告 — 高風險管線可能排除' : 'undeclared — high-risk pipelines may exclude',
 };
 
 const RIGHTS: { key: string; label: string; attr?: boolean; words?: boolean; retention?: boolean; def: string }[] = [
@@ -132,6 +150,7 @@ const AICL_RIGHT_OPTIONS = ['read', 'summarize', 'quote', 'rag', 'transform', 't
       <button class="tab-btn" role="tab" id="tab-token" aria-selected="false" aria-controls="panel-token" data-tab="token">{T.tabToken}</button>
       <button class="tab-btn" role="tab" id="tab-h402" aria-selected="false" aria-controls="panel-h402" data-tab="h402">{T.tabHttp402}</button>
       <button class="tab-btn" role="tab" id="tab-tester" aria-selected="false" aria-controls="panel-tester" data-tab="tester">{T.tabTester}</button>
+      <button class="tab-btn" role="tab" id="tab-sim" aria-selected="false" aria-controls="panel-sim" data-tab="sim">{T.tabSim}</button>
     </div>
     <p class="mt-3 font-mono text-[0.72rem] text-muted" data-reveal>{T.localNote}</p>
 
@@ -419,6 +438,41 @@ const AICL_RIGHT_OPTIONS = ['read', 'summarize', 'quote', 'rag', 'transform', 't
           <button class="btn btn-primary" data-tester-run>{T.testerRun}</button>
         </div>
         <div class="mt-6 overflow-hidden rounded-md border border-line" data-tester-result>
+          <p class="bg-surface px-5 py-4 text-[0.85rem] text-muted">—</p>
+        </div>
+        <div class="mt-6 hidden" data-audit>
+          <div class="flex flex-wrap items-center gap-4">
+            <p class="spec-label !mb-0">{T.auditScore}</p>
+            <div class="h-2.5 w-48 overflow-hidden rounded-full bg-paper-deep border border-line">
+              <div class="h-full rounded-full" style="background:var(--color-ok);width:0%" data-audit-bar></div>
+            </div>
+            <span class="font-mono text-[0.85rem] font-medium text-navy" data-audit-score>—</span>
+          </div>
+          <div class="mt-4">
+            <p class="spec-label">{T.auditRecs}</p>
+            <ul class="mt-2 space-y-2" data-audit-recs></ul>
+          </div>
+          <div class="mt-6 rounded-md border border-line bg-paper px-5 py-4">
+            <p class="spec-label !text-spec">{T.auditKit}</p>
+            <p class="mt-2 max-w-3xl text-[0.8rem] leading-relaxed text-muted">{T.auditKitNote}</p>
+            <div class="mt-3 flex flex-wrap gap-2" data-kit-buttons></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ AI CRAWLER SIMULATOR ============ -->
+    <section id="panel-sim" role="tabpanel" aria-labelledby="tab-sim" class="mt-8 hidden grid-cols-1 gap-8" data-panel="sim">
+      <div class="card p-6 md:p-7">
+        <p class="max-w-3xl text-[0.9rem] leading-relaxed text-ink-soft">{T.simNote}</p>
+        <div class="mt-5 flex flex-wrap items-end gap-3">
+          <div class="flex-1 min-w-64">
+            <label class="field-label" for="sim-origin">{T.testerOrigin}</label>
+            <input class="field-input" id="sim-origin" type="url" value="https://agiright.org" data-sim-origin />
+          </div>
+          <button class="btn btn-primary" data-sim-run>{T.simRun}</button>
+        </div>
+        <div class="mt-6 overflow-hidden rounded-md border border-line" data-sim-result>
           <p class="bg-surface px-5 py-4 text-[0.85rem] text-muted">—</p>
         </div>
       </div>
@@ -864,11 +918,207 @@ const AICL_RIGHT_OPTIONS = ['read', 'summarize', 'quote', 'rag', 'transform', 't
         testerResult.innerHTML =
           `<div class="bg-paper-deep px-5 py-2.5"><span class="spec-label">${esc(data.origin)} · ${esc(data.checked_at ?? '')}</span></div>` +
           rows.join('');
+        renderAudit(data);
       } catch (e) {
         testerResult.innerHTML = `<p class="bg-surface px-5 py-4 font-mono text-[0.85rem]" style="color:var(--color-deny)">request failed: ${esc((e as Error).message)}</p>`;
       } finally {
         testerBtn.disabled = false;
         testerBtn.textContent = original;
+      }
+    });
+
+    // ------------------------------------------------------------------
+    // site audit: adoption score + recommendations + starter kit (v0.4)
+    // ------------------------------------------------------------------
+    type CheckResult = { path: string; status?: number; body?: string | null; error?: string };
+
+    function foundMap(data: { results: CheckResult[] }) {
+      const map: Record<string, { found: boolean; parsed?: unknown }> = {};
+      for (const r of data.results) {
+        const found = !!(r.status && r.status >= 200 && r.status < 300);
+        let parsed: unknown;
+        if (found && r.path.endsWith('.json') && r.body) {
+          try { parsed = JSON.parse(r.body); } catch { /* invalid json */ }
+        }
+        map[r.path] = { found, parsed };
+      }
+      return map;
+    }
+
+    function renderAudit(data: { origin: string; results: CheckResult[] }) {
+      const isZh = root.getAttribute('data-lang') === 'zh';
+      const m = foundMap(data);
+      const auditBox = root.querySelector('[data-audit]') as HTMLElement;
+      const weights: Array<[string, number]> = [
+        ['/robots.txt', 1],
+        ['/llms.txt', 2],
+        ['/.well-known/aicr.json', 3],
+        ['/.well-known/aicl.json', 2],
+        ['/ai/rights-spectrum.json', 1],
+        ['/ai/manifest.json', 1],
+      ];
+      let score = 0;
+      const max = weights.reduce((a, [, w]) => a + w, 0);
+      for (const [p, w] of weights) if (m[p]?.found) score += w;
+      const pct = Math.round((score / max) * 100);
+      (root.querySelector('[data-audit-bar]') as HTMLElement).style.width = `${pct}%`;
+      (root.querySelector('[data-audit-score]') as HTMLElement).textContent = `${score}/${max} · ${pct}%`;
+
+      const REC: Array<[string, string, string]> = [
+        ['/llms.txt', isZh ? '加上 llms.txt,給 AI 系統一個入口索引(模板已含)。' : 'Add llms.txt as an entry index for AI systems (included in the template).', ''],
+        ['/.well-known/aicr.json', isZh ? '宣告 AI 內容權利——用「AICR 產生器」分頁一分鐘完成。' : 'Declare AI content rights — one minute in the “AICR generator” tab.', 'aicr'],
+        ['/.well-known/aicl.json', isZh ? '發布授權目錄——用「AICL 產生器」分頁。' : 'Publish a license catalog — see the “AICL generator” tab.', 'aicl'],
+        ['/ai/rights-spectrum.json', isZh ? '加上 AIRS/AILP 光譜宣告,表達學習許可的深度。' : 'Add an AIRS/AILP spectrum declaration to express learning-permission depth.', ''],
+        ['/robots.txt', isZh ? '補上基本 robots.txt。' : 'Add a basic robots.txt.', ''],
+        ['/ai/manifest.json', isZh ? '加上 /ai/manifest.json 作為機器入口清單。' : 'Add /ai/manifest.json as the machine entry manifest.', ''],
+      ];
+      const recs = REC.filter(([p]) => !m[p]?.found);
+      const recsEl = root.querySelector('[data-audit-recs]') as HTMLElement;
+      recsEl.innerHTML = recs.length
+        ? recs
+            .map(
+              ([p, text, tab]) =>
+                `<li class="flex gap-2.5 text-[0.85rem] leading-relaxed text-ink-soft"><code class="font-mono text-[0.75rem] text-navy shrink-0 pt-0.5">${esc(p)}</code><span>${esc(text)}${tab ? ` <button class="link-quiet cursor-pointer font-medium" data-goto-tab="${tab}">→</button>` : ''}</span></li>`
+            )
+            .join('') +
+          `<li class="pt-1 text-[0.82rem] text-muted">${isZh ? '或直接下載可部署的' : 'Or grab the deployable'} <a class="link-quiet font-medium" href="/downloads/agiright-policy-starter.zip">policy starter template (.zip)</a></li>`
+        : `<li class="text-[0.85rem]" style="color:var(--color-ok)">${isZh ? '✓ 完整的機器可讀政策層——這個網站是好範例。' : '✓ Complete machine-readable policy surface — this site is a good example.'}</li>`;
+
+      // starter kit prefilled for the inspected host
+      const host = new URL(data.origin).hostname;
+      const kit = buildKit(host);
+      const btns = root.querySelector('[data-kit-buttons]') as HTMLElement;
+      btns.innerHTML = '';
+      for (const f of kit) {
+        const b = document.createElement('button');
+        b.className = 'btn btn-outline !px-3 !py-2 !text-[0.78rem] font-mono';
+        b.textContent = `${f.name} ↓`;
+        b.addEventListener('click', () => {
+          const blob = new Blob([f.content], { type: f.name.endsWith('.json') ? 'application/json' : 'text/plain' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = f.name.replace(/\//g, '_');
+          a.click();
+          URL.revokeObjectURL(a.href);
+        });
+        btns.appendChild(b);
+      }
+      auditBox.classList.remove('hidden');
+      root.querySelectorAll<HTMLButtonElement>('[data-goto-tab]').forEach((el) =>
+        el.addEventListener('click', () => (root.querySelector(`[data-tab="${el.dataset.gotoTab}"]`) as HTMLButtonElement)?.click())
+      );
+    }
+
+    function buildKit(host: string): Array<{ name: string; content: string }> {
+      const contact = `contact@${host}`;
+      const aicr = {
+        version: '0.1', protocol: 'AICR', publisher: host,
+        schema: 'https://agiright.org/schemas/aicr.schema.json',
+        default_policy: {
+          read_access: { allowed: true },
+          summarization: { allowed: true, attribution_required: true },
+          quotation: { allowed: true, max_excerpt_words: 200, attribution_required: true },
+          rag_use: { allowed: true, attribution_required: true, retention_days: 30 },
+          training: { allowed: false, license_required: true, permission_contact: contact },
+          commercial_use: { allowed: false, license_required: true, permission_contact: contact },
+          redistribution: { allowed: false },
+        },
+      };
+      const aicl = {
+        version: '0.1', protocol: 'AICL', publisher: host,
+        schema: 'https://agiright.org/schemas/aicl.schema.json',
+        licenses: [
+          { id: 'public_read_summary', rights: ['read', 'summarize', 'quote'], price: { amount: '0', currency: 'USD' }, conditions: ['attribution_required', 'no_model_training', 'no_commercial_redistribution'] },
+          { id: 'research_rag', rights: ['read', 'summarize', 'rag'], price: { amount: '0', currency: 'USD' }, conditions: ['attribution_required', 'retention_days_30', 'no_model_training'] },
+          { id: 'commercial_or_training_license', rights: ['training', 'fine_tuning', 'commercial_use'], requires_contact: true, contact },
+        ],
+      };
+      const llms = `# ${host}\n\n<one-line description of this site>\n\n## Machine-Readable Policies\n\n- https://${host}/.well-known/aicr.json : AI content rights (AICR)\n- https://${host}/.well-known/aicl.json : license catalog (AICL)\n\n## Permissions (summary)\n\n- Reading, summarization, quotation, RAG: allowed with attribution.\n- Training and commercial use: license required — ${contact}.\n\n## Citation\n\nCite the page title, URL, and ${host}.\n\n# Generated with https://agiright.org/playground\n`;
+      const robots = `# ${host} — robots.txt\n# AI-specific permissions are declared in:\n#   https://${host}/.well-known/aicr.json\n#   https://${host}/.well-known/aicl.json\n#   https://${host}/llms.txt\n\nUser-agent: *\nAllow: /\n`;
+      return [
+        { name: '.well-known/aicr.json', content: JSON.stringify(aicr, null, 2) },
+        { name: '.well-known/aicl.json', content: JSON.stringify(aicl, null, 2) },
+        { name: 'llms.txt', content: llms },
+        { name: 'robots.txt', content: robots },
+      ];
+    }
+
+    // ------------------------------------------------------------------
+    // AI crawler simulator (v0.4)
+    // ------------------------------------------------------------------
+    const simBtn = root.querySelector('[data-sim-run]') as HTMLButtonElement;
+    const simResult = root.querySelector('[data-sim-result]') as HTMLElement;
+
+    type RightState = 'allowed' | 'license' | 'denied' | 'undeclared';
+    function evalRight(policy: Record<string, any> | undefined, right: string): { state: RightState; conds: string[] } {
+      const rule = policy?.[right];
+      if (!rule) return { state: 'undeclared', conds: [] };
+      const conds: string[] = [];
+      if (rule.attribution_required) conds.push('attribution');
+      if (rule.retention_days) conds.push(`retention ≤ ${rule.retention_days}d`);
+      if (rule.max_excerpt_words) conds.push(`≤ ${rule.max_excerpt_words} words`);
+      if (rule.allowed === true) return { state: 'allowed', conds };
+      if (rule.license_required) return { state: 'license', conds };
+      if (rule.allowed === false) return { state: 'denied', conds };
+      return { state: 'undeclared', conds };
+    }
+
+    simBtn?.addEventListener('click', async () => {
+      const isZh = root.getAttribute('data-lang') === 'zh';
+      const PERSONAS: Array<{ label: string; needs: string[] }> = [
+        { label: isZh ? '搜尋索引器' : 'Search indexer', needs: ['read_access', 'quotation'] },
+        { label: isZh ? 'RAG 助理' : 'RAG assistant', needs: ['read_access', 'summarization', 'rag_use'] },
+        { label: isZh ? '模型訓練管線' : 'Model-training pipeline', needs: ['training'] },
+        { label: isZh ? '商業再分發者' : 'Commercial redistributor', needs: ['commercial_use', 'redistribution'] },
+      ];
+      const STATE_LABEL: Record<RightState, [string, string]> = {
+        allowed: [isZh ? '可進行(附條件)' : 'may proceed (with conditions)', 'var(--color-ok)'],
+        license: [isZh ? '需授權' : 'license required', 'var(--color-warn)'],
+        denied: [isZh ? '不允許' : 'not permitted', 'var(--color-deny)'],
+        undeclared: [isZh ? '未宣告 — 高風險管線可能排除' : 'undeclared — may be excluded', 'var(--color-muted, #676c84)'],
+      };
+      const origin = (root.querySelector('[data-sim-origin]') as HTMLInputElement).value.trim();
+      const original = simBtn.textContent;
+      simBtn.disabled = true;
+      simBtn.textContent = isZh ? '模擬中…' : 'Simulating…';
+      try {
+        const res = await fetch(`/api/crawler-check?origin=${encodeURIComponent(origin)}`);
+        const data = await res.json();
+        if (!res.ok) {
+          simResult.innerHTML = `<p class="bg-surface px-5 py-4 font-mono text-[0.85rem]" style="color:var(--color-deny)">${esc(data.error ?? 'error')}: ${esc(data.message ?? '')}</p>`;
+          return;
+        }
+        const m = foundMap(data);
+        const aicr = m['/.well-known/aicr.json']?.parsed as Record<string, any> | undefined;
+        const policy = aicr?.default_policy as Record<string, any> | undefined;
+        const rows = PERSONAS.map((p) => {
+          const evals = p.needs.map((r) => ({ right: r, ...evalRight(policy, r) }));
+          const worst: RightState = evals.some((e) => e.state === 'denied')
+            ? 'denied'
+            : evals.some((e) => e.state === 'license')
+              ? 'license'
+              : evals.some((e) => e.state === 'undeclared')
+                ? 'undeclared'
+                : 'allowed';
+          const [label, color] = STATE_LABEL[worst];
+          const detail = evals
+            .map((e) => `${e.right}: ${e.state}${e.conds.length ? ` (${e.conds.join(', ')})` : ''}`)
+            .join(' · ');
+          return `<div class="flex flex-col gap-1.5 border-t border-line bg-surface px-5 py-4 first:border-t-0 md:flex-row md:items-center md:gap-4">
+            <span class="font-medium text-navy min-w-44 text-[0.92rem]">${esc(p.label)}</span>
+            <span class="badge" style="color:${color};border-color:color-mix(in srgb, ${color} 45%, transparent)">${esc(label)}</span>
+            <span class="font-mono text-[0.72rem] leading-relaxed text-muted">${esc(detail)}</span>
+          </div>`;
+        });
+        const headline = policy
+          ? `<span class="spec-label">${esc(data.origin)} · aicr.json</span>`
+          : `<span class="spec-label" style="color:var(--color-warn)">${esc(data.origin)} · ${isZh ? '未找到 aicr.json — 全部視為未宣告' : 'no aicr.json found — everything reads as undeclared'}</span>`;
+        simResult.innerHTML = `<div class="bg-paper-deep px-5 py-2.5">${headline}</div>` + rows.join('');
+      } catch (e) {
+        simResult.innerHTML = `<p class="bg-surface px-5 py-4 font-mono text-[0.85rem]" style="color:var(--color-deny)">request failed: ${esc((e as Error).message)}</p>`;
+      } finally {
+        simBtn.disabled = false;
+        simBtn.textContent = original;
       }
     });
   </script>

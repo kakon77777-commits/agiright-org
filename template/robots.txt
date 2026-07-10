@@ -1,0 +1,9 @@
+# your-site.example — robots.txt
+# Crawling for reading and indexing is welcome.
+# AI-specific permissions (summarization, RAG, training) are declared in:
+#   https://your-site.example/.well-known/aicr.json
+#   https://your-site.example/.well-known/aicl.json
+#   https://your-site.example/llms.txt
+
+User-agent: *
+Allow: /

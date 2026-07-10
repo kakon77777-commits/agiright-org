@@ -1,0 +1,40 @@
+{
+  "version": "0.1",
+  "protocol": "AICL",
+  "publisher": "your-site.example",
+  "schema": "https://agiright.org/schemas/aicl.schema.json",
+  "licenses": [
+    {
+      "id": "public_read_summary",
+      "rights": ["read", "summarize", "quote"],
+      "price": {
+        "amount": "0",
+        "currency": "USD"
+      },
+      "conditions": [
+        "attribution_required",
+        "no_model_training",
+        "no_commercial_redistribution"
+      ]
+    },
+    {
+      "id": "research_rag",
+      "rights": ["read", "summarize", "rag"],
+      "price": {
+        "amount": "0",
+        "currency": "USD"
+      },
+      "conditions": [
+        "attribution_required",
+        "retention_days_30",
+        "no_model_training"
+      ]
+    },
+    {
+      "id": "commercial_or_training_license",
+      "rights": ["training", "fine_tuning", "commercial_use"],
+      "requires_contact": true,
+      "contact": "contact@your-site.example"
+    }
+  ]
+}

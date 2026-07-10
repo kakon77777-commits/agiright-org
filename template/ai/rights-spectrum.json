@@ -1,0 +1,19 @@
+{
+  "version": "0.1",
+  "protocol": "AILP",
+  "publisher": "your-site.example",
+  "schema": "https://agiright.org/schemas/ailp.schema.json",
+  "default": {
+    "access": "allowed",
+    "indexing": "allowed",
+    "inference_input": "allowed",
+    "embedding": "allowed",
+    "training": "license_required",
+    "fine_tuning": "license_required",
+    "distillation": "denied",
+    "verbatim_memory": "denied",
+    "attribution": "required",
+    "compensation": "contact"
+  },
+  "contact": "contact@your-site.example"
+}
