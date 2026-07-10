@@ -1,5 +1,6 @@
 {
   "version": "0.1",
+  "site_version": "0.4.1",
   "site": "AGIRight.org",
   "url": "https://agiright.org",
   "alias_domains": ["https://asiright.org"],
