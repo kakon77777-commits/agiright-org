@@ -19,15 +19,19 @@ export const SITE = {
   },
 } as const;
 
-export function langPrefix(lang: Lang): string {
-  return lang === 'zh' ? '/zh' : '';
+/**
+ * Single-URL i18n: one public URL serves every language; the edge worker
+ * negotiates the variant (lang cookie > IP country > Accept-Language).
+ * Localized build trees (/zh/...) are internal, so links never carry a
+ * language prefix.
+ */
+export function langPrefix(_lang: Lang): string {
+  return '';
 }
 
-export function altLangHref(lang: Lang, pathname: string): string {
-  // strip any /zh prefix, then re-apply for the other language
-  const bare = pathname.replace(/^\/zh(?=\/|$)/, '') || '/';
-  if (lang === 'zh') return bare; // link to EN
-  return bare === '/' ? '/zh' : `/zh${bare}`;
+/** strip an internal language prefix from a build-time pathname */
+export function publicPath(pathname: string): string {
+  return pathname.replace(/^\/zh(?=\/|$)/, '') || '/';
 }
 
 export const NAV = [

@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE, altLangHref, type Lang } from '../data/site';
+import { SITE, publicPath, type Lang } from '../data/site';
 
 interface Props {
   lang: Lang;
@@ -14,9 +14,10 @@ const { lang, title, description } = Astro.props;
 
 const pageTitle = title ? `${title} · ${SITE.name}` : SITE.title[lang];
 const pageDesc = description ?? SITE.description[lang];
-const pathname = Astro.url.pathname.replace(/\.html$/, '');
+// one public URL per page: the /zh build tree is internal, so canonical
+// always points at the bare path (the edge worker serves the variant there)
+const pathname = publicPath(Astro.url.pathname.replace(/\.html$/, ''));
 const canonical = new URL(pathname, SITE.url).href;
-const altHref = new URL(altLangHref(lang, pathname), SITE.url).href;
 const htmlLang = lang === 'zh' ? 'zh-Hant' : 'en';
 
 const jsonLd = {
@@ -43,8 +44,6 @@ const jsonLd = {
     <meta name="description" content={pageDesc} />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang={lang === 'zh' ? 'en' : 'zh-Hant'} href={altHref} />
-    <link rel="alternate" hreflang={htmlLang} href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/feed.xml" />
 

@@ -1,5 +1,5 @@
 ---
-import { NAV, UI, SITE, langPrefix, altLangHref, type Lang } from '../data/site';
+import { NAV, UI, SITE, langPrefix, publicPath, type Lang } from '../data/site';
 import Logo from './Logo.astro';
 
 interface Props {
@@ -8,9 +8,9 @@ interface Props {
 const { lang } = Astro.props;
 const t = UI[lang];
 const prefix = langPrefix(lang);
-const pathname = Astro.url.pathname.replace(/\.html$/, '');
-const switchHref = altLangHref(lang, pathname);
-const isActive = (href: string) => pathname === prefix + href || pathname.startsWith(prefix + href + '/');
+const pathname = publicPath(Astro.url.pathname.replace(/\.html$/, ''));
+const switchTarget = lang === 'zh' ? 'en' : 'zh';
+const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
 ---
 
 <header
@@ -41,23 +41,25 @@ const isActive = (href: string) => pathname === prefix + href || pathname.starts
           </a>
         ))
       }
-      <a
-        href={switchHref}
+      <button
+        type="button"
         class="spec-label !text-ink-soft border border-line-strong rounded-md px-2.5 py-1.5 hover:border-navy hover:!text-navy transition-colors duration-200 cursor-pointer"
         aria-label={t.langSwitchAria}
+        data-lang-switch={switchTarget}
       >
         {t.langSwitch}
-      </a>
+      </button>
     </nav>
 
     <div class="flex items-center gap-3 lg:hidden">
-      <a
-        href={switchHref}
+      <button
+        type="button"
         class="spec-label !text-ink-soft border border-line-strong rounded-md px-2.5 py-1.5 cursor-pointer"
         aria-label={t.langSwitchAria}
+        data-lang-switch={switchTarget}
       >
         {t.langSwitch}
-      </a>
+      </button>
       <button
         type="button"
         class="flex h-10 w-10 items-center justify-center rounded-md border border-line-strong text-navy cursor-pointer"
@@ -104,4 +106,13 @@ const isActive = (href: string) => pathname === prefix + href || pathname.starts
     openIcon?.classList.toggle('hidden', open);
     closeIcon?.classList.toggle('hidden', !open);
   });
+
+  // single-URL i18n: the switcher stores the choice and reloads — the edge
+  // worker serves the chosen language at the same URL
+  document.querySelectorAll<HTMLButtonElement>('[data-lang-switch]').forEach((el) =>
+    el.addEventListener('click', () => {
+      document.cookie = `lang=${el.dataset.langSwitch};path=/;max-age=31536000;SameSite=Lax`;
+      location.reload();
+    })
+  );
 </script>

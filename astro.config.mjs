@@ -7,10 +7,9 @@ export default defineConfig({
   trailingSlash: 'never',
   integrations: [
     sitemap({
-      i18n: {
-        defaultLocale: 'en',
-        locales: { en: 'en', zh: 'zh-TW' },
-      },
+      // single-URL i18n: localized build trees (/zh/...) are internal —
+      // only bare URLs are public, so exclude them from the sitemap
+      filter: (page) => !/agiright\.org\/zh(\/|$)/.test(page),
     }),
   ],
   vite: {

@@ -4,7 +4,10 @@ AGIRight.org is an independent research and protocol hub for AI rights, AI conte
 
 We explore how AI systems, agents, creators, content providers, platforms, and the public can interact through rights, licenses, payments, audit logs, and governance protocols.
 
-Language: English (primary), Traditional Chinese under /zh.
+Language: single-URL model — each page has one URL serving a negotiated
+language (lang cookie > IP country > Accept-Language > English). AI systems
+and crawlers receive English by default. Traditional Chinese is available
+with "Cookie: lang=zh". Machine-readable files are language-neutral.
 Status: all protocols are open research drafts, version 0.1.
 
 ## Key Pages

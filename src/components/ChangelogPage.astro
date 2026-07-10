@@ -16,6 +16,25 @@ const intro =
 
 const ENTRIES = [
   {
+    version: 'v0.2.2',
+    date: '2026-07-10',
+    tag: { en: 'i18n', zh: '多語言' },
+    items: {
+      en: [
+        'Single-URL multilingual architecture: every page now has one public URL; the language is negotiated at the edge (manual choice via lang cookie > IP country > Accept-Language > English).',
+        'The header language button now switches in place and remembers your choice — no more /zh URLs; legacy /zh links 301-redirect and preserve the preference.',
+        'Machine-readable layer stays language-neutral; AI systems and crawlers receive English by default. Negotiation is documented in /ai/manifest.json and /llms.txt.',
+        'Groundwork for additional languages: each new language is a translated dictionary plus a build tree — no architecture change.',
+      ],
+      zh: [
+        '單一網址多語言架構:每個頁面只有一個公開網址,語言在邊緣協商(手動選擇 lang cookie > IP 國別 > Accept-Language > 英文)。',
+        '頁首語言鈕改為原地切換並記住選擇——不再有 /zh 網址;舊 /zh 連結 301 轉向並保留偏好。',
+        '機器可讀層維持語言中立;AI 系統與爬蟲預設取得英文。協商方式記載於 /ai/manifest.json 與 /llms.txt。',
+        '為更多語言鋪路:新增語言只需翻譯字典 + 建置樹,不動架構。',
+      ],
+    },
+  },
+  {
     version: 'v0.2.1',
     date: '2026-07-04',
     tag: { en: 'Content', zh: '內容' },
