@@ -14,5 +14,8 @@
     { "pattern": "www.agiright.org", "custom_domain": true },
     { "pattern": "asiright.org", "custom_domain": true },
     { "pattern": "www.asiright.org", "custom_domain": true }
+  ],
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "agirightstudio" }
   ]
 }

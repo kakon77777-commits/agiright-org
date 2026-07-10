@@ -26,8 +26,8 @@ const COUNTRY_LANG = {
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
 
-/** paths that are language-neutral: machine layer, feeds, build assets, API */
-const NEUTRAL_PREFIXES = ['/ai/', '/schemas/', '/.well-known/', '/_astro/', '/api/'];
+/** paths that are language-neutral: machine layer, feeds, build assets, API, media */
+const NEUTRAL_PREFIXES = ['/ai/', '/schemas/', '/.well-known/', '/_astro/', '/api/', '/media/'];
 
 function cookieLang(request) {
   const cookie = request.headers.get('Cookie') || '';
@@ -85,6 +85,11 @@ export default {
       return handleApi(url, request, env);
     }
 
+    // --- media streaming from R2 (v0.4.1) ---------------------------------
+    if (url.pathname.startsWith('/media/')) {
+      return handleMedia(url, request, env);
+    }
+
     // --- legacy localized URLs: /zh/foo → /foo + remembered preference ---
     for (const lang of LANGS) {
       const m = url.pathname.match(new RegExp(`^/${lang}(/.*)?$`));
@@ -120,6 +125,74 @@ export default {
     return env.ASSETS.fetch(request);
   },
 };
+
+/* ---------------------------------------------------------------------------
+   Media streaming from R2 (v0.4.1) — GET /media/<key> with HTTP Range
+   support so video/audio players can seek (206 Partial Content).
+--------------------------------------------------------------------------- */
+
+function parseRange(header) {
+  // supports: bytes=start-end | bytes=start- | bytes=-suffix
+  const m = /^bytes=(\d*)-(\d*)$/.exec(header || '');
+  if (!m || (m[1] === '' && m[2] === '')) return null;
+  if (m[1] === '') return { suffix: Number(m[2]) };
+  const offset = Number(m[1]);
+  if (m[2] === '') return { offset };
+  return { offset, length: Number(m[2]) - offset + 1 };
+}
+
+async function handleMedia(url, request, env) {
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return new Response('method not allowed', { status: 405 });
+  }
+  const key = decodeURIComponent(url.pathname.slice('/media/'.length));
+  if (!key || key.includes('..')) return new Response('not found', { status: 404 });
+
+  const range = request.method === 'GET' ? parseRange(request.headers.get('Range')) : null;
+  let object;
+  try {
+    object = await env.MEDIA.get(key, range ? { range } : undefined);
+  } catch {
+    // R2 rejects unsatisfiable ranges
+    const head = await env.MEDIA.head(key);
+    if (!head) return new Response('not found', { status: 404 });
+    return new Response('range not satisfiable', {
+      status: 416,
+      headers: { 'Content-Range': `bytes */${head.size}` },
+    });
+  }
+  if (!object) return new Response('not found', { status: 404 });
+
+  const headers = new Headers();
+  object.writeHttpMetadata(headers);
+  headers.set('ETag', object.httpEtag);
+  headers.set('Accept-Ranges', 'bytes');
+  headers.set('Cache-Control', 'public, max-age=86400');
+
+  if (range) {
+    // compute Content-Range from the requested range + total size —
+    // production R2 does not reliably echo the fulfilled range back
+    let offset, length;
+    if (range.suffix !== undefined) {
+      length = Math.min(range.suffix, object.size);
+      offset = object.size - length;
+    } else {
+      offset = range.offset;
+      length = Math.min(range.length ?? object.size - offset, object.size - offset);
+    }
+    if (offset >= object.size || length <= 0) {
+      return new Response('range not satisfiable', {
+        status: 416,
+        headers: { 'Content-Range': `bytes */${object.size}` },
+      });
+    }
+    headers.set('Content-Range', `bytes ${offset}-${offset + length - 1}/${object.size}`);
+    return new Response(object.body, { status: 206, headers });
+  }
+
+  headers.set('Content-Length', String(object.size));
+  return new Response(request.method === 'HEAD' ? null : object.body, { status: 200, headers });
+}
 
 /* ---------------------------------------------------------------------------
    Live demo API (v0.3) — mock/educational only, per site policy: no real

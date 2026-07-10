@@ -5,6 +5,9 @@ dist/
 # wrangler dev artifacts
 .wrangler/
 
+# source media (uploaded to R2, not tracked in git)
+studio/
+
 # dependencies
 node_modules/
 

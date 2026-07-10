@@ -39,6 +39,7 @@ export const NAV = [
   { href: '/protocols', en: 'Protocols', zh: '協議' },
   { href: '/specs', en: 'Specs', zh: '規範' },
   { href: '/docs', en: 'Whitepapers', zh: '白皮書' },
+  { href: '/studio', en: 'Studio', zh: '影音' },
   { href: '/playground', en: 'Playground', zh: '實驗工具' },
   { href: '/about', en: 'About', zh: '關於' },
 ] as const;
