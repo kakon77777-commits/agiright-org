@@ -16,6 +16,25 @@ const intro =
 
 const ENTRIES = [
   {
+    version: 'v0.3.0',
+    date: '2026-07-10',
+    tag: { en: 'Protocol tools', zh: '協議工具' },
+    items: {
+      en: [
+        'Protocol registry at /ai/registry.json — every draft with version history, status, schema, and live instance.',
+        'Live demo API on the edge: GET /api/mock/402 returns a real AICL-style HTTP 402 with machine-actionable licensing info; GET /api/crawler-check inspects any site’s machine-readable policy surface. CORS-open; documented in OpenAPI 3.1 at /ai/openapi.json. No payments are processed.',
+        'Playground: three new tools — signed license token demo (HMAC-SHA256 in-browser: sign, verify, tamper detection, expiry), HTTP 402 response builder wired to the live endpoint, and a crawler policy tester that validates fetched files against the draft schemas.',
+        'AICL quote/verify/revoke endpoints included in the OpenAPI document as specification-only illustrations (marked x-specification-only, not implemented).',
+      ],
+      zh: [
+        '協議 registry 上線 /ai/registry.json——每個草案的版本歷史、狀態、schema 與 live 實例。',
+        '邊緣 live demo API:GET /api/mock/402 回傳真實的 AICL 式 HTTP 402(機器可行動的授權資訊);GET /api/crawler-check 檢測任一網站的機器可讀政策層。開放 CORS;以 OpenAPI 3.1 記載於 /ai/openapi.json。不處理任何真實付款。',
+        '實驗工具新增三項——簽章授權憑證 demo(瀏覽器內 HMAC-SHA256:簽發、驗證、竄改偵測、時效)、HTTP 402 回應產生器(可直接呼叫 live 端點)、爬蟲政策測試器(以草案 schema 驗證抓到的檔案)。',
+        'AICL 的 quote/verify/revoke 端點以「僅規格說明」形式納入 OpenAPI(標示 x-specification-only,未實作)。',
+      ],
+    },
+  },
+  {
     version: 'v0.2.2',
     date: '2026-07-10',
     tag: { en: 'i18n', zh: '多語言' },

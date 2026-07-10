@@ -45,6 +45,13 @@ Status: all protocols are open research drafts, version 0.1.
 - https://agiright.org/schemas/aicl.schema.json
 - https://agiright.org/schemas/airs.schema.json
 - https://agiright.org/schemas/ailp.schema.json
+- https://agiright.org/ai/registry.json : protocol registry with version history
+- https://agiright.org/ai/openapi.json : OpenAPI 3.1 for the live demo API
+
+## Live API (mock/demo — no payment processed)
+
+- GET https://agiright.org/api/mock/402 : a real AICL-style HTTP 402 response, safe for agents to call
+- GET https://agiright.org/api/crawler-check?origin=https://example.org : inspect a site's machine-readable policy surface
 
 ## Permissions (summary of /.well-known/aicr.json)
 

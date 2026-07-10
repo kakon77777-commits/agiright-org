@@ -1,0 +1,85 @@
+{
+  "registry_version": "0.1",
+  "publisher": "AGIRight.org",
+  "updated": "2026-07-10",
+  "description": "Protocol registry: every protocol draft published by AGIRight.org, with version history, status, schemas, and live instances. Status values: draft | experimental | proposal | stable | deprecated.",
+  "protocols": [
+    {
+      "id": "aicr",
+      "abbr": "AICR",
+      "name": "AI Content Rights / AI Content Rules",
+      "current_version": "0.1",
+      "status": "draft",
+      "since": "2026-07-04",
+      "spec_page": "https://agiright.org/protocols/aicr",
+      "schema": "https://agiright.org/schemas/aicr.schema.json",
+      "live_instance": "https://agiright.org/.well-known/aicr.json",
+      "versions": [
+        {
+          "version": "0.1",
+          "date": "2026-07-04",
+          "changes": "Initial public draft: default_policy rights vocabulary (read_access, summarization, quotation, rag_use, transformation, training, commercial_use, redistribution), rightRule fields, resource_overrides."
+        }
+      ]
+    },
+    {
+      "id": "aicl",
+      "abbr": "AICL",
+      "name": "AI Content License / AI Content Licensing Layer",
+      "current_version": "0.1",
+      "status": "draft",
+      "since": "2026-07-04",
+      "spec_page": "https://agiright.org/protocols/aicl",
+      "schema": "https://agiright.org/schemas/aicl.schema.json",
+      "live_instance": "https://agiright.org/.well-known/aicl.json",
+      "mock_endpoints": ["https://agiright.org/api/mock/402"],
+      "versions": [
+        {
+          "version": "0.1",
+          "date": "2026-07-04",
+          "changes": "Initial public draft: license catalog (id, rights, price, conditions, requires_contact), payment_endpoints placeholders (quote/pay/verify/revoke), HTTP 402 interoperability."
+        }
+      ]
+    },
+    {
+      "id": "airs",
+      "abbr": "AIRS",
+      "name": "AI Rights Spectrum",
+      "current_version": "0.1",
+      "status": "draft",
+      "since": "2026-07-04",
+      "spec_page": "https://agiright.org/protocols/airs",
+      "schema": "https://agiright.org/schemas/airs.schema.json",
+      "live_instance": "https://agiright.org/ai/rights-spectrum.json",
+      "versions": [
+        {
+          "version": "0.1",
+          "date": "2026-07-04",
+          "changes": "Initial public draft: eight-level spectrum from No AI Access (L0) to Commercial Redistribution (L7), each level independently licensable and auditable."
+        }
+      ]
+    },
+    {
+      "id": "ailp",
+      "abbr": "AILP",
+      "name": "AI Learning Permission Protocol",
+      "current_version": "0.1",
+      "status": "draft",
+      "since": "2026-07-04",
+      "spec_page": "https://agiright.org/protocols/ailp",
+      "schema": "https://agiright.org/schemas/ailp.schema.json",
+      "versions": [
+        {
+          "version": "0.1",
+          "date": "2026-07-04",
+          "changes": "Initial public draft: dimension-level learning permissions (access, indexing, inference_input, embedding, training, fine_tuning, distillation, verbatim_memory, attribution, compensation) with allowed | denied | license_required | proportional values."
+        }
+      ]
+    }
+  ],
+  "related": {
+    "openapi": "https://agiright.org/ai/openapi.json",
+    "protocol_index": "https://agiright.org/ai/protocol-index.json",
+    "changelog": "https://agiright.org/docs/changelog"
+  }
+}

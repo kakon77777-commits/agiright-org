@@ -1,0 +1,133 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AGIRight.org API",
+    "version": "0.3.0",
+    "description": "Live demo endpoints plus the AICL licensing-flow endpoint specification. Endpoints marked `x-specification-only: true` illustrate the AICL draft and are NOT implemented — this site processes no payments and issues no real licenses.",
+    "contact": { "email": "contact@agiright.org" },
+    "license": { "name": "MIT" }
+  },
+  "servers": [{ "url": "https://agiright.org" }],
+  "paths": {
+    "/api/mock/402": {
+      "get": {
+        "operationId": "getMock402",
+        "summary": "Live mock of an AICL-style HTTP 402 response",
+        "description": "Returns a real HTTP 402 with a machine-actionable licensing body, as proposed by the AICL draft. Safe to call from agents and crawlers; no payment is processed.",
+        "parameters": [
+          {
+            "name": "resource",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "maxLength": 200 },
+            "description": "Resource path to echo in the mock response."
+          }
+        ],
+        "responses": {
+          "402": {
+            "description": "License required (mock)",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/License402" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/crawler-check": {
+      "get": {
+        "operationId": "getCrawlerCheck",
+        "summary": "Fetch a site's machine-readable policy surface",
+        "description": "Fetches robots.txt, llms.txt, /.well-known/aicr.json, /.well-known/aicl.json, /ai/rights-spectrum.json, and /ai/manifest.json from the given https origin (bounded: fixed paths, 8s timeout, 20KB body cap) and returns the raw results.",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "uri" },
+            "description": "https origin to inspect, e.g. https://agiright.org"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetch results per file",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CrawlerCheckResult" }
+              }
+            }
+          },
+          "400": { "description": "Invalid origin (https public hostnames only)" }
+        }
+      }
+    },
+    "/api/mock/quote": {
+      "post": {
+        "operationId": "postQuote",
+        "summary": "AICL quote endpoint (specification only)",
+        "x-specification-only": true,
+        "description": "NOT IMPLEMENTED. In the AICL draft, an AI requester posts the desired rights and scope and receives a priced quote with a quote_id.",
+        "responses": { "501": { "description": "Not implemented — specification illustration only." } }
+      }
+    },
+    "/api/mock/verify": {
+      "post": {
+        "operationId": "postVerify",
+        "summary": "AICL license-token verification endpoint (specification only)",
+        "x-specification-only": true,
+        "description": "NOT IMPLEMENTED. In the AICL draft, a publisher verifies a presented license token: signature, expiry, scope, and revocation status.",
+        "responses": { "501": { "description": "Not implemented — specification illustration only." } }
+      }
+    },
+    "/api/mock/revoke": {
+      "post": {
+        "operationId": "postRevoke",
+        "summary": "AICL license revocation endpoint (specification only)",
+        "x-specification-only": true,
+        "description": "NOT IMPLEMENTED. In the AICL draft, a publisher revokes an issued license token; subsequent verifications fail.",
+        "responses": { "501": { "description": "Not implemented — specification illustration only." } }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "License402": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string", "const": "license_required" },
+          "message": { "type": "string" },
+          "resource": { "type": "string" },
+          "aicl": { "type": "string", "format": "uri" },
+          "applicable_licenses": { "type": "array", "items": { "type": "object" } },
+          "quote_endpoint": { "type": "string" },
+          "mock": { "type": "boolean" }
+        }
+      },
+      "CrawlerCheckResult": {
+        "type": "object",
+        "properties": {
+          "origin": { "type": "string", "format": "uri" },
+          "checked_at": { "type": "string", "format": "date-time" },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": { "type": "string" },
+                "status": { "type": "integer" },
+                "contentType": { "type": "string" },
+                "body": { "type": ["string", "null"] },
+                "error": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Protocol registry and JSON Schemas",
+    "url": "https://agiright.org/ai/registry.json"
+  }
+}

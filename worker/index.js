@@ -26,8 +26,8 @@ const COUNTRY_LANG = {
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
 
-/** paths that are language-neutral: machine layer, feeds, build assets */
-const NEUTRAL_PREFIXES = ['/ai/', '/schemas/', '/.well-known/', '/_astro/'];
+/** paths that are language-neutral: machine layer, feeds, build assets, API */
+const NEUTRAL_PREFIXES = ['/ai/', '/schemas/', '/.well-known/', '/_astro/', '/api/'];
 
 function cookieLang(request) {
   const cookie = request.headers.get('Cookie') || '';
@@ -80,6 +80,11 @@ export default {
       return Response.redirect(url.toString(), 301);
     }
 
+    // --- live demo API (v0.3) --------------------------------------------
+    if (url.pathname.startsWith('/api/')) {
+      return handleApi(url, request, env);
+    }
+
     // --- legacy localized URLs: /zh/foo → /foo + remembered preference ---
     for (const lang of LANGS) {
       const m = url.pathname.match(new RegExp(`^/${lang}(/.*)?$`));
@@ -115,3 +120,151 @@ export default {
     return env.ASSETS.fetch(request);
   },
 };
+
+/* ---------------------------------------------------------------------------
+   Live demo API (v0.3) — mock/educational only, per site policy: no real
+   payment processing, no data collection. CORS-open so other playgrounds
+   and agents can call these endpoints.
+--------------------------------------------------------------------------- */
+
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+function apiJson(obj, status = 200, extra = {}) {
+  return new Response(JSON.stringify(obj, null, 2), {
+    status,
+    headers: { 'Content-Type': 'application/json; charset=utf-8', ...CORS, ...extra },
+  });
+}
+
+async function handleApi(url, request, env) {
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { status: 204, headers: CORS });
+  }
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return apiJson({ error: 'method_not_allowed' }, 405);
+  }
+  switch (url.pathname) {
+    case '/api/mock/402':
+      return mock402(url);
+    case '/api/crawler-check':
+      return crawlerCheck(url, env);
+    default:
+      return apiJson(
+        {
+          error: 'not_found',
+          endpoints: ['/api/mock/402', '/api/crawler-check?origin=https://example.org'],
+          openapi: 'https://agiright.org/ai/openapi.json',
+        },
+        404
+      );
+  }
+}
+
+/**
+ * GET /api/mock/402[?resource=/path]
+ * A live example of an AICL-style "402 Payment Required" response:
+ * machine-actionable licensing information instead of a dead end.
+ */
+function mock402(url) {
+  const resource = (url.searchParams.get('resource') || '/premium/example-article').slice(0, 200);
+  return apiJson(
+    {
+      error: 'license_required',
+      message: 'This resource requires a license for AI use. This is a mock response for demonstration — no payment is processed.',
+      resource,
+      aicl: 'https://agiright.org/.well-known/aicl.json',
+      applicable_licenses: [
+        {
+          id: 'metered_rag',
+          rights: ['rag'],
+          price: { amount: '0.002', currency: 'USD', unit: 'per_request' },
+          conditions: ['attribution_required', 'retention_days_30', 'no_model_training'],
+        },
+        {
+          id: 'commercial_or_training_license',
+          rights: ['training', 'fine_tuning', 'commercial_use'],
+          requires_contact: true,
+          contact: 'contact@agiright.org',
+        },
+      ],
+      quote_endpoint: 'https://agiright.org/api/mock/quote (specification only — not implemented)',
+      spec: 'https://agiright.org/protocols/aicl',
+      mock: true,
+    },
+    402,
+    { Link: '<https://agiright.org/.well-known/aicl.json>; rel="license-catalog"' }
+  );
+}
+
+/**
+ * GET /api/crawler-check?origin=https://example.org
+ * Fetches a site's machine-readable policy surface (bounded: https-only,
+ * fixed well-known paths, capped size and time) and returns the raw results
+ * so the playground can validate and summarize them client-side.
+ */
+const CHECK_FILES = [
+  '/robots.txt',
+  '/llms.txt',
+  '/.well-known/aicr.json',
+  '/.well-known/aicl.json',
+  '/ai/rights-spectrum.json',
+  '/ai/manifest.json',
+];
+const PRIVATE_HOST = /^(localhost|.*\.local|.*\.internal|.*\.lan|0\.0\.0\.0|127\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.)/i;
+
+async function crawlerCheck(url, env) {
+  const raw = url.searchParams.get('origin') || '';
+  let origin;
+  try {
+    const parsed = new URL(raw);
+    if (parsed.protocol !== 'https:') throw new Error('https origins only');
+    if (!parsed.hostname.includes('.') || PRIVATE_HOST.test(parsed.hostname)) {
+      throw new Error('public hostnames only');
+    }
+    origin = parsed.origin;
+  } catch (e) {
+    return apiJson({ error: 'invalid_origin', message: String((e && e.message) || e) }, 400);
+  }
+
+  // self-inspection: serve our own files from the asset store directly,
+  // avoiding worker self-fetch recursion limits
+  const self = origin === `https://${CANONICAL_HOST}` || origin === `https://www.${CANONICAL_HOST}`;
+
+  const results = await Promise.all(
+    CHECK_FILES.map(async (path) => {
+      try {
+        const res = self
+          ? await env.ASSETS.fetch(new Request(`https://${CANONICAL_HOST}${path}`))
+          : await fetch(origin + path, {
+          redirect: 'follow',
+          signal: AbortSignal.timeout(8000),
+          headers: {
+            'User-Agent': 'AGIRight-PolicyTester/0.3 (+https://agiright.org/playground)',
+            Accept: 'application/json, text/plain, */*',
+          },
+        });
+        const contentType = res.headers.get('content-type') || '';
+        const length = Number(res.headers.get('content-length') || 0);
+        let body = null;
+        if (res.ok && length < 512000) {
+          const text = await res.text();
+          body = text.slice(0, 20000);
+        }
+        return { path, status: res.status, contentType, body };
+      } catch (e) {
+        return { path, error: String((e && e.message) || e) };
+      }
+    })
+  );
+
+  return apiJson({
+    origin,
+    checked_at: new Date().toISOString(),
+    note: 'Raw fetch results; validation against AGIRight draft schemas happens in the playground client.',
+    results,
+  });
+}

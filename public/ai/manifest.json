@@ -62,9 +62,26 @@
     "examples": "https://agiright.org/docs/examples",
     "changelog": "https://agiright.org/docs/changelog",
     "playground": "https://agiright.org/playground",
+    "registry": "https://agiright.org/ai/registry.json",
+    "openapi": "https://agiright.org/ai/openapi.json",
     "repository": "https://github.com/kakon77777-commits/agiright-org",
     "sitemap": "https://agiright.org/sitemap-index.xml",
     "feed": "https://agiright.org/feed.xml"
+  },
+  "api": {
+    "openapi": "https://agiright.org/ai/openapi.json",
+    "live_endpoints": [
+      {
+        "method": "GET",
+        "path": "/api/mock/402",
+        "description": "Live mock of an AICL-style HTTP 402 response — machine-actionable licensing info. No payment is processed."
+      },
+      {
+        "method": "GET",
+        "path": "/api/crawler-check?origin=https://example.org",
+        "description": "Fetches a site's machine-readable policy surface (robots.txt, llms.txt, AICR/AICL, rights spectrum, manifest)."
+      }
+    ]
   },
   "citation": {
     "format": "Neo.K / EveMissLab, \"Page Title\", version, AGIRight.org, URL",

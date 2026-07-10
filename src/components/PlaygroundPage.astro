@@ -57,8 +57,53 @@ const T = {
   loadExample: lang === 'zh' ? '載入本站範例' : 'Load this site’s file',
   localNote:
     lang === 'zh'
-      ? '// 完全在本地執行 — 你的政策內容不會離開瀏覽器。'
-      : '// Runs entirely locally — your policy never leaves the browser.',
+      ? '// 產生器與驗證器完全在本地執行;授權憑證 demo 亦同。政策測試器會經由本站 API 讀取你指定網站的公開政策檔。'
+      : '// Generators, validator, and the token demo run entirely locally. The policy tester fetches a site’s public policy files via this site’s API.',
+  // --- token demo ---
+  tabToken: lang === 'zh' ? '授權憑證 demo' : 'License token',
+  tokenLicense: lang === 'zh' ? '授權級距' : 'License',
+  tokenAgent: lang === 'zh' ? 'Agent 識別' : 'Agent identity',
+  tokenScope: lang === 'zh' ? '適用範圍(路徑)' : 'Scope (path)',
+  tokenTtl: lang === 'zh' ? '有效分鐘數' : 'TTL (minutes)',
+  tokenSecret: lang === 'zh' ? '共享密鑰(demo)' : 'Shared secret (demo)',
+  tokenSign: lang === 'zh' ? '簽發憑證' : 'Sign token',
+  tokenVerify: lang === 'zh' ? '驗證' : 'Verify',
+  tokenTamper: lang === 'zh' ? '竄改一個字元' : 'Tamper one character',
+  tokenPaste: lang === 'zh' ? '貼上要驗證的憑證' : 'Token to verify',
+  tokenValid: lang === 'zh' ? '✓ 簽章有效' : '✓ Signature valid',
+  tokenInvalid: lang === 'zh' ? '✗ 簽章無效(內容已被竄改或密鑰不符)' : '✗ Invalid signature (tampered or wrong secret)',
+  tokenExpired: lang === 'zh' ? '⚠ 簽章有效,但憑證已過期' : '⚠ Signature valid, but the token has expired',
+  tokenNote:
+    lang === 'zh'
+      ? '教學用 demo:以 HMAC-SHA256 與共享密鑰示範「請求綁定、有時效、可驗證」的授權憑證。正式環境應由發布者以非對稱金鑰簽章,驗證方使用 /.well-known/ 公開的公鑰。'
+      : 'Educational demo: HMAC-SHA256 with a shared secret, showing request-bound, expiring, verifiable license tokens. Production tokens should be signed asymmetrically, with the publisher’s public key discoverable under /.well-known/.',
+  // --- 402 builder ---
+  tabHttp402: 'HTTP 402',
+  h402Resource: lang === 'zh' ? '受保護資源路徑' : 'Protected resource path',
+  h402Unit: lang === 'zh' ? '計價單位' : 'Pricing unit',
+  h402Build: lang === 'zh' ? '產生回應' : 'Build response',
+  h402Live: lang === 'zh' ? '呼叫本站的 live mock 端點' : 'Call this site’s live mock endpoint',
+  h402LiveNote:
+    lang === 'zh'
+      ? '這是真的端點——任何 Agent 都可以打:'
+      : 'This is a real endpoint — any agent can call it:',
+  h402Note:
+    lang === 'zh'
+      ? 'AICL 的核心主張:對未授權的 AI 請求,不要回死路(403/空白),而是回機器可行動的 402——附授權目錄、價格與洽詢方式。本站不處理真實付款。'
+      : 'The AICL thesis: answer unlicensed AI requests not with a dead end (403/blank) but with a machine-actionable 402 — license catalog, prices, and contact. This site processes no real payments.',
+  // --- crawler tester ---
+  tabTester: lang === 'zh' ? '政策測試器' : 'Policy tester',
+  testerOrigin: lang === 'zh' ? '要檢測的網站(https)' : 'Site to inspect (https)',
+  testerRun: lang === 'zh' ? '檢測' : 'Inspect',
+  testerRunning: lang === 'zh' ? '檢測中…' : 'Inspecting…',
+  testerFound: lang === 'zh' ? '存在' : 'found',
+  testerMissing: lang === 'zh' ? '不存在' : 'missing',
+  testerValid: lang === 'zh' ? '符合 schema' : 'schema-valid',
+  testerInvalid: lang === 'zh' ? '不符合 schema' : 'schema-invalid',
+  testerNote:
+    lang === 'zh'
+      ? '檢查任一網站的機器可讀政策層:robots.txt、llms.txt、AICR/AICL 政策檔與權利光譜宣告,並以本站草案 schema 驗證。'
+      : 'Inspect any site’s machine-readable policy surface: robots.txt, llms.txt, AICR/AICL policies, and rights-spectrum declarations — validated against this site’s draft schemas.',
 };
 
 const RIGHTS: { key: string; label: string; attr?: boolean; words?: boolean; retention?: boolean; def: string }[] = [
@@ -76,7 +121,7 @@ const AICL_RIGHT_OPTIONS = ['read', 'summarize', 'quote', 'rag', 'transform', 't
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>
-  <PageHeader kicker={lang === 'zh' ? '工具' : 'Tools'} title={title} intro={intro} badges={['v0.2', lang === 'zh' ? '瀏覽器內執行' : 'runs in-browser']} />
+  <PageHeader kicker={lang === 'zh' ? '工具' : 'Tools'} title={title} intro={intro} badges={['v0.3', lang === 'zh' ? '瀏覽器內執行 + live API' : 'in-browser + live API']} />
 
   <div class="container-site py-12 md:py-16" data-playground data-lang={lang}>
     <!-- tabs -->
@@ -84,6 +129,9 @@ const AICL_RIGHT_OPTIONS = ['read', 'summarize', 'quote', 'rag', 'transform', 't
       <button class="tab-btn" role="tab" id="tab-aicr" aria-selected="true" aria-controls="panel-aicr" data-tab="aicr">{T.tabAicr}</button>
       <button class="tab-btn" role="tab" id="tab-aicl" aria-selected="false" aria-controls="panel-aicl" data-tab="aicl">{T.tabAicl}</button>
       <button class="tab-btn" role="tab" id="tab-validate" aria-selected="false" aria-controls="panel-validate" data-tab="validate">{T.tabValidate}</button>
+      <button class="tab-btn" role="tab" id="tab-token" aria-selected="false" aria-controls="panel-token" data-tab="token">{T.tabToken}</button>
+      <button class="tab-btn" role="tab" id="tab-h402" aria-selected="false" aria-controls="panel-h402" data-tab="h402">{T.tabHttp402}</button>
+      <button class="tab-btn" role="tab" id="tab-tester" aria-selected="false" aria-controls="panel-tester" data-tab="tester">{T.tabTester}</button>
     </div>
     <p class="mt-3 font-mono text-[0.72rem] text-muted" data-reveal>{T.localNote}</p>
 
@@ -252,6 +300,126 @@ const AICL_RIGHT_OPTIONS = ['read', 'summarize', 'quote', 'rag', 'transform', 't
         <p class="field-label">{T.output}</p>
         <div class="rounded-md border border-line bg-surface p-5 min-h-40" data-val-result>
           <p class="text-[0.85rem] text-muted">—</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LICENSE TOKEN DEMO ============ -->
+    <section id="panel-token" role="tabpanel" aria-labelledby="tab-token" class="mt-8 hidden grid-cols-1 gap-8 lg:grid-cols-2" data-panel="token">
+      <div class="card p-6 md:p-7">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="tok-publisher">{T.publisher}</label>
+            <input class="field-input" id="tok-publisher" type="text" value="agiright.org" data-tok-publisher />
+          </div>
+          <div>
+            <label class="field-label" for="tok-agent">{T.tokenAgent}</label>
+            <input class="field-input" id="tok-agent" type="text" value="agent://example-agent" data-tok-agent />
+          </div>
+          <div>
+            <label class="field-label" for="tok-license">{T.tokenLicense}</label>
+            <select class="field-select" id="tok-license" data-tok-license>
+              <option value="research_rag" selected>research_rag — read, summarize, rag</option>
+              <option value="metered_rag">metered_rag — rag (paid per request)</option>
+              <option value="public_read_summary">public_read_summary — read, summarize, quote</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="tok-scope">{T.tokenScope}</label>
+            <input class="field-input" id="tok-scope" type="text" value="/docs/*" data-tok-scope />
+          </div>
+          <div>
+            <label class="field-label" for="tok-ttl">{T.tokenTtl}</label>
+            <input class="field-input" id="tok-ttl" type="number" min="1" value="60" data-tok-ttl />
+          </div>
+          <div>
+            <label class="field-label" for="tok-secret">{T.tokenSecret}</label>
+            <input class="field-input" id="tok-secret" type="text" value="demo-secret-change-me" data-tok-secret />
+          </div>
+        </div>
+        <button class="btn btn-primary mt-6" data-tok-sign>{T.tokenSign}</button>
+        <p class="mt-5 border-t border-line pt-4 text-[0.8rem] leading-relaxed text-muted">{T.tokenNote}</p>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between gap-3">
+          <p class="field-label !mb-0">{T.output} — license token</p>
+          <button class="btn btn-outline !px-3 !py-2 !text-[0.8rem]" data-copy="token">{T.copy}</button>
+        </div>
+        <figure class="terminal mt-3">
+          <pre class="max-h-40 overflow-auto whitespace-pre-wrap break-all p-4"><code data-output="token">—</code></pre>
+        </figure>
+
+        <label class="field-label mt-6" for="tok-verify-input">{T.tokenPaste}</label>
+        <textarea class="field-textarea !min-h-24" id="tok-verify-input" spellcheck="false" data-tok-verify-input></textarea>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button class="btn btn-primary !px-3 !py-2 !text-[0.85rem]" data-tok-verify>{T.tokenVerify}</button>
+          <button class="btn btn-outline !px-3 !py-2 !text-[0.85rem]" data-tok-tamper>{T.tokenTamper}</button>
+        </div>
+        <div class="mt-4 rounded-md border border-line bg-surface p-5 min-h-24" data-tok-result>
+          <p class="text-[0.85rem] text-muted">—</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HTTP 402 BUILDER ============ -->
+    <section id="panel-h402" role="tabpanel" aria-labelledby="tab-h402" class="mt-8 hidden grid-cols-1 gap-8 lg:grid-cols-2" data-panel="h402">
+      <div class="card p-6 md:p-7">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="field-label" for="h402-resource">{T.h402Resource}</label>
+            <input class="field-input" id="h402-resource" type="text" value="/premium/example-article" data-h402-resource />
+          </div>
+          <div>
+            <label class="field-label" for="h402-contact">{T.contact}</label>
+            <input class="field-input" id="h402-contact" type="email" value="licensing@example.org" data-h402-contact />
+          </div>
+          <div>
+            <label class="field-label" for="h402-price">{T.price}</label>
+            <input class="field-input" id="h402-price" type="text" value="0.002" data-h402-price />
+          </div>
+          <div>
+            <label class="field-label" for="h402-unit">{T.h402Unit}</label>
+            <select class="field-select" id="h402-unit" data-h402-unit>
+              <option value="per_request" selected>per_request</option>
+              <option value="per_1k_tokens">per_1k_tokens</option>
+              <option value="per_month">per_month</option>
+            </select>
+          </div>
+        </div>
+        <p class="mt-5 border-t border-line pt-4 text-[0.8rem] leading-relaxed text-muted">{T.h402Note}</p>
+        <div class="mt-5 rounded-md border border-line bg-paper px-4 py-3.5">
+          <p class="spec-label !text-spec">{T.h402Live}</p>
+          <p class="mt-2 text-[0.8rem] text-muted">{T.h402LiveNote}</p>
+          <code class="mt-2 block break-all font-mono text-[0.75rem] text-navy">curl -i "https://agiright.org/api/mock/402?resource=/premium/example-article"</code>
+          <button class="btn btn-outline mt-3 !px-3 !py-2 !text-[0.8rem]" data-h402-live>{T.h402Live}</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between gap-3">
+          <p class="field-label !mb-0">{T.output} — HTTP response</p>
+          <button class="btn btn-outline !px-3 !py-2 !text-[0.8rem]" data-copy="h402">{T.copy}</button>
+        </div>
+        <figure class="terminal mt-3">
+          <pre class="max-h-[32rem] overflow-auto p-4"><code data-output="h402"></code></pre>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ CRAWLER POLICY TESTER ============ -->
+    <section id="panel-tester" role="tabpanel" aria-labelledby="tab-tester" class="mt-8 hidden grid-cols-1 gap-8" data-panel="tester">
+      <div class="card p-6 md:p-7">
+        <p class="max-w-3xl text-[0.9rem] leading-relaxed text-ink-soft">{T.testerNote}</p>
+        <div class="mt-5 flex flex-wrap items-end gap-3">
+          <div class="flex-1 min-w-64">
+            <label class="field-label" for="tester-origin">{T.testerOrigin}</label>
+            <input class="field-input" id="tester-origin" type="url" value="https://agiright.org" data-tester-origin />
+          </div>
+          <button class="btn btn-primary" data-tester-run>{T.testerRun}</button>
+        </div>
+        <div class="mt-6 overflow-hidden rounded-md border border-line" data-tester-result>
+          <p class="bg-surface px-5 py-4 text-[0.85rem] text-muted">—</p>
         </div>
       </div>
     </section>
@@ -488,6 +656,219 @@ const AICL_RIGHT_OPTIONS = ['read', 'summarize', 'quote', 'rag', 'transform', 't
         }
       } catch (e) {
         valResult.innerHTML = `<p class="font-mono text-[0.85rem]" style="color:var(--color-deny)">schema load error: ${(e as Error).message}</p>`;
+      }
+    });
+
+    // ------------------------------------------------------------------
+    // license token demo (HMAC-SHA256 via WebCrypto — educational only)
+    // ------------------------------------------------------------------
+    const enc = new TextEncoder();
+    const esc = (s: string) =>
+      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const b64url = (bytes: Uint8Array) =>
+      btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    const b64urlStr = (s: string) => b64url(enc.encode(s));
+    const fromB64url = (s: string) => {
+      const padded = s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - (s.length % 4)) % 4);
+      return atob(padded);
+    };
+
+    async function hmac(secret: string, data: string): Promise<string> {
+      const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+      const sig = await crypto.subtle.sign('HMAC', key, enc.encode(data));
+      return b64url(new Uint8Array(sig));
+    }
+
+    const TOKEN_RIGHTS: Record<string, string[]> = {
+      research_rag: ['read', 'summarize', 'rag'],
+      metered_rag: ['rag'],
+      public_read_summary: ['read', 'summarize', 'quote'],
+    };
+
+    const tokVerifyInput = root.querySelector('[data-tok-verify-input]') as HTMLTextAreaElement;
+    const tokResult = root.querySelector('[data-tok-result]') as HTMLElement;
+
+    root.querySelector('[data-tok-sign]')?.addEventListener('click', async () => {
+      const licenseId = (root.querySelector('[data-tok-license]') as HTMLSelectElement).value;
+      const ttlMin = Number((root.querySelector('[data-tok-ttl]') as HTMLInputElement).value) || 60;
+      const now = Math.floor(Date.now() / 1000);
+      const header = { alg: 'HS256', typ: 'AICL-license+jwt' };
+      const payload = {
+        iss: (root.querySelector('[data-tok-publisher]') as HTMLInputElement).value.trim() || 'example.org',
+        sub: (root.querySelector('[data-tok-agent]') as HTMLInputElement).value.trim() || 'agent://example',
+        license_id: licenseId,
+        rights: TOKEN_RIGHTS[licenseId] ?? ['read'],
+        scope: (root.querySelector('[data-tok-scope]') as HTMLInputElement).value.trim() || '/*',
+        iat: now,
+        exp: now + ttlMin * 60,
+        nonce: crypto.randomUUID(),
+      };
+      const signingInput = `${b64urlStr(JSON.stringify(header))}.${b64urlStr(JSON.stringify(payload))}`;
+      const secret = (root.querySelector('[data-tok-secret]') as HTMLInputElement).value;
+      const token = `${signingInput}.${await hmac(secret, signingInput)}`;
+      const out = root.querySelector('[data-output="token"]');
+      if (out) out.textContent = token;
+      tokVerifyInput.value = token;
+    });
+
+    root.querySelector('[data-tok-verify]')?.addEventListener('click', async () => {
+      const token = tokVerifyInput.value.trim();
+      const secret = (root.querySelector('[data-tok-secret]') as HTMLInputElement).value;
+      const parts = token.split('.');
+      const bad = (msg: string) =>
+        (tokResult.innerHTML = `<p class="font-mono text-[0.9rem]" style="color:var(--color-deny)">${msg}</p>`);
+      if (parts.length !== 3) return bad(esc('✗ not a header.payload.signature token'));
+      const expected = await hmac(secret, `${parts[0]}.${parts[1]}`);
+      if (expected !== parts[2]) return bad(esc(root.getAttribute('data-lang') === 'zh' ? '✗ 簽章無效(內容已被竄改或密鑰不符)' : '✗ Invalid signature (tampered or wrong secret)'));
+      let payload: Record<string, unknown>;
+      try {
+        payload = JSON.parse(fromB64url(parts[1]));
+      } catch {
+        return bad('✗ signature ok but payload is not valid JSON');
+      }
+      const expired = typeof payload.exp === 'number' && payload.exp * 1000 < Date.now();
+      const isZh = root.getAttribute('data-lang') === 'zh';
+      const headline = expired
+        ? `<p class="font-mono text-[0.9rem]" style="color:var(--color-warn)">${isZh ? '⚠ 簽章有效,但憑證已過期' : '⚠ Signature valid, but the token has expired'}</p>`
+        : `<p class="font-mono text-[0.9rem]" style="color:var(--color-ok)">${isZh ? '✓ 簽章有效' : '✓ Signature valid'}</p>`;
+      tokResult.innerHTML =
+        headline +
+        `<pre class="mt-3 overflow-auto font-mono text-[0.75rem] leading-relaxed text-ink-soft">${esc(JSON.stringify(payload, null, 2))}</pre>`;
+    });
+
+    root.querySelector('[data-tok-tamper]')?.addEventListener('click', () => {
+      const v = tokVerifyInput.value;
+      if (!v.includes('.')) return;
+      const i = v.indexOf('.') + 3; // flip a char inside the payload segment
+      const c = v[i] === 'A' ? 'B' : 'A';
+      tokVerifyInput.value = v.slice(0, i) + c + v.slice(i + 1);
+    });
+
+    // ------------------------------------------------------------------
+    // HTTP 402 response builder + live mock endpoint
+    // ------------------------------------------------------------------
+    function buildH402() {
+      const resource = (root.querySelector('[data-h402-resource]') as HTMLInputElement).value.trim() || '/premium/example';
+      const contact = (root.querySelector('[data-h402-contact]') as HTMLInputElement).value.trim();
+      const amount = (root.querySelector('[data-h402-price]') as HTMLInputElement).value.trim() || '0.002';
+      const unit = (root.querySelector('[data-h402-unit]') as HTMLSelectElement).value;
+      const body = {
+        error: 'license_required',
+        message: 'This resource requires a license for AI use.',
+        resource,
+        aicl: 'https://your-site.example/.well-known/aicl.json',
+        applicable_licenses: [
+          {
+            id: 'metered_rag',
+            rights: ['rag'],
+            price: { amount, currency: 'USD', unit },
+            conditions: ['attribution_required', 'no_model_training'],
+          },
+        ],
+        quote_endpoint: 'https://your-site.example/api/aicl/quote',
+        contact,
+      };
+      const text =
+        'HTTP/1.1 402 Payment Required\n' +
+        'Content-Type: application/json\n' +
+        'Link: <https://your-site.example/.well-known/aicl.json>; rel="license-catalog"\n\n' +
+        JSON.stringify(body, null, 2);
+      const out = root.querySelector('[data-output="h402"]');
+      if (out) out.textContent = text;
+    }
+    ['[data-h402-resource]', '[data-h402-contact]', '[data-h402-price]', '[data-h402-unit]'].forEach((sel) => {
+      root.querySelector(sel)?.addEventListener('input', buildH402);
+      root.querySelector(sel)?.addEventListener('change', buildH402);
+    });
+    buildH402();
+
+    root.querySelector('[data-h402-live]')?.addEventListener('click', async () => {
+      const resource = (root.querySelector('[data-h402-resource]') as HTMLInputElement).value.trim() || '/premium/example';
+      const out = root.querySelector('[data-output="h402"]');
+      if (!out) return;
+      out.textContent = '…';
+      try {
+        const res = await fetch(`/api/mock/402?resource=${encodeURIComponent(resource)}`);
+        out.textContent = `HTTP ${res.status} ${res.statusText}\nLink: ${res.headers.get('Link') ?? ''}\n\n${JSON.stringify(await res.json(), null, 2)}`;
+      } catch (e) {
+        out.textContent = `request failed: ${(e as Error).message}`;
+      }
+    });
+
+    // ------------------------------------------------------------------
+    // crawler policy tester
+    // ------------------------------------------------------------------
+    const testerResult = root.querySelector('[data-tester-result]') as HTMLElement;
+    const testerBtn = root.querySelector('[data-tester-run]') as HTMLButtonElement;
+
+    function chip(text: string, color: string) {
+      return `<span class="badge" style="color:${color};border-color:color-mix(in srgb, ${color} 45%, transparent)">${text}</span>`;
+    }
+
+    testerBtn?.addEventListener('click', async () => {
+      const isZh = root.getAttribute('data-lang') === 'zh';
+      const origin = (root.querySelector('[data-tester-origin]') as HTMLInputElement).value.trim();
+      const original = testerBtn.textContent;
+      testerBtn.disabled = true;
+      testerBtn.textContent = isZh ? '檢測中…' : 'Inspecting…';
+      try {
+        const res = await fetch(`/api/crawler-check?origin=${encodeURIComponent(origin)}`);
+        const data = await res.json();
+        if (!res.ok) {
+          testerResult.innerHTML = `<p class="bg-surface px-5 py-4 font-mono text-[0.85rem]" style="color:var(--color-deny)">${esc(data.error ?? 'error')}: ${esc(data.message ?? '')}</p>`;
+          return;
+        }
+        const rows = await Promise.all(
+          (data.results as Array<{ path: string; status?: number; body?: string | null; error?: string }>).map(async (r) => {
+            let statusChip: string;
+            let detail = '';
+            if (r.error) {
+              statusChip = chip('error', 'var(--color-deny)');
+              detail = esc(r.error.slice(0, 80));
+            } else if (r.status && r.status >= 200 && r.status < 300) {
+              statusChip = chip(isZh ? '存在' : 'found', 'var(--color-ok)');
+              if (r.path.endsWith('.json') && r.body) {
+                try {
+                  const parsed = JSON.parse(r.body);
+                  if (r.path.includes('manifest')) {
+                    detail = esc(`site: ${parsed.site ?? parsed.url ?? '—'}`);
+                  } else {
+                    const id = detectSchema(parsed);
+                    try {
+                      const validate = await getValidator(id);
+                      statusChip += ' ' + (validate(parsed)
+                        ? chip(isZh ? `符合 ${id} schema` : `${id} schema-valid`, 'var(--color-ok)')
+                        : chip(isZh ? `不符合 ${id} schema` : `${id} schema-invalid`, 'var(--color-warn)'));
+                    } catch { /* schema fetch failed — skip validation chip */ }
+                    if (parsed.default_policy?.training) detail = esc(`training: ${parsed.default_policy.training.allowed ? 'allowed' : 'not allowed'}`);
+                    else if (Array.isArray(parsed.licenses)) detail = esc(`${parsed.licenses.length} license tier(s)`);
+                    else if (Array.isArray(parsed.spectrum)) detail = esc(`${parsed.spectrum.length} spectrum level(s)`);
+                  }
+                } catch {
+                  statusChip += ' ' + chip(isZh ? 'JSON 解析失敗' : 'invalid JSON', 'var(--color-deny)');
+                }
+              } else if (r.body) {
+                detail = esc(`${r.body.length} bytes`);
+              }
+            } else {
+              statusChip = chip(isZh ? '不存在' : 'missing', 'var(--color-muted, #676c84)');
+              detail = r.status ? `HTTP ${r.status}` : '';
+            }
+            return `<div class="flex flex-wrap items-center gap-3 border-t border-line bg-surface px-5 py-3 first:border-t-0">
+              <code class="font-mono text-[0.8rem] font-medium text-navy min-w-56">${esc(r.path)}</code>
+              ${statusChip}
+              <span class="text-[0.78rem] text-muted">${detail}</span>
+            </div>`;
+          })
+        );
+        testerResult.innerHTML =
+          `<div class="bg-paper-deep px-5 py-2.5"><span class="spec-label">${esc(data.origin)} · ${esc(data.checked_at ?? '')}</span></div>` +
+          rows.join('');
+      } catch (e) {
+        testerResult.innerHTML = `<p class="bg-surface px-5 py-4 font-mono text-[0.85rem]" style="color:var(--color-deny)">request failed: ${esc((e as Error).message)}</p>`;
+      } finally {
+        testerBtn.disabled = false;
+        testerBtn.textContent = original;
       }
     });
   </script>
