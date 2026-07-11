@@ -14,14 +14,24 @@
  */
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
-/** language codes with a built tree under /<code>/ */
-const LANGS = ['zh'];
+/** language codes with a built tree under /<code>/ (longest first for prefix matching) */
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
   HK: 'zh',
   MO: 'zh',
-  CN: 'zh',
+  CN: 'zh-cn',
+  JP: 'ja',
+  KR: 'ko',
+};
+/** Content-Language per lang code */
+const CONTENT_LANG = {
+  en: 'en',
+  zh: 'zh-Hant',
+  'zh-cn': 'zh-Hans',
+  ja: 'ja',
+  ko: 'ko',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -46,11 +56,14 @@ function pickLang(request) {
   if (country && COUNTRY_LANG[country]) return COUNTRY_LANG[country];
 
   const accept = (request.headers.get('Accept-Language') || '').toLowerCase();
-  for (const lang of LANGS) {
-    if (accept.startsWith(lang) || accept.includes(',' + lang) || accept.includes(', ' + lang)) {
-      return lang;
-    }
+  // first language tag wins; script-aware Chinese mapping
+  const first = accept.split(',')[0].trim().split(';')[0];
+  if (first.startsWith('zh')) {
+    if (/hans|cn|sg/.test(first)) return 'zh-cn';
+    return 'zh'; // zh-tw / zh-hant / zh-hk / bare zh → Traditional
   }
+  if (first.startsWith('ja')) return 'ja';
+  if (first.startsWith('ko')) return 'ko';
   return DEFAULT_LANG;
 }
 
@@ -65,7 +78,7 @@ function isPagePath(pathname) {
 function withLangHeaders(res, lang) {
   const out = new Response(res.body, res);
   out.headers.append('Vary', 'Cookie');
-  out.headers.set('Content-Language', lang === 'zh' ? 'zh-Hant' : lang);
+  out.headers.set('Content-Language', CONTENT_LANG[lang] || lang);
   return out;
 }
 

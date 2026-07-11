@@ -1,5 +1,5 @@
 ---
-import { NAV, UI, SITE, langPrefix, type Lang } from '../data/site';
+import { NAV, UI, SITE, langPrefix, type Lang, pick } from '../data/site';
 import { PROTOCOLS } from '../data/protocols';
 import Logo from './Logo.astro';
 
@@ -33,32 +33,32 @@ const machineLinks = [
           {t.footerTagline}
         </p>
         <p class="mt-4 spec-label">
-          {SITE.org} · {SITE.author} · {lang === 'zh' ? '亦可經' : 'also at'} asiright.org
+          {SITE.org} · {SITE.author} · {pick({ en: 'also at', zh: '亦可經' }, lang)} asiright.org
         </p>
       </div>
 
       <div class="md:col-span-2">
-        <p class="spec-label mb-4">{lang === 'zh' ? '網站' : 'Site'}</p>
+        <p class="spec-label mb-4">{pick({ en: 'Site', zh: '網站' }, lang)}</p>
         <ul class="space-y-2.5 text-[0.9rem]">
           {
             NAV.map((item) => (
               <li>
                 <a href={prefix + item.href} class="text-ink-soft hover:text-navy transition-colors duration-200">
-                  {item[lang]}
+                  {pick(item, lang)}
                 </a>
               </li>
             ))
           }
           <li>
             <a href={prefix + '/contact'} class="text-ink-soft hover:text-navy transition-colors duration-200">
-              {lang === 'zh' ? '聯絡' : 'Contact'}
+              {pick({ en: 'Contact', zh: '聯絡' }, lang)}
             </a>
           </li>
         </ul>
       </div>
 
       <div class="md:col-span-2">
-        <p class="spec-label mb-4">{lang === 'zh' ? '協議' : 'Protocols'}</p>
+        <p class="spec-label mb-4">{pick({ en: 'Protocols', zh: '協議' }, lang)}</p>
         <ul class="space-y-2.5 text-[0.9rem]">
           {
             PROTOCOLS.map((p) => (
@@ -71,14 +71,14 @@ const machineLinks = [
           }
           <li>
             <a href={prefix + '/specs'} class="text-ink-soft hover:text-navy transition-colors duration-200">
-              {lang === 'zh' ? '規範總覽' : 'All specs'}
+              {pick({ en: 'All specs', zh: '規範總覽' }, lang)}
             </a>
           </li>
         </ul>
       </div>
 
       <div class="md:col-span-3">
-        <p class="spec-label mb-4">{lang === 'zh' ? '機器可讀' : 'Machine-readable'}</p>
+        <p class="spec-label mb-4">{pick({ en: 'Machine-readable', zh: '機器可讀' }, lang)}</p>
         <ul class="space-y-2.5">
           {
             machineLinks.map((l) => (

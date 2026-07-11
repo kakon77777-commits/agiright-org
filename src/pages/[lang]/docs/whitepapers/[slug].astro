@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content';
+import PaperReader from '../../../../components/PaperReader.astro';
+import { NON_DEFAULT_LANGS, type Lang } from '../../../../data/site';
+
+export async function getStaticPaths() {
+  const papers = await getCollection('whitepapers');
+  return NON_DEFAULT_LANGS.flatMap((lang) =>
+    papers.map((entry) => ({ params: { lang, slug: entry.id }, props: { entry } }))
+  );
+}
+
+const lang = Astro.params.lang as Lang;
+const { entry } = Astro.props;
+---
+
+<PaperReader lang={lang} entry={entry} />

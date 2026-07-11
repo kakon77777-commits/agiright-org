@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import JsonBlock from './JsonBlock.astro';
 import SpectrumViz from './SpectrumViz.astro';
-import { UI, langPrefix, type Lang } from '../data/site';
+import { UI, langPrefix, type Lang, pick, pickList } from '../data/site';
 import { getProtocol, PROTOCOLS } from '../data/protocols';
 import { PAPERS } from '../data/papers';
 
@@ -18,20 +18,20 @@ const related = PAPERS.filter((paper) => p.relatedPapers.includes(paper.slug));
 const others = PROTOCOLS.filter((x) => x.id !== p.id);
 ---
 
-<BaseLayout lang={lang} title={p.name[lang]} description={p.tagline[lang]}>
+<BaseLayout lang={lang} title={pick(p.name, lang)} description={pick(p.tagline, lang)}>
   <!-- header -->
   <section class="border-b border-line bg-surface">
     <div class="container-site py-14 md:py-18">
       <nav class="spec-label" aria-label="Breadcrumb" data-hero-line>
-        <a href={prefix + '/protocols'} class="hover:text-navy transition-colors duration-200">{lang === 'zh' ? '協議' : 'Protocols'}</a>
+        <a href={prefix + '/protocols'} class="hover:text-navy transition-colors duration-200">{pick({ en: 'Protocols', zh: '協議' }, lang)}</a>
         <span class="mx-2 text-line-strong">/</span>
         <span class="text-navy">{p.abbr}</span>
       </nav>
       <div class="mt-6 flex flex-wrap items-start justify-between gap-6">
         <div class="max-w-3xl">
-          <h1 class="display-serif text-4xl md:text-5xl" data-hero-line>{p.name[lang]}</h1>
-          <p class="mt-3 spec-label" data-hero-line>{p.expansion[lang]}</p>
-          <p class="mt-6 text-lg leading-relaxed text-ink-soft" data-hero-line>{p.tagline[lang]}</p>
+          <h1 class="display-serif text-4xl md:text-5xl" data-hero-line>{pick(p.name, lang)}</h1>
+          <p class="mt-3 spec-label" data-hero-line>{pick(p.expansion, lang)}</p>
+          <p class="mt-6 text-lg leading-relaxed text-ink-soft" data-hero-line>{pick(p.tagline, lang)}</p>
         </div>
         <div class="flex flex-col items-end gap-2" data-hero-line>
           <span class="badge badge-draft">{p.status}</span>
@@ -48,7 +48,7 @@ const others = PROTOCOLS.filter((x) => x.id !== p.id);
       <!-- definition -->
       <section data-reveal>
         <h2 class="spec-label !text-accent">01 · {t.definition}</h2>
-        <p class="mt-4 max-w-2xl text-[1.05rem] leading-[1.85] text-ink-soft">{p.definition[lang]}</p>
+        <p class="mt-4 max-w-2xl text-[1.05rem] leading-[1.85] text-ink-soft">{pick(p.definition, lang)}</p>
       </section>
 
       <!-- purpose -->
@@ -56,7 +56,7 @@ const others = PROTOCOLS.filter((x) => x.id !== p.id);
         <h2 class="spec-label !text-accent">02 · {t.purpose}</h2>
         <ul class="mt-5 max-w-2xl space-y-3.5">
           {
-            p.purpose[lang].map((item) => (
+            pickList(p.purpose, lang).map((item) => (
               <li class="flex gap-3 text-[0.98rem] leading-relaxed text-ink-soft">
                 <svg class="mt-1.5 h-3.5 w-3.5 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M5 12h14M13 6l6 6-6 6" />
@@ -73,7 +73,7 @@ const others = PROTOCOLS.filter((x) => x.id !== p.id);
         <h2 class="spec-label !text-accent">03 · {t.scope}</h2>
         <div class="mt-5 overflow-hidden rounded-lg border border-line">
           {
-            p.scope[lang].map((item, i) => {
+            pickList(p.scope, lang).map((item, i) => {
               const [head, ...rest] = item.split('—');
               return (
                 <div class:list={['flex gap-4 bg-surface px-5 py-3.5', i > 0 && 'border-t border-line']}>
@@ -99,7 +99,7 @@ const others = PROTOCOLS.filter((x) => x.id !== p.id);
       <!-- example -->
       <section data-reveal>
         <h2 class="spec-label !text-accent">04 · {t.example}</h2>
-        <p class="mt-4 text-[0.95rem] text-ink-soft">{p.exampleTitle[lang]}</p>
+        <p class="mt-4 text-[0.95rem] text-ink-soft">{pick(p.exampleTitle, lang)}</p>
         <JsonBlock code={p.jsonExample} file={p.exampleFile} class="mt-4" />
       </section>
 
@@ -108,7 +108,7 @@ const others = PROTOCOLS.filter((x) => x.id !== p.id);
         <h2 class="spec-label !text-warn">05 · {t.limitations}</h2>
         <ul class="mt-5 max-w-2xl space-y-3">
           {
-            p.limitations[lang].map((item) => (
+            pickList(p.limitations, lang).map((item) => (
               <li class="flex gap-3 text-[0.92rem] leading-relaxed text-muted">
                 <span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-warn" aria-hidden="true" />
                 {item}
@@ -122,7 +122,7 @@ const others = PROTOCOLS.filter((x) => x.id !== p.id);
         p.namingNote && (
           <section class="rounded-md border-l-2 border-spec bg-spec-soft/60 px-5 py-4" data-reveal>
             <h2 class="spec-label !text-spec">{t.namingNote}</h2>
-            <p class="mt-3 max-w-2xl text-[0.9rem] leading-relaxed text-ink-soft">{p.namingNote[lang]}</p>
+            <p class="mt-3 max-w-2xl text-[0.9rem] leading-relaxed text-ink-soft">{pick(p.namingNote, lang)}</p>
           </section>
         )
       }
@@ -160,7 +160,7 @@ const others = PROTOCOLS.filter((x) => x.id !== p.id);
         {
           related.length > 0 && (
             <div data-reveal>
-              <p class="spec-label mb-4">{lang === 'zh' ? '相關白皮書' : 'Related whitepapers'}</p>
+              <p class="spec-label mb-4">{pick({ en: 'Related whitepapers', zh: '相關白皮書' }, lang)}</p>
               <ul class="space-y-3">
                 {related.map((paper) => (
                   <li>
@@ -169,7 +169,7 @@ const others = PROTOCOLS.filter((x) => x.id !== p.id);
                       class="group block rounded-md border border-line bg-surface p-4 no-underline cursor-pointer hover:border-line-strong transition-colors duration-200"
                     >
                       <span class="font-serif text-[0.95rem] font-semibold leading-snug text-navy group-hover:text-primary transition-colors duration-200">
-                        {paper.title[lang]}
+                        {pick(paper.title, lang)}
                       </span>
                       <span class="mt-1.5 block spec-label">{paper.version}</span>
                     </a>
@@ -191,7 +191,7 @@ const others = PROTOCOLS.filter((x) => x.id !== p.id);
                     class="group flex items-baseline gap-3 py-1 no-underline cursor-pointer"
                   >
                     <span class="font-mono text-[0.85rem] font-medium text-navy group-hover:text-primary transition-colors duration-200">{o.abbr}</span>
-                    <span class="text-[0.8rem] text-muted">{o.expansion[lang]}</span>
+                    <span class="text-[0.8rem] text-muted">{pick(o.expansion, lang)}</span>
                   </a>
                 </li>
               ))

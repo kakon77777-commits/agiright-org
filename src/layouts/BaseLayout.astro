@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE, publicPath, type Lang } from '../data/site';
+import { SITE, publicPath, LANG_META, LANGS, type Lang, pick } from '../data/site';
 
 interface Props {
   lang: Lang;
@@ -12,13 +12,13 @@ interface Props {
 
 const { lang, title, description } = Astro.props;
 
-const pageTitle = title ? `${title} · ${SITE.name}` : SITE.title[lang];
-const pageDesc = description ?? SITE.description[lang];
+const pageTitle = title ? `${title} · ${SITE.name}` : pick(SITE.title, lang);
+const pageDesc = description ?? pick(SITE.description, lang);
 // one public URL per page: the /zh build tree is internal, so canonical
 // always points at the bare path (the edge worker serves the variant there)
 const pathname = publicPath(Astro.url.pathname.replace(/\.html$/, ''));
 const canonical = new URL(pathname, SITE.url).href;
-const htmlLang = lang === 'zh' ? 'zh-Hant' : 'en';
+const htmlLang = LANG_META[lang].html;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -26,7 +26,7 @@ const jsonLd = {
   name: SITE.name,
   url: SITE.url,
   description: SITE.description.en,
-  inLanguage: ['en', 'zh-Hant'],
+  inLanguage: LANGS.map((l) => LANG_META[l].html),
   publisher: {
     '@type': 'Organization',
     name: SITE.org,
@@ -53,7 +53,7 @@ const jsonLd = {
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDesc} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content={lang === 'zh' ? 'zh_TW' : 'en_US'} />
+    <meta property="og:locale" content={LANG_META[lang].ogLocale} />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDesc} />
@@ -77,7 +77,7 @@ const jsonLd = {
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-navy focus:text-white focus:px-4 focus:py-2 focus:rounded-md"
-      >{lang === 'zh' ? '跳至主要內容' : 'Skip to content'}</a
+      >{pick({ en: 'Skip to content', zh: '跳至主要內容' }, lang)}</a
     >
     <Header lang={lang} />
     <main id="main" class="flex-1">

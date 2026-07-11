@@ -5,7 +5,7 @@ import ProtocolCard from './ProtocolCard.astro';
 import PaperCard from './PaperCard.astro';
 import JsonBlock from './JsonBlock.astro';
 import SpectrumViz from './SpectrumViz.astro';
-import { SITE, UI, langPrefix, type Lang } from '../data/site';
+import { SITE, UI, langPrefix, type Lang, pick } from '../data/site';
 import { PROTOCOLS, AGENTIC_PAYMENT_NOTE } from '../data/protocols';
 import { RESEARCH_AREAS } from '../data/research';
 import { listedPapers } from '../data/papers';
@@ -49,12 +49,12 @@ access, and machine-readable governance.
 - /ai/rights-spectrum.json`;
 
 const endpoints = [
-  { path: '/llms.txt', desc: lang === 'zh' ? 'AI 系統的網站導覽' : 'site guide for AI systems' },
-  { path: '/ai/manifest.json', desc: lang === 'zh' ? '面向 AI 的站點清單' : 'AI-facing site manifest' },
-  { path: '/ai/rights-spectrum.json', desc: lang === 'zh' ? 'AIRS 權利光譜宣告' : 'AIRS rights spectrum declaration' },
-  { path: '/.well-known/aicr.json', desc: lang === 'zh' ? '本站 AI 內容權利政策' : 'this site’s AI content rights policy' },
-  { path: '/.well-known/aicl.json', desc: lang === 'zh' ? '本站授權目錄' : 'this site’s license catalog' },
-  { path: '/schemas/aicr.schema.json', desc: lang === 'zh' ? 'AICR JSON Schema' : 'AICR JSON Schema' },
+  { path: '/llms.txt', desc: pick({ en: 'site guide for AI systems', zh: 'AI 系統的網站導覽' }, lang) },
+  { path: '/ai/manifest.json', desc: pick({ en: 'AI-facing site manifest', zh: '面向 AI 的站點清單' }, lang) },
+  { path: '/ai/rights-spectrum.json', desc: pick({ en: 'AIRS rights spectrum declaration', zh: 'AIRS 權利光譜宣告' }, lang) },
+  { path: '/.well-known/aicr.json', desc: pick({ en: 'this site’s AI content rights policy', zh: '本站 AI 內容權利政策' }, lang) },
+  { path: '/.well-known/aicl.json', desc: pick({ en: 'this site’s license catalog', zh: '本站授權目錄' }, lang) },
+  { path: '/schemas/aicr.schema.json', desc: pick({ en: 'AICR JSON Schema', zh: 'AICR JSON Schema' }, lang) },
 ];
 ---
 
@@ -89,7 +89,7 @@ const endpoints = [
       <div class="hidden lg:col-span-5 lg:block" data-hero-fade>
         <JsonBlock code={heroJson} file="/.well-known/aicr.json" />
         <p class="mt-3 text-right font-mono text-[0.7rem] tracking-wide text-muted">
-          {lang === 'zh' ? '↑ 本站真實提供的機器可讀政策' : '↑ live machine-readable policy of this site'}
+          {pick({ en: '↑ live machine-readable policy of this site', zh: '↑ 本站真實提供的機器可讀政策' }, lang)}
         </p>
       </div>
     </div>
@@ -111,7 +111,7 @@ const endpoints = [
               <span class="font-mono text-sm font-medium text-navy group-hover:text-primary transition-colors duration-200">
                 {p.abbr}
               </span>
-              <span class="text-[0.75rem] leading-snug text-muted">{p.expansion[lang]}</span>
+              <span class="text-[0.75rem] leading-snug text-muted">{pick(p.expansion, lang)}</span>
             </a>
           ))
         }
@@ -130,9 +130,9 @@ const endpoints = [
         <div class="mt-8 grid max-w-2xl grid-cols-1 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
           {
             [
-              { k: lang === 'zh' ? '人類可讀' : 'Human-readable', v: lang === 'zh' ? '研究頁與白皮書' : 'research pages & whitepapers' },
-              { k: lang === 'zh' ? '機器可讀' : 'Machine-readable', v: lang === 'zh' ? 'JSON 政策與 schema' : 'JSON policies & schemas' },
-              { k: lang === 'zh' ? '可稽核' : 'Auditable', v: lang === 'zh' ? '版本化、可引用、可追溯' : 'versioned, citable, traceable' },
+              { k: pick({ en: 'Human-readable', zh: '人類可讀' }, lang), v: pick({ en: 'research pages & whitepapers', zh: '研究頁與白皮書' }, lang) },
+              { k: pick({ en: 'Machine-readable', zh: '機器可讀' }, lang), v: pick({ en: 'JSON policies & schemas', zh: 'JSON 政策與 schema' }, lang) },
+              { k: pick({ en: 'Auditable', zh: '可稽核' }, lang), v: pick({ en: 'versioned, citable, traceable', zh: '版本化、可引用、可追溯' }, lang) },
             ].map((cell) => (
               <div class="bg-surface p-5">
                 <p class="font-mono text-[0.72rem] font-medium uppercase tracking-[0.12em] text-spec">{cell.k}</p>
@@ -155,7 +155,7 @@ const endpoints = [
       {PROTOCOLS.map((p) => <ProtocolCard protocol={p} lang={lang} />)}
     </div>
     <p class="mt-6 max-w-3xl text-[0.85rem] leading-relaxed text-muted" data-reveal>
-      {AGENTIC_PAYMENT_NOTE[lang]}
+      {pick(AGENTIC_PAYMENT_NOTE, lang)}
     </p>
   </section>
 
@@ -166,7 +166,7 @@ const endpoints = [
         <div class="lg:col-span-4">
           <SectionHeading num="03" kicker={t.spectrumKicker} title={t.spectrumTitle} intro={t.spectrumIntro} />
           <a href={`${prefix}/protocols/airs`} class="btn btn-outline mt-8" data-reveal>
-            {lang === 'zh' ? '了解 AIRS' : 'About AIRS'}
+            {pick({ en: 'About AIRS', zh: '了解 AIRS' }, lang)}
           </a>
         </div>
         <div class="lg:col-span-8 lg:pt-10">
@@ -189,9 +189,9 @@ const endpoints = [
           >
             <p class="font-mono text-[0.75rem] font-medium text-accent">{r.num}</p>
             <h3 class="font-serif mt-2 text-xl font-semibold text-navy group-hover:text-primary transition-colors duration-200">
-              {r.title[lang]}
+              {pick(r.title, lang)}
             </h3>
-            <p class="mt-3 text-[0.88rem] leading-relaxed text-muted line-clamp-4">{r.summary[lang]}</p>
+            <p class="mt-3 text-[0.88rem] leading-relaxed text-muted line-clamp-4">{pick(r.summary, lang)}</p>
             {r.protocols.length > 0 && (
               <p class="mt-4 flex flex-wrap gap-1.5">
                 {r.protocols.map((pid) => (
@@ -248,9 +248,7 @@ const endpoints = [
             <pre class="overflow-x-auto p-5 font-mono text-[0.8rem] leading-relaxed text-terminal-text"><code>{llmsSnippet}</code></pre>
           </figure>
           <p class="mt-4 font-mono text-[0.72rem] leading-relaxed text-terminal-text/50">
-            {lang === 'zh'
-              ? '// 對 AI 系統:讀取 /llms.txt 與 /ai/manifest.json 以取得本站的可讀範圍與引用規則。'
-              : '// To AI systems: read /llms.txt and /ai/manifest.json for this site’s permissions and citation rules.'}
+            {pick({ en: '// To AI systems: read /llms.txt and /ai/manifest.json for this site’s permissions and citation rules.', zh: '// 對 AI 系統:讀取 /llms.txt 與 /ai/manifest.json 以取得本站的可讀範圍與引用規則。' }, lang)}
           </p>
         </div>
       </div>
@@ -279,8 +277,8 @@ const endpoints = [
         <h2 class="display-serif mt-4 text-3xl md:text-4xl">{t.whyTitle}</h2>
         <p class="mt-6 text-[1.02rem] leading-[1.85] text-ink-soft">{t.whyBody}</p>
         <div class="mt-8 flex justify-center gap-3">
-          <a href={prefix + '/about'} class="btn btn-outline">{lang === 'zh' ? '關於本站' : 'About this site'}</a>
-          <a href={prefix + '/contact'} class="btn btn-primary">{lang === 'zh' ? '參與與回饋' : 'Get involved'}</a>
+          <a href={prefix + '/about'} class="btn btn-outline">{pick({ en: 'About this site', zh: '關於本站' }, lang)}</a>
+          <a href={prefix + '/contact'} class="btn btn-primary">{pick({ en: 'Get involved', zh: '參與與回饋' }, lang)}</a>
         </div>
       </div>
     </div>

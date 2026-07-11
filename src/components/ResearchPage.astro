@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { UI, langPrefix, type Lang } from '../data/site';
+import { UI, langPrefix, type Lang, pick, pickList } from '../data/site';
 import { getResearchArea, RESEARCH_AREAS } from '../data/research';
 import { PROTOCOLS } from '../data/protocols';
 import { listedPapers } from '../data/papers';
@@ -20,27 +20,27 @@ const relatedPapers = listedPapers().filter((paper) =>
 const others = RESEARCH_AREAS.filter((x) => x.slug !== r.slug);
 ---
 
-<BaseLayout lang={lang} title={r.title[lang]} description={r.summary[lang]}>
+<BaseLayout lang={lang} title={pick(r.title, lang)} description={pick(r.summary, lang)}>
   <section class="border-b border-line bg-surface">
     <div class="container-site py-14 md:py-18">
       <nav class="spec-label" aria-label="Breadcrumb" data-hero-line>
-        <a href={prefix + '/research'} class="hover:text-navy transition-colors duration-200">{lang === 'zh' ? '研究' : 'Research'}</a>
+        <a href={prefix + '/research'} class="hover:text-navy transition-colors duration-200">{pick({ en: 'Research', zh: '研究' }, lang)}</a>
         <span class="mx-2 text-line-strong">/</span>
         <span class="text-navy">{r.num}</span>
       </nav>
-      <h1 class="display-serif mt-6 max-w-3xl text-4xl md:text-5xl" data-hero-line>{r.title[lang]}</h1>
-      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-ink-soft" data-hero-line>{r.summary[lang]}</p>
+      <h1 class="display-serif mt-6 max-w-3xl text-4xl md:text-5xl" data-hero-line>{pick(r.title, lang)}</h1>
+      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-ink-soft" data-hero-line>{pick(r.summary, lang)}</p>
     </div>
   </section>
 
   <div class="container-site grid grid-cols-1 gap-14 py-14 md:py-20 lg:grid-cols-12">
     <div class="lg:col-span-8">
       <h2 class="spec-label !text-accent" data-reveal>
-        {lang === 'zh' ? '研究問題' : 'Questions under study'}
+        {pick({ en: 'Questions under study', zh: '研究問題' }, lang)}
       </h2>
       <div class="mt-6 overflow-hidden rounded-lg border border-line" data-reveal>
         {
-          r.topics[lang].map((topic, i) => (
+          pickList(r.topics, lang).map((topic, i) => (
             <div class:list={['flex gap-4 bg-surface px-5 py-4', i > 0 && 'border-t border-line']}>
               <span class="font-mono text-[0.72rem] font-medium text-muted pt-1 w-6 shrink-0">
                 {String(i + 1).padStart(2, '0')}
@@ -54,7 +54,7 @@ const others = RESEARCH_AREAS.filter((x) => x.slug !== r.slug);
       {
         relatedPapers.length > 0 && (
           <div class="mt-14" data-reveal>
-            <h2 class="spec-label !text-accent">{lang === 'zh' ? '相關白皮書' : 'Related whitepapers'}</h2>
+            <h2 class="spec-label !text-accent">{pick({ en: 'Related whitepapers', zh: '相關白皮書' }, lang)}</h2>
             <ul class="mt-6 space-y-3">
               {relatedPapers.map((paper) => (
                 <li>
@@ -63,9 +63,9 @@ const others = RESEARCH_AREAS.filter((x) => x.slug !== r.slug);
                     class="card group flex flex-col gap-1.5 p-5 no-underline cursor-pointer"
                   >
                     <span class="font-serif text-lg font-semibold leading-snug text-navy group-hover:text-primary transition-colors duration-200">
-                      {paper.title[lang]}
+                      {pick(paper.title, lang)}
                     </span>
-                    <span class="text-[0.85rem] text-muted">{paper.oneLiner[lang]}</span>
+                    <span class="text-[0.85rem] text-muted">{pick(paper.oneLiner, lang)}</span>
                   </a>
                 </li>
               ))}
@@ -91,7 +91,7 @@ const others = RESEARCH_AREAS.filter((x) => x.slug !== r.slug);
                       <span class="font-mono text-[0.95rem] font-medium text-navy group-hover:text-primary transition-colors duration-200">
                         {p.abbr}
                       </span>
-                      <span class="mt-1 block text-[0.8rem] leading-snug text-muted">{p.expansion[lang]}</span>
+                      <span class="mt-1 block text-[0.8rem] leading-snug text-muted">{pick(p.expansion, lang)}</span>
                     </a>
                   </li>
                 ))}
@@ -108,7 +108,7 @@ const others = RESEARCH_AREAS.filter((x) => x.slug !== r.slug);
                   <a href={`${prefix}/research/${o.slug}`} class="group flex items-baseline gap-3 py-1 no-underline cursor-pointer">
                     <span class="font-mono text-[0.75rem] text-accent">{o.num}</span>
                     <span class="text-[0.88rem] font-medium text-ink-soft group-hover:text-navy transition-colors duration-200">
-                      {o.title[lang]}
+                      {pick(o.title, lang)}
                     </span>
                   </a>
                 </li>

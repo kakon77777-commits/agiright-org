@@ -1,5 +1,5 @@
 ---
-import { NAV, UI, SITE, langPrefix, publicPath, type Lang } from '../data/site';
+import { NAV, UI, SITE, langPrefix, publicPath, LANGS, LANG_META, type Lang, pick } from '../data/site';
 import Logo from './Logo.astro';
 
 interface Props {
@@ -9,7 +9,6 @@ const { lang } = Astro.props;
 const t = UI[lang];
 const prefix = langPrefix(lang);
 const pathname = publicPath(Astro.url.pathname.replace(/\.html$/, ''));
-const switchTarget = lang === 'zh' ? 'en' : 'zh';
 const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
 ---
 
@@ -37,29 +36,27 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
             ]}
             aria-current={isActive(item.href) ? 'page' : undefined}
           >
-            {item[lang]}
+            {pick(item, lang)}
           </a>
         ))
       }
-      <button
-        type="button"
-        class="spec-label !text-ink-soft border border-line-strong rounded-md px-2.5 py-1.5 hover:border-navy hover:!text-navy transition-colors duration-200 cursor-pointer"
+      <select
+        class="spec-label !text-ink-soft border border-line-strong rounded-md bg-transparent px-2 py-1.5 hover:border-navy transition-colors duration-200 cursor-pointer"
         aria-label={t.langSwitchAria}
-        data-lang-switch={switchTarget}
+        data-lang-select
       >
-        {t.langSwitch}
-      </button>
+        {LANGS.map((l) => <option value={l} selected={l === lang}>{LANG_META[l].label}</option>)}
+      </select>
     </nav>
 
     <div class="flex items-center gap-3 lg:hidden">
-      <button
-        type="button"
-        class="spec-label !text-ink-soft border border-line-strong rounded-md px-2.5 py-1.5 cursor-pointer"
+      <select
+        class="spec-label !text-ink-soft border border-line-strong rounded-md bg-transparent px-2 py-1.5 cursor-pointer"
         aria-label={t.langSwitchAria}
-        data-lang-switch={switchTarget}
+        data-lang-select
       >
-        {t.langSwitch}
-      </button>
+        {LANGS.map((l) => <option value={l} selected={l === lang}>{LANG_META[l].label}</option>)}
+      </select>
       <button
         type="button"
         class="flex h-10 w-10 items-center justify-center rounded-md border border-line-strong text-navy cursor-pointer"
@@ -87,7 +84,7 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
               isActive(item.href) ? 'text-navy' : 'text-ink-soft',
             ]}
           >
-            {item[lang]}
+            {pick(item, lang)}
           </a>
         ))
       }
@@ -109,9 +106,9 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
 
   // single-URL i18n: the switcher stores the choice and reloads — the edge
   // worker serves the chosen language at the same URL
-  document.querySelectorAll<HTMLButtonElement>('[data-lang-switch]').forEach((el) =>
-    el.addEventListener('click', () => {
-      document.cookie = `lang=${el.dataset.langSwitch};path=/;max-age=31536000;SameSite=Lax`;
+  document.querySelectorAll<HTMLSelectElement>('[data-lang-select]').forEach((el) =>
+    el.addEventListener('change', () => {
+      document.cookie = `lang=${el.value};path=/;max-age=31536000;SameSite=Lax`;
       location.reload();
     })
   );

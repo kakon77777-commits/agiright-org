@@ -1,145 +1,127 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from './PageHeader.astro';
-import type { Lang } from '../data/site';
+import { pick, type Lang } from '../data/site';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 
-const title = lang === 'zh' ? '實驗工具' : 'Playground';
+const title = pick({ en: 'Playground', zh: '實驗工具' }, lang);
 const intro =
-  lang === 'zh'
-    ? '在瀏覽器內產生與驗證機器可讀政策檔。所有工具皆在本地執行,不上傳任何資料。'
-    : 'Generate and validate machine-readable policy files, entirely in your browser. Nothing is uploaded.';
+  pick({ en: 'Generate and validate machine-readable policy files, entirely in your browser. Nothing is uploaded.', zh: '在瀏覽器內產生與驗證機器可讀政策檔。所有工具皆在本地執行,不上傳任何資料。' }, lang);
 
 const T = {
-  tabAicr: lang === 'zh' ? 'AICR 產生器' : 'AICR generator',
-  tabAicl: lang === 'zh' ? 'AICL 產生器' : 'AICL generator',
-  tabValidate: lang === 'zh' ? '驗證器' : 'Validator',
-  publisher: lang === 'zh' ? '發布者(網站名稱)' : 'Publisher (site name)',
-  contact: lang === 'zh' ? '授權聯絡 email' : 'Licensing contact email',
-  rights: lang === 'zh' ? '權利設定' : 'Rights',
-  allowed: lang === 'zh' ? '允許' : 'Allowed',
-  licenseRequired: lang === 'zh' ? '需授權' : 'License required',
-  denied: lang === 'zh' ? '拒絕' : 'Denied',
-  attribution: lang === 'zh' ? '需署名' : 'Attribution',
-  maxWords: lang === 'zh' ? '引用字數上限' : 'Max excerpt words',
-  retention: lang === 'zh' ? '保存天數' : 'Retention days',
-  output: lang === 'zh' ? '輸出' : 'Output',
-  copy: lang === 'zh' ? '複製' : 'Copy',
-  copied: lang === 'zh' ? '已複製 ✓' : 'Copied ✓',
-  download: lang === 'zh' ? '下載' : 'Download',
+  tabAicr: pick({ en: 'AICR generator', zh: 'AICR 產生器' }, lang),
+  tabAicl: pick({ en: 'AICL generator', zh: 'AICL 產生器' }, lang),
+  tabValidate: pick({ en: 'Validator', zh: '驗證器' }, lang),
+  publisher: pick({ en: 'Publisher (site name)', zh: '發布者(網站名稱)' }, lang),
+  contact: pick({ en: 'Licensing contact email', zh: '授權聯絡 email' }, lang),
+  rights: pick({ en: 'Rights', zh: '權利設定' }, lang),
+  allowed: pick({ en: 'Allowed', zh: '允許' }, lang),
+  licenseRequired: pick({ en: 'License required', zh: '需授權' }, lang),
+  denied: pick({ en: 'Denied', zh: '拒絕' }, lang),
+  attribution: pick({ en: 'Attribution', zh: '需署名' }, lang),
+  maxWords: pick({ en: 'Max excerpt words', zh: '引用字數上限' }, lang),
+  retention: pick({ en: 'Retention days', zh: '保存天數' }, lang),
+  output: pick({ en: 'Output', zh: '輸出' }, lang),
+  copy: pick({ en: 'Copy', zh: '複製' }, lang),
+  copied: pick({ en: 'Copied ✓', zh: '已複製 ✓' }, lang),
+  download: pick({ en: 'Download', zh: '下載' }, lang),
   deployHint:
-    lang === 'zh'
-      ? '將產生的檔案放到你網站的 /.well-known/ 目錄,並在 llms.txt 中宣告。'
-      : 'Place the generated file under /.well-known/ on your site and declare it in llms.txt.',
-  presets: lang === 'zh' ? '授權級距' : 'License tiers',
-  presetFree: lang === 'zh' ? '免費讀取+摘要(需署名)' : 'Free read + summarize (attribution)',
-  presetRag: lang === 'zh' ? '研究用 RAG(免費、30 天保存)' : 'Research RAG (free, 30-day retention)',
-  presetCommercial: lang === 'zh' ? '訓練/商用(聯絡授權)' : 'Training / commercial (contact)',
-  customTier: lang === 'zh' ? '自訂級距' : 'Custom tier',
-  customEnable: lang === 'zh' ? '加入自訂級距' : 'Add a custom tier',
-  tierId: lang === 'zh' ? '級距 ID' : 'Tier id',
-  tierRights: lang === 'zh' ? '包含權利' : 'Rights included',
-  price: lang === 'zh' ? '價格' : 'Price',
-  currency: lang === 'zh' ? '幣別' : 'Currency',
-  conditions: lang === 'zh' ? '條件(逗號分隔)' : 'Conditions (comma-separated)',
-  requiresContact: lang === 'zh' ? '需聯絡洽談' : 'Requires contact',
+    pick({ en: 'Place the generated file under /.well-known/ on your site and declare it in llms.txt.', zh: '將產生的檔案放到你網站的 /.well-known/ 目錄,並在 llms.txt 中宣告。' }, lang),
+  presets: pick({ en: 'License tiers', zh: '授權級距' }, lang),
+  presetFree: pick({ en: 'Free read + summarize (attribution)', zh: '免費讀取+摘要(需署名)' }, lang),
+  presetRag: pick({ en: 'Research RAG (free, 30-day retention)', zh: '研究用 RAG(免費、30 天保存)' }, lang),
+  presetCommercial: pick({ en: 'Training / commercial (contact)', zh: '訓練/商用(聯絡授權)' }, lang),
+  customTier: pick({ en: 'Custom tier', zh: '自訂級距' }, lang),
+  customEnable: pick({ en: 'Add a custom tier', zh: '加入自訂級距' }, lang),
+  tierId: pick({ en: 'Tier id', zh: '級距 ID' }, lang),
+  tierRights: pick({ en: 'Rights included', zh: '包含權利' }, lang),
+  price: pick({ en: 'Price', zh: '價格' }, lang),
+  currency: pick({ en: 'Currency', zh: '幣別' }, lang),
+  conditions: pick({ en: 'Conditions (comma-separated)', zh: '條件(逗號分隔)' }, lang),
+  requiresContact: pick({ en: 'Requires contact', zh: '需聯絡洽談' }, lang),
   schema: 'Schema',
-  autoDetect: lang === 'zh' ? '自動偵測' : 'Auto-detect',
-  pasteJson: lang === 'zh' ? '貼上要驗證的 JSON' : 'Paste JSON to validate',
-  validate: lang === 'zh' ? '驗證' : 'Validate',
-  valid: lang === 'zh' ? '✓ 有效 — 符合' : '✓ Valid against',
-  invalid: lang === 'zh' ? '✗ 不符合 schema' : '✗ Does not match schema',
-  syntaxError: lang === 'zh' ? 'JSON 語法錯誤' : 'JSON syntax error',
-  loadExample: lang === 'zh' ? '載入本站範例' : 'Load this site’s file',
+  autoDetect: pick({ en: 'Auto-detect', zh: '自動偵測' }, lang),
+  pasteJson: pick({ en: 'Paste JSON to validate', zh: '貼上要驗證的 JSON' }, lang),
+  validate: pick({ en: 'Validate', zh: '驗證' }, lang),
+  valid: pick({ en: '✓ Valid against', zh: '✓ 有效 — 符合' }, lang),
+  invalid: pick({ en: '✗ Does not match schema', zh: '✗ 不符合 schema' }, lang),
+  syntaxError: pick({ en: 'JSON syntax error', zh: 'JSON 語法錯誤' }, lang),
+  loadExample: pick({ en: 'Load this site’s file', zh: '載入本站範例' }, lang),
   localNote:
-    lang === 'zh'
-      ? '// 產生器與驗證器完全在本地執行;授權憑證 demo 亦同。政策測試器會經由本站 API 讀取你指定網站的公開政策檔。'
-      : '// Generators, validator, and the token demo run entirely locally. The policy tester fetches a site’s public policy files via this site’s API.',
+    pick({ en: '// Generators, validator, and the token demo run entirely locally. The policy tester fetches a site’s public policy files via this site’s API.', zh: '// 產生器與驗證器完全在本地執行;授權憑證 demo 亦同。政策測試器會經由本站 API 讀取你指定網站的公開政策檔。' }, lang),
   // --- token demo ---
-  tabToken: lang === 'zh' ? '授權憑證 demo' : 'License token',
-  tokenLicense: lang === 'zh' ? '授權級距' : 'License',
-  tokenAgent: lang === 'zh' ? 'Agent 識別' : 'Agent identity',
-  tokenScope: lang === 'zh' ? '適用範圍(路徑)' : 'Scope (path)',
-  tokenTtl: lang === 'zh' ? '有效分鐘數' : 'TTL (minutes)',
-  tokenSecret: lang === 'zh' ? '共享密鑰(demo)' : 'Shared secret (demo)',
-  tokenSign: lang === 'zh' ? '簽發憑證' : 'Sign token',
-  tokenVerify: lang === 'zh' ? '驗證' : 'Verify',
-  tokenTamper: lang === 'zh' ? '竄改一個字元' : 'Tamper one character',
-  tokenPaste: lang === 'zh' ? '貼上要驗證的憑證' : 'Token to verify',
-  tokenValid: lang === 'zh' ? '✓ 簽章有效' : '✓ Signature valid',
-  tokenInvalid: lang === 'zh' ? '✗ 簽章無效(內容已被竄改或密鑰不符)' : '✗ Invalid signature (tampered or wrong secret)',
-  tokenExpired: lang === 'zh' ? '⚠ 簽章有效,但憑證已過期' : '⚠ Signature valid, but the token has expired',
+  tabToken: pick({ en: 'License token', zh: '授權憑證 demo' }, lang),
+  tokenLicense: pick({ en: 'License', zh: '授權級距' }, lang),
+  tokenAgent: pick({ en: 'Agent identity', zh: 'Agent 識別' }, lang),
+  tokenScope: pick({ en: 'Scope (path)', zh: '適用範圍(路徑)' }, lang),
+  tokenTtl: pick({ en: 'TTL (minutes)', zh: '有效分鐘數' }, lang),
+  tokenSecret: pick({ en: 'Shared secret (demo)', zh: '共享密鑰(demo)' }, lang),
+  tokenSign: pick({ en: 'Sign token', zh: '簽發憑證' }, lang),
+  tokenVerify: pick({ en: 'Verify', zh: '驗證' }, lang),
+  tokenTamper: pick({ en: 'Tamper one character', zh: '竄改一個字元' }, lang),
+  tokenPaste: pick({ en: 'Token to verify', zh: '貼上要驗證的憑證' }, lang),
+  tokenValid: pick({ en: '✓ Signature valid', zh: '✓ 簽章有效' }, lang),
+  tokenInvalid: pick({ en: '✗ Invalid signature (tampered or wrong secret)', zh: '✗ 簽章無效(內容已被竄改或密鑰不符)' }, lang),
+  tokenExpired: pick({ en: '⚠ Signature valid, but the token has expired', zh: '⚠ 簽章有效,但憑證已過期' }, lang),
   tokenNote:
-    lang === 'zh'
-      ? '教學用 demo:以 HMAC-SHA256 與共享密鑰示範「請求綁定、有時效、可驗證」的授權憑證。正式環境應由發布者以非對稱金鑰簽章,驗證方使用 /.well-known/ 公開的公鑰。'
-      : 'Educational demo: HMAC-SHA256 with a shared secret, showing request-bound, expiring, verifiable license tokens. Production tokens should be signed asymmetrically, with the publisher’s public key discoverable under /.well-known/.',
+    pick({ en: 'Educational demo: HMAC-SHA256 with a shared secret, showing request-bound, expiring, verifiable license tokens. Production tokens should be signed asymmetrically, with the publisher’s public key discoverable under /.well-known/.', zh: '教學用 demo:以 HMAC-SHA256 與共享密鑰示範「請求綁定、有時效、可驗證」的授權憑證。正式環境應由發布者以非對稱金鑰簽章,驗證方使用 /.well-known/ 公開的公鑰。' }, lang),
   // --- 402 builder ---
   tabHttp402: 'HTTP 402',
-  h402Resource: lang === 'zh' ? '受保護資源路徑' : 'Protected resource path',
-  h402Unit: lang === 'zh' ? '計價單位' : 'Pricing unit',
-  h402Build: lang === 'zh' ? '產生回應' : 'Build response',
-  h402Live: lang === 'zh' ? '呼叫本站的 live mock 端點' : 'Call this site’s live mock endpoint',
+  h402Resource: pick({ en: 'Protected resource path', zh: '受保護資源路徑' }, lang),
+  h402Unit: pick({ en: 'Pricing unit', zh: '計價單位' }, lang),
+  h402Build: pick({ en: 'Build response', zh: '產生回應' }, lang),
+  h402Live: pick({ en: 'Call this site’s live mock endpoint', zh: '呼叫本站的 live mock 端點' }, lang),
   h402LiveNote:
-    lang === 'zh'
-      ? '這是真的端點——任何 Agent 都可以打:'
-      : 'This is a real endpoint — any agent can call it:',
+    pick({ en: 'This is a real endpoint — any agent can call it:', zh: '這是真的端點——任何 Agent 都可以打:' }, lang),
   h402Note:
-    lang === 'zh'
-      ? 'AICL 的核心主張:對未授權的 AI 請求,不要回死路(403/空白),而是回機器可行動的 402——附授權目錄、價格與洽詢方式。本站不處理真實付款。'
-      : 'The AICL thesis: answer unlicensed AI requests not with a dead end (403/blank) but with a machine-actionable 402 — license catalog, prices, and contact. This site processes no real payments.',
+    pick({ en: 'The AICL thesis: answer unlicensed AI requests not with a dead end (403/blank) but with a machine-actionable 402 — license catalog, prices, and contact. This site processes no real payments.', zh: 'AICL 的核心主張:對未授權的 AI 請求,不要回死路(403/空白),而是回機器可行動的 402——附授權目錄、價格與洽詢方式。本站不處理真實付款。' }, lang),
   // --- crawler tester ---
-  tabTester: lang === 'zh' ? '政策測試器' : 'Policy tester',
-  testerOrigin: lang === 'zh' ? '要檢測的網站(https)' : 'Site to inspect (https)',
-  testerRun: lang === 'zh' ? '檢測' : 'Inspect',
-  testerRunning: lang === 'zh' ? '檢測中…' : 'Inspecting…',
-  testerFound: lang === 'zh' ? '存在' : 'found',
-  testerMissing: lang === 'zh' ? '不存在' : 'missing',
-  testerValid: lang === 'zh' ? '符合 schema' : 'schema-valid',
-  testerInvalid: lang === 'zh' ? '不符合 schema' : 'schema-invalid',
+  tabTester: pick({ en: 'Policy tester', zh: '政策測試器' }, lang),
+  testerOrigin: pick({ en: 'Site to inspect (https)', zh: '要檢測的網站(https)' }, lang),
+  testerRun: pick({ en: 'Inspect', zh: '檢測' }, lang),
+  testerRunning: pick({ en: 'Inspecting…', zh: '檢測中…' }, lang),
+  testerFound: pick({ en: 'found', zh: '存在' }, lang),
+  testerMissing: pick({ en: 'missing', zh: '不存在' }, lang),
+  testerValid: pick({ en: 'schema-valid', zh: '符合 schema' }, lang),
+  testerInvalid: pick({ en: 'schema-invalid', zh: '不符合 schema' }, lang),
   testerNote:
-    lang === 'zh'
-      ? '檢查任一網站的機器可讀政策層:robots.txt、llms.txt、AICR/AICL 政策檔與權利光譜宣告,並以本站草案 schema 驗證。附採用度評分、改善建議,以及一鍵產生的 starter kit。'
-      : 'Inspect any site’s machine-readable policy surface: robots.txt, llms.txt, AICR/AICL policies, and rights-spectrum declarations — validated against this site’s draft schemas. Includes an adoption score, recommendations, and a one-click starter kit.',
-  auditScore: lang === 'zh' ? '採用度' : 'Adoption score',
-  auditRecs: lang === 'zh' ? '建議' : 'Recommendations',
-  auditKit: lang === 'zh' ? '為這個網站產生 starter kit' : 'Generate a starter kit for this site',
+    pick({ en: 'Inspect any site’s machine-readable policy surface: robots.txt, llms.txt, AICR/AICL policies, and rights-spectrum declarations — validated against this site’s draft schemas. Includes an adoption score, recommendations, and a one-click starter kit.', zh: '檢查任一網站的機器可讀政策層:robots.txt、llms.txt、AICR/AICL 政策檔與權利光譜宣告,並以本站草案 schema 驗證。附採用度評分、改善建議,以及一鍵產生的 starter kit。' }, lang),
+  auditScore: pick({ en: 'Adoption score', zh: '採用度' }, lang),
+  auditRecs: pick({ en: 'Recommendations', zh: '建議' }, lang),
+  auditKit: pick({ en: 'Generate a starter kit for this site', zh: '為這個網站產生 starter kit' }, lang),
   auditKitNote:
-    lang === 'zh'
-      ? '依照該網域預填的四個檔案——放進網站根目錄即可宣告 AI 政策。內容可再用產生器分頁細調。'
-      : 'Four files prefilled for that domain — drop them into the site root to declare its AI policy. Fine-tune them in the generator tabs.',
+    pick({ en: 'Four files prefilled for that domain — drop them into the site root to declare its AI policy. Fine-tune them in the generator tabs.', zh: '依照該網域預填的四個檔案——放進網站根目錄即可宣告 AI 政策。內容可再用產生器分頁細調。' }, lang),
   // --- crawler simulator ---
-  tabSim: lang === 'zh' ? '爬蟲模擬器' : 'Crawler simulator',
+  tabSim: pick({ en: 'Crawler simulator', zh: '爬蟲模擬器' }, lang),
   simNote:
-    lang === 'zh'
-      ? '模擬四種 AI 角色如何解讀一個網站的宣告:搜尋索引器、RAG 助理、模型訓練管線、商業再分發者。未宣告的權利會被高風險管線視為不確定性——這正是《協議化開放》的核心論點。'
-      : 'Simulates how four AI personas would interpret a site’s declarations: a search indexer, a RAG assistant, a model-training pipeline, and a commercial redistributor. Undeclared rights read as uncertainty to high-risk pipelines — the core thesis of “Protocolized Openness”.',
-  simRun: lang === 'zh' ? '模擬' : 'Simulate',
-  simAllowed: lang === 'zh' ? '可進行(附條件)' : 'may proceed (with conditions)',
-  simLicense: lang === 'zh' ? '需授權' : 'license required',
-  simDenied: lang === 'zh' ? '不允許' : 'not permitted',
-  simUndeclared: lang === 'zh' ? '未宣告 — 高風險管線可能排除' : 'undeclared — high-risk pipelines may exclude',
+    pick({ en: 'Simulates how four AI personas would interpret a site’s declarations: a search indexer, a RAG assistant, a model-training pipeline, and a commercial redistributor. Undeclared rights read as uncertainty to high-risk pipelines — the core thesis of “Protocolized Openness”.', zh: '模擬四種 AI 角色如何解讀一個網站的宣告:搜尋索引器、RAG 助理、模型訓練管線、商業再分發者。未宣告的權利會被高風險管線視為不確定性——這正是《協議化開放》的核心論點。' }, lang),
+  simRun: pick({ en: 'Simulate', zh: '模擬' }, lang),
+  simAllowed: pick({ en: 'may proceed (with conditions)', zh: '可進行(附條件)' }, lang),
+  simLicense: pick({ en: 'license required', zh: '需授權' }, lang),
+  simDenied: pick({ en: 'not permitted', zh: '不允許' }, lang),
+  simUndeclared: pick({ en: 'undeclared — high-risk pipelines may exclude', zh: '未宣告 — 高風險管線可能排除' }, lang),
 };
 
 const RIGHTS: { key: string; label: string; attr?: boolean; words?: boolean; retention?: boolean; def: string }[] = [
-  { key: 'read_access', label: lang === 'zh' ? '讀取' : 'Read access', def: 'allowed' },
-  { key: 'summarization', label: lang === 'zh' ? '摘要' : 'Summarization', attr: true, def: 'allowed' },
-  { key: 'quotation', label: lang === 'zh' ? '引用' : 'Quotation', attr: true, words: true, def: 'allowed' },
+  { key: 'read_access', label: pick({ en: 'Read access', zh: '讀取' }, lang), def: 'allowed' },
+  { key: 'summarization', label: pick({ en: 'Summarization', zh: '摘要' }, lang), attr: true, def: 'allowed' },
+  { key: 'quotation', label: pick({ en: 'Quotation', zh: '引用' }, lang), attr: true, words: true, def: 'allowed' },
   { key: 'rag_use', label: 'RAG', attr: true, retention: true, def: 'allowed' },
-  { key: 'transformation', label: lang === 'zh' ? '轉換' : 'Transformation', def: 'license_required' },
-  { key: 'training', label: lang === 'zh' ? '訓練' : 'Training', def: 'license_required' },
-  { key: 'commercial_use', label: lang === 'zh' ? '商業使用' : 'Commercial use', def: 'license_required' },
-  { key: 'redistribution', label: lang === 'zh' ? '再分發' : 'Redistribution', def: 'denied' },
+  { key: 'transformation', label: pick({ en: 'Transformation', zh: '轉換' }, lang), def: 'license_required' },
+  { key: 'training', label: pick({ en: 'Training', zh: '訓練' }, lang), def: 'license_required' },
+  { key: 'commercial_use', label: pick({ en: 'Commercial use', zh: '商業使用' }, lang), def: 'license_required' },
+  { key: 'redistribution', label: pick({ en: 'Redistribution', zh: '再分發' }, lang), def: 'denied' },
 ];
 
 const AICL_RIGHT_OPTIONS = ['read', 'summarize', 'quote', 'rag', 'transform', 'training', 'fine_tuning', 'commercial_use'];
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>
-  <PageHeader kicker={lang === 'zh' ? '工具' : 'Tools'} title={title} intro={intro} badges={['v0.3', lang === 'zh' ? '瀏覽器內執行 + live API' : 'in-browser + live API']} />
+  <PageHeader kicker={pick({ en: 'Tools', zh: '工具' }, lang)} title={title} intro={intro} badges={['v0.3', pick({ en: 'in-browser + live API', zh: '瀏覽器內執行 + live API' }, lang)]} />
 
   <div class="container-site py-12 md:py-16" data-playground data-lang={lang}>
     <!-- tabs -->

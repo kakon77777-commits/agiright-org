@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from './PageHeader.astro';
 import JsonBlock from './JsonBlock.astro';
-import { langPrefix, type Lang } from '../data/site';
+import { langPrefix, type Lang, pick } from '../data/site';
 import { EXAMPLES } from '../data/examples';
 
 interface Props {
@@ -11,18 +11,16 @@ interface Props {
 const { lang } = Astro.props;
 const prefix = langPrefix(lang);
 
-const title = lang === 'zh' ? '政策範例' : 'Policy Examples';
+const title = pick({ en: 'Policy Examples', zh: '政策範例' }, lang);
 const intro =
-  lang === 'zh'
-    ? '七個可直接改用的機器可讀政策範例——從最小 AICR 宣告到 pay-per-crawl 式 HTTP 402 回應。搭配實驗工具可以直接產生你自己的版本。'
-    : 'Seven copy-paste-ready machine-readable policy examples — from a minimal AICR declaration to a pay-per-crawl style HTTP 402 response. Use the playground to generate your own.';
+  pick({ en: 'Seven copy-paste-ready machine-readable policy examples — from a minimal AICR declaration to a pay-per-crawl style HTTP 402 response. Use the playground to generate your own.', zh: '七個可直接改用的機器可讀政策範例——從最小 AICR 宣告到 pay-per-crawl 式 HTTP 402 回應。搭配實驗工具可以直接產生你自己的版本。' }, lang);
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>
-  <PageHeader kicker={lang === 'zh' ? '文件 / 範例' : 'Docs / Examples'} title={title} intro={intro} badges={['v0.2', 'MIT']} />
+  <PageHeader kicker={pick({ en: 'Docs / Examples', zh: '文件 / 範例' }, lang)} title={title} intro={intro} badges={['v0.2', 'MIT']} />
   <div class="container-site max-w-5xl py-12 md:py-16">
     <!-- index -->
-    <nav aria-label={lang === 'zh' ? '範例列表' : 'Example index'} class="overflow-hidden rounded-lg border border-line" data-reveal>
+    <nav aria-label={pick({ en: 'Example index', zh: '範例列表' }, lang)} class="overflow-hidden rounded-lg border border-line" data-reveal>
       {
         EXAMPLES.map((ex, i) => (
           <a
@@ -30,7 +28,7 @@ const intro =
             class:list={['flex items-baseline gap-4 bg-surface px-5 py-3 no-underline cursor-pointer hover:bg-primary-soft/40 transition-colors duration-200', i > 0 && 'border-t border-line']}
           >
             <span class="font-mono text-[0.72rem] font-medium text-muted w-6 shrink-0">{String(i + 1).padStart(2, '0')}</span>
-            <span class="text-[0.92rem] font-medium text-navy">{ex.title[lang]}</span>
+            <span class="text-[0.92rem] font-medium text-navy">{pick(ex.title, lang)}</span>
             <span class="ml-auto hidden gap-1.5 sm:flex">
               {ex.protocols.map((p) => (
                 <span class="badge">{p.toUpperCase()}</span>
@@ -48,8 +46,8 @@ const intro =
             <p class="spec-label !text-accent">
               {String(i + 1).padStart(2, '0')} · {ex.protocols.map((p) => p.toUpperCase()).join(' + ')}
             </p>
-            <h2 class="font-serif mt-3 text-2xl font-semibold text-navy">{ex.title[lang]}</h2>
-            <p class="mt-3 max-w-3xl text-[0.95rem] leading-relaxed text-ink-soft">{ex.desc[lang]}</p>
+            <h2 class="font-serif mt-3 text-2xl font-semibold text-navy">{pick(ex.title, lang)}</h2>
+            <p class="mt-3 max-w-3xl text-[0.95rem] leading-relaxed text-ink-soft">{pick(ex.desc, lang)}</p>
             <JsonBlock code={ex.json} file={ex.file} class="mt-5" />
           </section>
         ))
@@ -58,9 +56,9 @@ const intro =
 
     <div class="mt-16 rounded-md border-l-2 border-accent bg-accent-soft/50 px-5 py-4" data-reveal>
       <p class="text-[0.9rem] leading-relaxed text-ink-soft">
-        {lang === 'zh' ? '想產生自己的政策檔?' : 'Want to generate your own policy file?'}
+        {pick({ en: 'Want to generate your own policy file?', zh: '想產生自己的政策檔?' }, lang)}
         <a href={prefix + '/playground'} class="link-quiet font-medium">
-          {lang === 'zh' ? '前往實驗工具 →' : 'Open the playground →'}
+          {pick({ en: 'Open the playground →', zh: '前往實驗工具 →' }, lang)}
         </a>
       </p>
     </div>

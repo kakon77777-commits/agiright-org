@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from './PageHeader.astro';
 import PaperCard from './PaperCard.astro';
-import { UI, langPrefix, type Lang } from '../data/site';
+import { UI, langPrefix, type Lang, pick } from '../data/site';
 import { listedPapers } from '../data/papers';
 
 interface Props {
@@ -11,46 +11,42 @@ interface Props {
 const { lang } = Astro.props;
 const prefix = langPrefix(lang);
 
-const title = lang === 'zh' ? '白皮書與文件' : 'Whitepapers & Docs';
+const title = pick({ en: 'Whitepapers & Docs', zh: '白皮書與文件' }, lang);
 const intro =
-  lang === 'zh'
-    ? '本站的研究草案全文。每篇皆為版本化文件,標示狀態、日期與引用格式;文本以原始語言發布,授權為 CC BY 4.0。'
-    : 'Full research drafts published on this site. Each is a versioned document with status, date, and citation guidance; texts are published in their original language under CC BY 4.0.';
+  pick({ en: 'Full research drafts published on this site. Each is a versioned document with status, date, and citation guidance; texts are published in their original language under CC BY 4.0.', zh: '本站的研究草案全文。每篇皆為版本化文件,標示狀態、日期與引用格式;文本以原始語言發布,授權為 CC BY 4.0。' }, lang);
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>
-  <PageHeader kicker={lang === 'zh' ? '文件庫' : 'Document library'} title={title} intro={intro} />
+  <PageHeader kicker={pick({ en: 'Document library', zh: '文件庫' }, lang)} title={title} intro={intro} />
   <div class="container-site py-14 md:py-20">
     <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
       {listedPapers().map((paper) => <PaperCard paper={paper} lang={lang} />)}
     </div>
     <div class="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2" data-reveal>
       <a href={prefix + '/docs/examples'} class="card group flex flex-col gap-1.5 p-6 no-underline cursor-pointer">
-        <span class="spec-label !text-accent">{lang === 'zh' ? '範例' : 'Examples'}</span>
+        <span class="spec-label !text-accent">{pick({ en: 'Examples', zh: '範例' }, lang)}</span>
         <span class="font-serif text-lg font-semibold text-navy group-hover:text-primary transition-colors duration-200">
-          {lang === 'zh' ? '政策範例庫' : 'Policy examples library'}
+          {pick({ en: 'Policy examples library', zh: '政策範例庫' }, lang)}
         </span>
         <span class="text-[0.85rem] text-muted">
-          {lang === 'zh' ? '七個可直接取用的機器可讀政策,含 HTTP 402 回應。' : 'Seven copy-paste-ready machine-readable policies, incl. an HTTP 402 response.'}
+          {pick({ en: 'Seven copy-paste-ready machine-readable policies, incl. an HTTP 402 response.', zh: '七個可直接取用的機器可讀政策,含 HTTP 402 回應。' }, lang)}
         </span>
       </a>
       <a href={prefix + '/docs/changelog'} class="card group flex flex-col gap-1.5 p-6 no-underline cursor-pointer">
-        <span class="spec-label !text-accent">{lang === 'zh' ? '版本' : 'Versions'}</span>
+        <span class="spec-label !text-accent">{pick({ en: 'Versions', zh: '版本' }, lang)}</span>
         <span class="font-serif text-lg font-semibold text-navy group-hover:text-primary transition-colors duration-200">
-          {lang === 'zh' ? '更新紀錄' : 'Changelog'}
+          {pick({ en: 'Changelog', zh: '更新紀錄' }, lang)}
         </span>
         <span class="text-[0.85rem] text-muted">
-          {lang === 'zh' ? '本站與協議草案的版本歷史。' : 'Version history of this site and its protocol drafts.'}
+          {pick({ en: 'Version history of this site and its protocol drafts.', zh: '本站與協議草案的版本歷史。' }, lang)}
         </span>
       </a>
     </div>
 
     <div class="mt-8 rounded-md border-l-2 border-line-strong bg-surface px-5 py-4" data-reveal>
-      <p class="spec-label">{lang === 'zh' ? '引用' : 'Citation'}</p>
+      <p class="spec-label">{pick({ en: 'Citation', zh: '引用' }, lang)}</p>
       <p class="mt-2 max-w-3xl font-mono text-[0.82rem] leading-relaxed text-ink-soft">
-        {lang === 'zh'
-          ? 'AGIRight.org,《文件標題》,版本,https://agiright.org/docs/whitepapers/<slug>'
-          : 'AGIRight.org, “Document Title”, version, https://agiright.org/docs/whitepapers/<slug>'}
+        {pick({ en: 'AGIRight.org, “Document Title”, version, https://agiright.org/docs/whitepapers/<slug>', zh: 'AGIRight.org,《文件標題》,版本,https://agiright.org/docs/whitepapers/<slug>' }, lang)}
       </p>
     </div>
   </div>

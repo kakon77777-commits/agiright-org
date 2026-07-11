@@ -6,8 +6,10 @@ We explore how AI systems, agents, creators, content providers, platforms, and t
 
 Language: single-URL model — each page has one URL serving a negotiated
 language (lang cookie > IP country > Accept-Language > English). AI systems
-and crawlers receive English by default. Traditional Chinese is available
-with "Cookie: lang=zh". Machine-readable files are language-neutral.
+and crawlers receive English by default. Human translations available via
+cookie: lang=zh (Traditional Chinese), lang=zh-cn (Simplified Chinese),
+lang=ja (Japanese), lang=ko (Korean). Machine-readable files are
+language-neutral; untranslated strings fall back to English.
 Status: all protocols are open research drafts, version 0.1.
 
 ## Key Pages

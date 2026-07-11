@@ -1,5 +1,5 @@
 ---
-import { langPrefix, UI, type Lang } from '../data/site';
+import { langPrefix, UI, type Lang, pick } from '../data/site';
 import type { Protocol } from '../data/protocols';
 
 interface Props {
@@ -22,8 +22,8 @@ const prefix = langPrefix(lang);
     </span>
     <span class="badge badge-draft">{p.status}</span>
   </div>
-  <p class="mt-1.5 spec-label">{p.expansion[lang]}</p>
-  <p class="mt-4 text-[0.95rem] leading-relaxed text-ink-soft flex-1">{p.tagline[lang]}</p>
+  <p class="mt-1.5 spec-label">{pick(p.expansion, lang)}</p>
+  <p class="mt-4 text-[0.95rem] leading-relaxed text-ink-soft flex-1">{pick(p.tagline, lang)}</p>
   <span class="mt-5 inline-flex items-center gap-1.5 text-[0.85rem] font-medium text-primary">
     {t.readDraft}
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">

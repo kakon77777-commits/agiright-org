@@ -1,0 +1,12 @@
+---
+import ResearchIndex from '../../../components/ResearchIndex.astro';
+import { NON_DEFAULT_LANGS, type Lang } from '../../../data/site';
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LANGS.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+---
+
+<ResearchIndex lang={lang} />

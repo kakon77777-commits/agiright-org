@@ -1,6 +1,6 @@
 ---
 import { SPECTRUM } from '../data/spectrum';
-import type { Lang } from '../data/site';
+import { pick, type Lang } from '../data/site';
 
 interface Props {
   lang: Lang;
@@ -9,7 +9,7 @@ interface Props {
 const { lang, class: className = '' } = Astro.props;
 ---
 
-<div class={`select-none ${className}`} data-spectrum role="img" aria-label={lang === 'zh' ? 'AIRS AI 權利光譜:八個層級,從禁止 AI 存取到可商業再分發' : 'AIRS AI Rights Spectrum: eight levels from No AI Access to Commercial Redistribution'}>
+<div class={`select-none ${className}`} data-spectrum role="img" aria-label={pick({ en: 'AIRS AI Rights Spectrum: eight levels from No AI Access to Commercial Redistribution', zh: 'AIRS AI 權利光譜:八個層級,從禁止 AI 存取到可商業再分發' }, lang)}>
   <div class="grid grid-cols-4 gap-x-3 gap-y-6 sm:grid-cols-8 sm:gap-x-2">
     {
       SPECTRUM.map((s) => (
@@ -23,15 +23,15 @@ const { lang, class: className = '' } = Astro.props;
           </div>
           <div data-spectrum-label>
             <p class="font-mono text-[0.7rem] font-medium text-muted">L{s.level}</p>
-            <p class="mt-0.5 text-[0.78rem] font-medium leading-snug text-ink">{s.name[lang]}</p>
+            <p class="mt-0.5 text-[0.78rem] font-medium leading-snug text-ink">{pick(s.name, lang)}</p>
           </div>
         </div>
       ))
     }
   </div>
   <div class="mt-6 flex items-center justify-between border-t border-line pt-3">
-    <span class="spec-label !text-deny">{lang === 'zh' ? '封閉' : 'Closed'}</span>
-    <span class="spec-label">{lang === 'zh' ? '每一級皆可獨立授權與稽核' : 'each level independently licensable & auditable'}</span>
-    <span class="spec-label !text-ok">{lang === 'zh' ? '開放' : 'Open'}</span>
+    <span class="spec-label !text-deny">{pick({ en: 'Closed', zh: '封閉' }, lang)}</span>
+    <span class="spec-label">{pick({ en: 'each level independently licensable & auditable', zh: '每一級皆可獨立授權與稽核' }, lang)}</span>
+    <span class="spec-label !text-ok">{pick({ en: 'Open', zh: '開放' }, lang)}</span>
   </div>
 </div>

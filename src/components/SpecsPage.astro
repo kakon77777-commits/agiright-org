@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from './PageHeader.astro';
-import { langPrefix, type Lang } from '../data/site';
+import { langPrefix, type Lang, pick } from '../data/site';
 import { PROTOCOLS } from '../data/protocols';
 
 interface Props {
@@ -10,11 +10,9 @@ interface Props {
 const { lang } = Astro.props;
 const prefix = langPrefix(lang);
 
-const title = lang === 'zh' ? '機器可讀規範' : 'Machine-Readable Specs';
+const title = pick({ en: 'Machine-Readable Specs', zh: '機器可讀規範' }, lang);
 const intro =
-  lang === 'zh'
-    ? '所有協議的版本化規格、JSON Schema 與本站實際部署的政策檔。每個檔案都可直接下載、驗證與引用。'
-    : 'Versioned specifications, JSON Schemas, and the policy files actually deployed on this site. Every file can be downloaded, validated, and cited directly.';
+  pick({ en: 'Versioned specifications, JSON Schemas, and the policy files actually deployed on this site. Every file can be downloaded, validated, and cited directly.', zh: '所有協議的版本化規格、JSON Schema 與本站實際部署的政策檔。每個檔案都可直接下載、驗證與引用。' }, lang);
 
 const liveFiles = [
   { path: '/llms.txt', desc: { en: 'Site guide for AI systems', zh: 'AI 系統的網站導覽' } },
@@ -36,16 +34,16 @@ const liveFiles = [
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>
-  <PageHeader kicker={lang === 'zh' ? '規範' : 'Specifications'} title={title} intro={intro} badges={['Draft v0.1']} />
+  <PageHeader kicker={pick({ en: 'Specifications', zh: '規範' }, lang)} title={title} intro={intro} badges={['Draft v0.1']} />
   <div class="container-site py-14 md:py-20 space-y-16">
     <section>
-      <h2 class="spec-label !text-accent" data-reveal>{lang === 'zh' ? '協議規格' : 'Protocol specifications'}</h2>
+      <h2 class="spec-label !text-accent" data-reveal>{pick({ en: 'Protocol specifications', zh: '協議規格' }, lang)}</h2>
       <div class="mt-6 overflow-hidden rounded-lg border border-line" data-reveal>
         <div class="hidden md:grid md:grid-cols-12 gap-4 bg-paper-deep px-5 py-3 border-b border-line">
           {[
-            lang === 'zh' ? '協議' : 'Protocol',
-            lang === 'zh' ? '名稱' : 'Name',
-            lang === 'zh' ? '狀態' : 'Status',
+            pick({ en: 'Protocol', zh: '協議' }, lang),
+            pick({ en: 'Name', zh: '名稱' }, lang),
+            pick({ en: 'Status', zh: '狀態' }, lang),
             'Schema',
           ].map((h, i) => (
             <p class:list={['spec-label', i === 0 && 'md:col-span-2', i === 1 && 'md:col-span-5', i === 2 && 'md:col-span-2', i === 3 && 'md:col-span-3']}>{h}</p>
@@ -57,7 +55,7 @@ const liveFiles = [
               <a href={`${prefix}/protocols/${p.id}`} class="font-mono text-[0.95rem] font-medium text-navy hover:text-primary transition-colors duration-200 md:col-span-2">
                 {p.abbr}
               </a>
-              <p class="text-[0.88rem] text-ink-soft md:col-span-5">{p.expansion[lang]}</p>
+              <p class="text-[0.88rem] text-ink-soft md:col-span-5">{pick(p.expansion, lang)}</p>
               <p class="md:col-span-2"><span class="badge badge-draft">{p.status}</span></p>
               <a href={p.schemaUrl} class="font-mono text-[0.78rem] text-spec hover:text-navy transition-colors duration-200 md:col-span-3" download>
                 {p.schemaUrl.split('/').pop()} ↓
@@ -69,13 +67,13 @@ const liveFiles = [
     </section>
 
     <section>
-      <h2 class="spec-label !text-accent" data-reveal>{lang === 'zh' ? '本站部署的檔案' : 'Files deployed on this site'}</h2>
+      <h2 class="spec-label !text-accent" data-reveal>{pick({ en: 'Files deployed on this site', zh: '本站部署的檔案' }, lang)}</h2>
       <div class="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2" data-reveal>
         {
           liveFiles.map((f) => (
             <a href={f.path} class="group flex flex-col gap-1 bg-surface p-4.5 px-5 py-4 no-underline cursor-pointer hover:bg-primary-soft/40 transition-colors duration-200">
               <span class="font-mono text-[0.82rem] font-medium text-spec group-hover:text-navy transition-colors duration-200">{f.path}</span>
-              <span class="text-[0.8rem] text-muted">{f.desc[lang]}</span>
+              <span class="text-[0.8rem] text-muted">{pick(f.desc, lang)}</span>
             </a>
           ))
         }
@@ -83,11 +81,9 @@ const liveFiles = [
     </section>
 
     <section class="rounded-md border-l-2 border-line-strong bg-surface px-5 py-4" data-reveal>
-      <p class="spec-label">{lang === 'zh' ? '版本策略' : 'Versioning'}</p>
+      <p class="spec-label">{pick({ en: 'Versioning', zh: '版本策略' }, lang)}</p>
       <p class="mt-2 max-w-3xl text-[0.9rem] leading-relaxed text-ink-soft">
-        {lang === 'zh'
-          ? '規格以 Draft → Experimental → Proposal → Stable 標示狀態;目前全部為 Draft v0.1。欄位與語意在 v1.0 前可能變動,重大變更會記錄於 changelog。'
-          : 'Specs are labeled Draft → Experimental → Proposal → Stable; everything is currently Draft v0.1. Fields and semantics may change before v1.0; breaking changes will be recorded in a changelog.'}
+        {pick({ en: 'Specs are labeled Draft → Experimental → Proposal → Stable; everything is currently Draft v0.1. Fields and semantics may change before v1.0; breaking changes will be recorded in a changelog.', zh: '規格以 Draft → Experimental → Proposal → Stable 標示狀態;目前全部為 Draft v0.1。欄位與語意在 v1.0 前可能變動,重大變更會記錄於 changelog。' }, lang)}
       </p>
     </section>
   </div>

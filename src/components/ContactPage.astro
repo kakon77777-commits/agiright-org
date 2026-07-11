@@ -1,18 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from './PageHeader.astro';
-import { SITE, type Lang } from '../data/site';
+import { SITE, type Lang, pick } from '../data/site';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 
-const title = lang === 'zh' ? '聯絡' : 'Contact';
+const title = pick({ en: 'Contact', zh: '聯絡' }, lang);
 const intro =
-  lang === 'zh'
-    ? '研究回饋、協議討論、授權洽詢,或想在自己的網站上部署這些協議——都歡迎來信。'
-    : 'Research feedback, protocol discussion, licensing inquiries, or deploying these protocols on your own site — all welcome.';
+  pick({ en: 'Research feedback, protocol discussion, licensing inquiries, or deploying these protocols on your own site — all welcome.', zh: '研究回饋、協議討論、授權洽詢,或想在自己的網站上部署這些協議——都歡迎來信。' }, lang);
 
 const reasons = [
   {
@@ -26,10 +24,10 @@ const reasons = [
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>
-  <PageHeader kicker={lang === 'zh' ? '聯絡我們' : 'Get in touch'} title={title} intro={intro} />
+  <PageHeader kicker={pick({ en: 'Get in touch', zh: '聯絡我們' }, lang)} title={title} intro={intro} />
   <div class="container-site max-w-4xl py-14 md:py-20">
     <div class="card p-8 md:p-10" data-reveal>
-      <p class="spec-label">{lang === 'zh' ? '電子郵件' : 'Email'}</p>
+      <p class="spec-label">{pick({ en: 'Email', zh: '電子郵件' }, lang)}</p>
       <a href={`mailto:${SITE.email}`} class="mt-3 inline-block font-mono text-xl text-primary hover:text-accent transition-colors duration-200 md:text-2xl">
         {SITE.email}
       </a>
@@ -40,15 +38,13 @@ const reasons = [
               <svg class="mt-1.5 h-3.5 w-3.5 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
-              {lang === 'zh' ? r.zh : r.en}
+              {pick(r, lang)}
             </li>
           ))
         }
       </ul>
       <p class="mt-8 border-t border-line pt-5 text-[0.85rem] leading-relaxed text-muted">
-        {lang === 'zh'
-          ? '機器可讀的授權洽詢入口,見 /.well-known/aicl.json 中的 contact 欄位。'
-          : 'For machine-readable licensing inquiries, see the contact field in /.well-known/aicl.json.'}
+        {pick({ en: 'For machine-readable licensing inquiries, see the contact field in /.well-known/aicl.json.', zh: '機器可讀的授權洽詢入口,見 /.well-known/aicl.json 中的 contact 欄位。' }, lang)}
       </p>
     </div>
   </div>

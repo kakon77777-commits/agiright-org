@@ -1,20 +1,35 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from './PageHeader.astro';
-import type { Lang } from '../data/site';
+import { pick, pickList, type Lang } from '../data/site';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 
-const title = lang === 'zh' ? '更新紀錄' : 'Changelog';
+const title = pick({ en: 'Changelog', zh: '更新紀錄' }, lang);
 const intro =
-  lang === 'zh'
-    ? '本站與各協議草案的版本紀錄。規格的重大變更都會記在這裡。'
-    : 'Version history of this site and its protocol drafts. Breaking spec changes are recorded here.';
+  pick({ en: 'Version history of this site and its protocol drafts. Breaking spec changes are recorded here.', zh: '本站與各協議草案的版本紀錄。規格的重大變更都會記在這裡。' }, lang);
 
 const ENTRIES = [
+  {
+    version: 'v0.5.0',
+    date: '2026-07-11',
+    tag: { en: 'Languages', zh: '多語言' },
+    items: {
+      en: [
+        'Three new interface languages: Simplified Chinese, Japanese, and Korean — negotiated at the same single URL (cookie > IP country > Accept-Language), selectable from the header language menu.',
+        'N-language architecture: every string resolves through a fallback layer, so anything not yet translated renders in English instead of breaking; adding a language is now one translation file plus two lines of worker config.',
+        'Whitepapers remain English-first by design; machine-readable files stay language-neutral.',
+      ],
+      zh: [
+        '新增三種介面語言:簡體中文、日文、韓文——同一網址協商(cookie > IP 國別 > Accept-Language),也可從頁首語言選單切換。',
+        'N 語架構:所有字串經過回退層解析,尚未翻譯的內容以英文呈現而非破版;新增語言只需一份翻譯檔加兩行 worker 設定。',
+        '白皮書依設計維持英文為主;機器可讀層維持語言中立。',
+      ],
+    },
+  },
   {
     version: 'v0.4.1',
     date: '2026-07-11',
@@ -144,7 +159,7 @@ const ENTRIES = [
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>
-  <PageHeader kicker={lang === 'zh' ? '文件' : 'Docs'} title={title} intro={intro} />
+  <PageHeader kicker={pick({ en: 'Docs', zh: '文件' }, lang)} title={title} intro={intro} />
   <div class="container-site max-w-3xl py-14 md:py-20">
     <div class="space-y-14">
       {
@@ -154,10 +169,10 @@ const ENTRIES = [
             <div class="flex flex-wrap items-center gap-3">
               <h2 class="font-mono text-xl font-medium text-navy">{entry.version}</h2>
               <span class="badge">{entry.date}</span>
-              <span class="badge badge-live">{entry.tag[lang]}</span>
+              <span class="badge badge-live">{pick(entry.tag, lang)}</span>
             </div>
             <ul class="mt-5 space-y-3">
-              {entry.items[lang].map((item) => (
+              {pickList(entry.items, lang).map((item) => (
                 <li class="flex gap-3 text-[0.95rem] leading-relaxed text-ink-soft">
                   <span class="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-line-strong" aria-hidden="true" />
                   {item}

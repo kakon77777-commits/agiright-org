@@ -1,4 +1,51 @@
-export type Lang = 'en' | 'zh';
+import { UI_ZHCN, STRINGS as ZHCN_STRINGS } from './translations/zh-cn';
+import { UI_JA, STRINGS as JA_STRINGS } from './translations/ja';
+import { UI_KO, STRINGS as KO_STRINGS } from './translations/ko';
+
+export type Lang = 'en' | 'zh' | 'zh-cn' | 'ja' | 'ko';
+
+/** all supported languages; adding one = translation file + worker mapping */
+export const LANGS: Lang[] = ['en', 'zh', 'zh-cn', 'ja', 'ko'];
+export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
+
+export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: string }> = {
+  en: { html: 'en', ogLocale: 'en_US', label: 'English' },
+  zh: { html: 'zh-Hant', ogLocale: 'zh_TW', label: '繁體中文' },
+  'zh-cn': { html: 'zh-Hans', ogLocale: 'zh_CN', label: '简体中文' },
+  ja: { html: 'ja', ogLocale: 'ja_JP', label: '日本語' },
+  ko: { html: 'ko', ogLocale: 'ko_KR', label: '한국어' },
+};
+
+/** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
+export interface Bi {
+  en: string;
+  zh: string;
+}
+export interface BiList {
+  en: string[];
+  zh: string[];
+}
+
+const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
+  'zh-cn': ZHCN_STRINGS,
+  ja: JA_STRINGS,
+  ko: KO_STRINGS,
+};
+
+/** resolve a bilingual string for any language, falling back to English */
+export function pick(obj: Bi, lang: Lang): string {
+  if (lang === 'zh') return obj.zh;
+  if (lang === 'en') return obj.en;
+  return STRING_MAPS[lang]?.[obj.en] ?? obj.en;
+}
+
+/** resolve a bilingual string list for any language, item-wise en fallback */
+export function pickList(obj: BiList, lang: Lang): string[] {
+  if (lang === 'zh') return obj.zh;
+  if (lang === 'en') return obj.en;
+  const tr = STRING_MAPS[lang];
+  return obj.en.map((s) => tr?.[s] ?? s);
+}
 
 export const SITE = {
   name: 'AGIRight.org',
@@ -7,7 +54,7 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.4.1',
+  version: 'v0.5.0',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -22,16 +69,18 @@ export const SITE = {
 /**
  * Single-URL i18n: one public URL serves every language; the edge worker
  * negotiates the variant (lang cookie > IP country > Accept-Language).
- * Localized build trees (/zh/...) are internal, so links never carry a
- * language prefix.
+ * Localized build trees (/zh/..., /ja/...) are internal, so links never
+ * carry a language prefix.
  */
 export function langPrefix(_lang: Lang): string {
   return '';
 }
 
+const LANG_PREFIX_RE = new RegExp(`^/(${NON_DEFAULT_LANGS.join('|')})(?=/|$)`);
+
 /** strip an internal language prefix from a build-time pathname */
 export function publicPath(pathname: string): string {
-  return pathname.replace(/^\/zh(?=\/|$)/, '') || '/';
+  return pathname.replace(LANG_PREFIX_RE, '') || '/';
 }
 
 export const NAV = [
@@ -44,7 +93,7 @@ export const NAV = [
   { href: '/about', en: 'About', zh: '關於' },
 ] as const;
 
-export const UI = {
+const BASE_UI = {
   en: {
     skipToContent: 'Skip to content',
     heroKicker: 'Independent research & protocol hub',
@@ -182,3 +231,15 @@ export const UI = {
     draftBanner: '本站所有協議皆為開放草案(v0.1),屬研究提案,尚非既定標準。',
   },
 } as const;
+
+export type UIStrings = { [K in keyof typeof BASE_UI.en]: string };
+const asUI = (o: Record<string, string> | null): UIStrings =>
+  (o ?? BASE_UI.en) as unknown as UIStrings;
+
+export const UI: Record<Lang, UIStrings> = {
+  en: BASE_UI.en as unknown as UIStrings,
+  zh: BASE_UI.zh as unknown as UIStrings,
+  'zh-cn': asUI(UI_ZHCN),
+  ja: asUI(UI_JA),
+  ko: asUI(UI_KO),
+};

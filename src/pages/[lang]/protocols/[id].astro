@@ -1,0 +1,16 @@
+---
+import ProtocolPage from '../../../components/ProtocolPage.astro';
+import { NON_DEFAULT_LANGS, type Lang } from '../../../data/site';
+import { PROTOCOLS } from '../../../data/protocols';
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LANGS.flatMap((lang) =>
+    PROTOCOLS.map((p) => ({ params: { lang, id: p.id } }))
+  );
+}
+
+const lang = Astro.params.lang as Lang;
+const { id } = Astro.params;
+---
+
+<ProtocolPage lang={lang} id={id!} />
