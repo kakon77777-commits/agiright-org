@@ -15,7 +15,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -24,6 +24,22 @@ const COUNTRY_LANG = {
   CN: 'zh-cn',
   JP: 'ja',
   KR: 'ko',
+  FR: 'fr',
+  BE: 'fr',
+  DE: 'de',
+  AT: 'de',
+  CH: 'de',
+  ES: 'es',
+  MX: 'es',
+  AR: 'es',
+  CO: 'es',
+  CL: 'es',
+  PE: 'es',
+  PT: 'pt',
+  BR: 'pt',
+  RU: 'ru',
+  BY: 'ru',
+  KZ: 'ru',
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -32,6 +48,11 @@ const CONTENT_LANG = {
   'zh-cn': 'zh-Hans',
   ja: 'ja',
   ko: 'ko',
+  fr: 'fr',
+  de: 'de',
+  es: 'es',
+  pt: 'pt',
+  ru: 'ru',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -64,6 +85,11 @@ function pickLang(request) {
   }
   if (first.startsWith('ja')) return 'ja';
   if (first.startsWith('ko')) return 'ko';
+  if (first.startsWith('fr')) return 'fr';
+  if (first.startsWith('de')) return 'de';
+  if (first.startsWith('es')) return 'es';
+  if (first.startsWith('pt')) return 'pt';
+  if (first.startsWith('ru')) return 'ru';
   return DEFAULT_LANG;
 }
 

@@ -13,10 +13,10 @@
     "model": "single-url",
     "note": "Every page has one public URL. The served language is negotiated per request: lang cookie > IP country > Accept-Language > English. Machine-readable files under /ai/, /.well-known/, and /schemas/ are language-neutral. AI systems and crawlers receive English by default. Untranslated strings gracefully fall back to English.",
     "cookie": "lang",
-    "supported": ["en", "zh-Hant", "zh-Hans", "ja", "ko"],
-    "cookie_values": ["en", "zh", "zh-cn", "ja", "ko"],
+    "supported": ["en", "zh-Hant", "zh-Hans", "ja", "ko", "fr", "de", "es", "pt", "ru"],
+    "cookie_values": ["en", "zh", "zh-cn", "ja", "ko", "fr", "de", "es", "pt", "ru"],
     "default": "en",
-    "example": "curl -H 'Cookie: lang=ja' https://agiright.org/"
+    "example": "curl -H 'Cookie: lang=fr' https://agiright.org/"
   },
   "status": "draft",
   "updated": "2026-07-04",

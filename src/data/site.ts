@@ -1,11 +1,16 @@
 import { UI_ZHCN, STRINGS as ZHCN_STRINGS } from './translations/zh-cn';
 import { UI_JA, STRINGS as JA_STRINGS } from './translations/ja';
 import { UI_KO, STRINGS as KO_STRINGS } from './translations/ko';
+import { UI_FR, STRINGS as FR_STRINGS } from './translations/fr';
+import { UI_DE, STRINGS as DE_STRINGS } from './translations/de';
+import { UI_ES, STRINGS as ES_STRINGS } from './translations/es';
+import { UI_PT, STRINGS as PT_STRINGS } from './translations/pt';
+import { UI_RU, STRINGS as RU_STRINGS } from './translations/ru';
 
-export type Lang = 'en' | 'zh' | 'zh-cn' | 'ja' | 'ko';
+export type Lang = 'en' | 'zh' | 'zh-cn' | 'ja' | 'ko' | 'fr' | 'de' | 'es' | 'pt' | 'ru';
 
 /** all supported languages; adding one = translation file + worker mapping */
-export const LANGS: Lang[] = ['en', 'zh', 'zh-cn', 'ja', 'ko'];
+export const LANGS: Lang[] = ['en', 'zh', 'zh-cn', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru'];
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
 export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: string }> = {
@@ -14,6 +19,11 @@ export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: st
   'zh-cn': { html: 'zh-Hans', ogLocale: 'zh_CN', label: '简体中文' },
   ja: { html: 'ja', ogLocale: 'ja_JP', label: '日本語' },
   ko: { html: 'ko', ogLocale: 'ko_KR', label: '한국어' },
+  fr: { html: 'fr', ogLocale: 'fr_FR', label: 'Français' },
+  de: { html: 'de', ogLocale: 'de_DE', label: 'Deutsch' },
+  es: { html: 'es', ogLocale: 'es_ES', label: 'Español' },
+  pt: { html: 'pt', ogLocale: 'pt_PT', label: 'Português' },
+  ru: { html: 'ru', ogLocale: 'ru_RU', label: 'Русский' },
 };
 
 /** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
@@ -30,6 +40,11 @@ const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
   'zh-cn': ZHCN_STRINGS,
   ja: JA_STRINGS,
   ko: KO_STRINGS,
+  fr: FR_STRINGS,
+  de: DE_STRINGS,
+  es: ES_STRINGS,
+  pt: PT_STRINGS,
+  ru: RU_STRINGS,
 };
 
 /** resolve a bilingual string for any language, falling back to English */
@@ -54,7 +69,7 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.5.0',
+  version: 'v0.5.1',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -242,4 +257,9 @@ export const UI: Record<Lang, UIStrings> = {
   'zh-cn': asUI(UI_ZHCN),
   ja: asUI(UI_JA),
   ko: asUI(UI_KO),
+  fr: asUI(UI_FR),
+  de: asUI(UI_DE),
+  es: asUI(UI_ES),
+  pt: asUI(UI_PT),
+  ru: asUI(UI_RU),
 };
