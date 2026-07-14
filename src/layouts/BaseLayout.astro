@@ -19,6 +19,7 @@ const pageDesc = description ?? pick(SITE.description, lang);
 const pathname = publicPath(Astro.url.pathname.replace(/\.html$/, ''));
 const canonical = new URL(pathname, SITE.url).href;
 const htmlLang = LANG_META[lang].html;
+const htmlDir = LANG_META[lang].dir;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -36,7 +37,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang={htmlLang}>
+<html lang={htmlLang} dir={htmlDir}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

@@ -6,24 +6,49 @@ import { UI_DE, STRINGS as DE_STRINGS } from './translations/de';
 import { UI_ES, STRINGS as ES_STRINGS } from './translations/es';
 import { UI_PT, STRINGS as PT_STRINGS } from './translations/pt';
 import { UI_RU, STRINGS as RU_STRINGS } from './translations/ru';
+import { UI_AR, STRINGS as AR_STRINGS } from './translations/ar';
+import { UI_TR, STRINGS as TR_STRINGS } from './translations/tr';
+import { UI_FA, STRINGS as FA_STRINGS } from './translations/fa';
+import { UI_BN, STRINGS as BN_STRINGS } from './translations/bn';
+import { UI_HI, STRINGS as HI_STRINGS } from './translations/hi';
 
-export type Lang = 'en' | 'zh' | 'zh-cn' | 'ja' | 'ko' | 'fr' | 'de' | 'es' | 'pt' | 'ru';
+export type Lang =
+  | 'en'
+  | 'zh'
+  | 'zh-cn'
+  | 'ja'
+  | 'ko'
+  | 'fr'
+  | 'de'
+  | 'es'
+  | 'pt'
+  | 'ru'
+  | 'ar'
+  | 'tr'
+  | 'fa'
+  | 'bn'
+  | 'hi';
 
 /** all supported languages; adding one = translation file + worker mapping */
-export const LANGS: Lang[] = ['en', 'zh', 'zh-cn', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru'];
+export const LANGS: Lang[] = ['en', 'zh', 'zh-cn', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi'];
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
-export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: string }> = {
-  en: { html: 'en', ogLocale: 'en_US', label: 'English' },
-  zh: { html: 'zh-Hant', ogLocale: 'zh_TW', label: '繁體中文' },
-  'zh-cn': { html: 'zh-Hans', ogLocale: 'zh_CN', label: '简体中文' },
-  ja: { html: 'ja', ogLocale: 'ja_JP', label: '日本語' },
-  ko: { html: 'ko', ogLocale: 'ko_KR', label: '한국어' },
-  fr: { html: 'fr', ogLocale: 'fr_FR', label: 'Français' },
-  de: { html: 'de', ogLocale: 'de_DE', label: 'Deutsch' },
-  es: { html: 'es', ogLocale: 'es_ES', label: 'Español' },
-  pt: { html: 'pt', ogLocale: 'pt_PT', label: 'Português' },
-  ru: { html: 'ru', ogLocale: 'ru_RU', label: 'Русский' },
+export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: string; dir: 'ltr' | 'rtl' }> = {
+  en: { html: 'en', ogLocale: 'en_US', label: 'English', dir: 'ltr' },
+  zh: { html: 'zh-Hant', ogLocale: 'zh_TW', label: '繁體中文', dir: 'ltr' },
+  'zh-cn': { html: 'zh-Hans', ogLocale: 'zh_CN', label: '简体中文', dir: 'ltr' },
+  ja: { html: 'ja', ogLocale: 'ja_JP', label: '日本語', dir: 'ltr' },
+  ko: { html: 'ko', ogLocale: 'ko_KR', label: '한국어', dir: 'ltr' },
+  fr: { html: 'fr', ogLocale: 'fr_FR', label: 'Français', dir: 'ltr' },
+  de: { html: 'de', ogLocale: 'de_DE', label: 'Deutsch', dir: 'ltr' },
+  es: { html: 'es', ogLocale: 'es_ES', label: 'Español', dir: 'ltr' },
+  pt: { html: 'pt', ogLocale: 'pt_PT', label: 'Português', dir: 'ltr' },
+  ru: { html: 'ru', ogLocale: 'ru_RU', label: 'Русский', dir: 'ltr' },
+  ar: { html: 'ar', ogLocale: 'ar_SA', label: 'العربية', dir: 'rtl' },
+  tr: { html: 'tr', ogLocale: 'tr_TR', label: 'Türkçe', dir: 'ltr' },
+  fa: { html: 'fa', ogLocale: 'fa_IR', label: 'فارسی', dir: 'rtl' },
+  bn: { html: 'bn', ogLocale: 'bn_BD', label: 'বাংলা', dir: 'ltr' },
+  hi: { html: 'hi', ogLocale: 'hi_IN', label: 'हिन्दी', dir: 'ltr' },
 };
 
 /** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
@@ -45,6 +70,11 @@ const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
   es: ES_STRINGS,
   pt: PT_STRINGS,
   ru: RU_STRINGS,
+  ar: AR_STRINGS,
+  tr: TR_STRINGS,
+  fa: FA_STRINGS,
+  bn: BN_STRINGS,
+  hi: HI_STRINGS,
 };
 
 /** resolve a bilingual string for any language, falling back to English */
@@ -69,7 +99,7 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.5.1',
+  version: 'v0.5.2',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -262,4 +292,9 @@ export const UI: Record<Lang, UIStrings> = {
   es: asUI(UI_ES),
   pt: asUI(UI_PT),
   ru: asUI(UI_RU),
+  ar: asUI(UI_AR),
+  tr: asUI(UI_TR),
+  fa: asUI(UI_FA),
+  bn: asUI(UI_BN),
+  hi: asUI(UI_HI),
 };

@@ -14,6 +14,25 @@ const intro =
 
 const ENTRIES = [
   {
+    version: 'v0.5.2',
+    date: '2026-07-14',
+    tag: { en: 'Languages', zh: '多語言' },
+    items: {
+      en: [
+        'Five more interface languages: Arabic, Turkish, Persian, Bengali, and Hindi — same single-URL negotiation, same graceful English fallback.',
+        'Right-to-left (RTL) support: Arabic and Persian pages now render with the correct text direction (⟨html dir="rtl"⟩), so bidi text, punctuation, and default alignment read correctly. Full logical-property layout mirroring (nav, icons, spacing) is left for a later polish pass — text direction is the fix that matters most and is done.',
+        'IP-country mapping extended (SA/AE/EG/IQ/JO/KW/QA/BH/OM/MA/DZ/TN/LB/SY→ar, TR→tr, IR/AF→fa, BD→bn); Hindi relies on Accept-Language only, since India has 22 official languages and no single country-level default is accurate.',
+        'Fifteen languages live in total: English, Traditional Chinese, Simplified Chinese, Japanese, Korean, French, German, Spanish, Portuguese, Russian, Arabic, Turkish, Persian, Bengali, Hindi.',
+      ],
+      zh: [
+        '新增五種介面語言:阿拉伯文、土耳其文、波斯文、孟加拉文、印地文——同樣的單一網址協商,同樣的缺譯自動回退英文。',
+        '新增從右到左(RTL)支援:阿拉伯文與波斯文頁面現以正確文字方向渲染(⟨html dir="rtl"⟩),雙向文字、標點與預設對齊都正確。完整的邏輯屬性版面鏡像(導覽列、圖示、間距)留待未來優化;文字方向是最關鍵的修正,已完成。',
+        'IP 國別對應擴充(SA/AE/EG/IQ/JO/KW/QA/BH/OM/MA/DZ/TN/LB/SY→ar、TR→tr、IR/AF→fa、BD→bn);印地文僅依 Accept-Language 判斷,因印度官方語言多達 22 種,無單一國別可準確代表。',
+        '目前共十五種語言上線:英文、繁體中文、簡體中文、日文、韓文、法文、德文、西班牙文、葡萄牙文、俄文、阿拉伯文、土耳其文、波斯文、孟加拉文、印地文。',
+      ],
+    },
+  },
+  {
     version: 'v0.5.1',
     date: '2026-07-12',
     tag: { en: 'Languages', zh: '多語言' },

@@ -15,7 +15,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -40,6 +40,27 @@ const COUNTRY_LANG = {
   RU: 'ru',
   BY: 'ru',
   KZ: 'ru',
+  // Arabic: GCC + Levant + Maghreb + Egypt/Iraq (major population centers)
+  SA: 'ar',
+  AE: 'ar',
+  EG: 'ar',
+  IQ: 'ar',
+  JO: 'ar',
+  KW: 'ar',
+  QA: 'ar',
+  BH: 'ar',
+  OM: 'ar',
+  MA: 'ar',
+  DZ: 'ar',
+  TN: 'ar',
+  LB: 'ar',
+  SY: 'ar',
+  TR: 'tr',
+  IR: 'fa',
+  AF: 'fa',
+  BD: 'bn',
+  // IN intentionally unmapped: India is multilingual (22 official
+  // languages) — Accept-Language is a better per-user signal than country
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -53,6 +74,11 @@ const CONTENT_LANG = {
   es: 'es',
   pt: 'pt',
   ru: 'ru',
+  ar: 'ar',
+  tr: 'tr',
+  fa: 'fa',
+  bn: 'bn',
+  hi: 'hi',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -90,6 +116,11 @@ function pickLang(request) {
   if (first.startsWith('es')) return 'es';
   if (first.startsWith('pt')) return 'pt';
   if (first.startsWith('ru')) return 'ru';
+  if (first.startsWith('ar')) return 'ar';
+  if (first.startsWith('tr')) return 'tr';
+  if (first.startsWith('fa')) return 'fa';
+  if (first.startsWith('bn')) return 'bn';
+  if (first.startsWith('hi')) return 'hi';
   return DEFAULT_LANG;
 }
 
