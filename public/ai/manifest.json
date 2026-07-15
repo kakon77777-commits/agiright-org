@@ -13,10 +13,10 @@
     "model": "single-url",
     "note": "Every page has one public URL. The served language is negotiated per request: lang cookie > IP country > Accept-Language > English. Machine-readable files under /ai/, /.well-known/, and /schemas/ are language-neutral. AI systems and crawlers receive English by default. Untranslated strings gracefully fall back to English.",
     "cookie": "lang",
-    "supported": ["en", "zh-Hant", "zh-Hans", "ja", "ko", "fr", "de", "es", "pt", "ru", "ar", "tr", "fa", "bn", "hi", "id", "vi", "el", "it", "nl"],
-    "cookie_values": ["en", "zh", "zh-cn", "ja", "ko", "fr", "de", "es", "pt", "ru", "ar", "tr", "fa", "bn", "hi", "id", "vi", "el", "it", "nl"],
+    "supported": ["en", "zh-Hant", "zh-Hans", "ja", "ko", "fr", "de", "es", "pt", "ru", "ar", "tr", "fa", "bn", "hi", "id", "vi", "el", "it", "nl", "he", "pl", "sv", "ur", "th"],
+    "cookie_values": ["en", "zh", "zh-cn", "ja", "ko", "fr", "de", "es", "pt", "ru", "ar", "tr", "fa", "bn", "hi", "id", "vi", "el", "it", "nl", "he", "pl", "sv", "ur", "th"],
     "default": "en",
-    "rtl_languages": ["ar", "fa"],
+    "rtl_languages": ["ar", "fa", "he", "ur"],
     "example": "curl -H 'Cookie: lang=nl' https://agiright.org/"
   },
   "status": "draft",

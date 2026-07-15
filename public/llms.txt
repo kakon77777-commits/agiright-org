@@ -12,10 +12,11 @@ lang=ja (Japanese), lang=ko (Korean), lang=fr (French), lang=de (German),
 lang=es (Spanish), lang=pt (Portuguese), lang=ru (Russian), lang=ar (Arabic,
 RTL), lang=tr (Turkish), lang=fa (Persian, RTL), lang=bn (Bengali),
 lang=hi (Hindi), lang=id (Indonesian), lang=vi (Vietnamese), lang=el (Greek),
-lang=it (Italian), lang=nl (Dutch). Machine-readable files are
-language-neutral; untranslated strings fall back to English. The on-page
-language picker (header) is a searchable grid — type a language's native or
-English name to filter it.
+lang=it (Italian), lang=nl (Dutch), lang=he (Hebrew, RTL), lang=pl (Polish),
+lang=sv (Swedish), lang=ur (Urdu, RTL), lang=th (Thai). Machine-readable
+files are language-neutral; untranslated strings fall back to English. The
+on-page language picker (header) is a searchable grid — type a language's
+native or English name to filter it.
 Status: all protocols are open research drafts, version 0.1.
 
 ## Key Pages
