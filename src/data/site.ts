@@ -11,6 +11,11 @@ import { UI_TR, STRINGS as TR_STRINGS } from './translations/tr';
 import { UI_FA, STRINGS as FA_STRINGS } from './translations/fa';
 import { UI_BN, STRINGS as BN_STRINGS } from './translations/bn';
 import { UI_HI, STRINGS as HI_STRINGS } from './translations/hi';
+import { UI_ID, STRINGS as ID_STRINGS } from './translations/id';
+import { UI_VI, STRINGS as VI_STRINGS } from './translations/vi';
+import { UI_EL, STRINGS as EL_STRINGS } from './translations/el';
+import { UI_IT, STRINGS as IT_STRINGS } from './translations/it';
+import { UI_NL, STRINGS as NL_STRINGS } from './translations/nl';
 
 export type Lang =
   | 'en'
@@ -27,28 +32,46 @@ export type Lang =
   | 'tr'
   | 'fa'
   | 'bn'
-  | 'hi';
+  | 'hi'
+  | 'id'
+  | 'vi'
+  | 'el'
+  | 'it'
+  | 'nl';
 
 /** all supported languages; adding one = translation file + worker mapping */
-export const LANGS: Lang[] = ['en', 'zh', 'zh-cn', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi'];
+export const LANGS: Lang[] = [
+  'en', 'zh', 'zh-cn', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru',
+  'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl',
+];
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
-export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: string; dir: 'ltr' | 'rtl' }> = {
-  en: { html: 'en', ogLocale: 'en_US', label: 'English', dir: 'ltr' },
-  zh: { html: 'zh-Hant', ogLocale: 'zh_TW', label: '繁體中文', dir: 'ltr' },
-  'zh-cn': { html: 'zh-Hans', ogLocale: 'zh_CN', label: '简体中文', dir: 'ltr' },
-  ja: { html: 'ja', ogLocale: 'ja_JP', label: '日本語', dir: 'ltr' },
-  ko: { html: 'ko', ogLocale: 'ko_KR', label: '한국어', dir: 'ltr' },
-  fr: { html: 'fr', ogLocale: 'fr_FR', label: 'Français', dir: 'ltr' },
-  de: { html: 'de', ogLocale: 'de_DE', label: 'Deutsch', dir: 'ltr' },
-  es: { html: 'es', ogLocale: 'es_ES', label: 'Español', dir: 'ltr' },
-  pt: { html: 'pt', ogLocale: 'pt_PT', label: 'Português', dir: 'ltr' },
-  ru: { html: 'ru', ogLocale: 'ru_RU', label: 'Русский', dir: 'ltr' },
-  ar: { html: 'ar', ogLocale: 'ar_SA', label: 'العربية', dir: 'rtl' },
-  tr: { html: 'tr', ogLocale: 'tr_TR', label: 'Türkçe', dir: 'ltr' },
-  fa: { html: 'fa', ogLocale: 'fa_IR', label: 'فارسی', dir: 'rtl' },
-  bn: { html: 'bn', ogLocale: 'bn_BD', label: 'বাংলা', dir: 'ltr' },
-  hi: { html: 'hi', ogLocale: 'hi_IN', label: 'हिन्दी', dir: 'ltr' },
+/**
+ * label = native/endonym name (what a speaker of that language calls it).
+ * labelEn = English name, used so the language-picker search matches both
+ * "Deutsch" and "German".
+ */
+export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: string; labelEn: string; dir: 'ltr' | 'rtl' }> = {
+  en: { html: 'en', ogLocale: 'en_US', label: 'English', labelEn: 'English', dir: 'ltr' },
+  zh: { html: 'zh-Hant', ogLocale: 'zh_TW', label: '繁體中文', labelEn: 'Chinese (Traditional)', dir: 'ltr' },
+  'zh-cn': { html: 'zh-Hans', ogLocale: 'zh_CN', label: '简体中文', labelEn: 'Chinese (Simplified)', dir: 'ltr' },
+  ja: { html: 'ja', ogLocale: 'ja_JP', label: '日本語', labelEn: 'Japanese', dir: 'ltr' },
+  ko: { html: 'ko', ogLocale: 'ko_KR', label: '한국어', labelEn: 'Korean', dir: 'ltr' },
+  fr: { html: 'fr', ogLocale: 'fr_FR', label: 'Français', labelEn: 'French', dir: 'ltr' },
+  de: { html: 'de', ogLocale: 'de_DE', label: 'Deutsch', labelEn: 'German', dir: 'ltr' },
+  es: { html: 'es', ogLocale: 'es_ES', label: 'Español', labelEn: 'Spanish', dir: 'ltr' },
+  pt: { html: 'pt', ogLocale: 'pt_PT', label: 'Português', labelEn: 'Portuguese', dir: 'ltr' },
+  ru: { html: 'ru', ogLocale: 'ru_RU', label: 'Русский', labelEn: 'Russian', dir: 'ltr' },
+  ar: { html: 'ar', ogLocale: 'ar_SA', label: 'العربية', labelEn: 'Arabic', dir: 'rtl' },
+  tr: { html: 'tr', ogLocale: 'tr_TR', label: 'Türkçe', labelEn: 'Turkish', dir: 'ltr' },
+  fa: { html: 'fa', ogLocale: 'fa_IR', label: 'فارسی', labelEn: 'Persian', dir: 'rtl' },
+  bn: { html: 'bn', ogLocale: 'bn_BD', label: 'বাংলা', labelEn: 'Bengali', dir: 'ltr' },
+  hi: { html: 'hi', ogLocale: 'hi_IN', label: 'हिन्दी', labelEn: 'Hindi', dir: 'ltr' },
+  id: { html: 'id', ogLocale: 'id_ID', label: 'Bahasa Indonesia', labelEn: 'Indonesian', dir: 'ltr' },
+  vi: { html: 'vi', ogLocale: 'vi_VN', label: 'Tiếng Việt', labelEn: 'Vietnamese', dir: 'ltr' },
+  el: { html: 'el', ogLocale: 'el_GR', label: 'Ελληνικά', labelEn: 'Greek', dir: 'ltr' },
+  it: { html: 'it', ogLocale: 'it_IT', label: 'Italiano', labelEn: 'Italian', dir: 'ltr' },
+  nl: { html: 'nl', ogLocale: 'nl_NL', label: 'Nederlands', labelEn: 'Dutch', dir: 'ltr' },
 };
 
 /** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
@@ -75,6 +98,11 @@ const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
   fa: FA_STRINGS,
   bn: BN_STRINGS,
   hi: HI_STRINGS,
+  id: ID_STRINGS,
+  vi: VI_STRINGS,
+  el: EL_STRINGS,
+  it: IT_STRINGS,
+  nl: NL_STRINGS,
 };
 
 /** resolve a bilingual string for any language, falling back to English */
@@ -99,7 +127,7 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.5.2',
+  version: 'v0.5.3',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -297,4 +325,9 @@ export const UI: Record<Lang, UIStrings> = {
   fa: asUI(UI_FA),
   bn: asUI(UI_BN),
   hi: asUI(UI_HI),
+  id: asUI(UI_ID),
+  vi: asUI(UI_VI),
+  el: asUI(UI_EL),
+  it: asUI(UI_IT),
+  nl: asUI(UI_NL),
 };
