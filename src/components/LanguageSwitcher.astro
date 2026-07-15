@@ -1,0 +1,160 @@
+---
+/**
+ * Searchable grid-style language picker. Replaces the native <select> —
+ * with 20+ languages a flat dropdown list is hard to scan; a filterable
+ * matrix lets people find their language by native or English name.
+ *
+ * New UI strings here use pick() (bilingual + STRING_MAPS fallback), not
+ * the UI dict — a Record key added after a language's translation file was
+ * generated would render as `undefined` for that language, since UI[lang]
+ * is an all-or-nothing dict swap, not a per-key fallback. pick() always
+ * degrades to English instead.
+ */
+import { LANGS, LANG_META, UI, pick, type Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+  id: string;
+}
+const { lang, id } = Astro.props;
+const t = UI[lang];
+const searchPlaceholder = pick({ en: 'Search languages…', zh: '搜尋語言…' }, lang);
+const noResults = pick({ en: 'No languages found', zh: '找不到符合的語言' }, lang);
+---
+
+<div class="relative" data-lang-switcher>
+  <button
+    type="button"
+    class="spec-label !text-ink-soft border border-line-strong rounded-md px-2.5 py-1.5 hover:border-navy transition-colors duration-200 cursor-pointer inline-flex items-center gap-1.5 max-w-[9rem]"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-controls={`${id}-panel`}
+    data-lang-trigger
+  >
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20 15.3 15.3 0 0 1 0-20Z" />
+    </svg>
+    <span class="truncate" data-lang-trigger-label>{LANG_META[lang].label}</span>
+  </button>
+
+  <div
+    id={`${id}-panel`}
+    class="hidden absolute end-0 top-full mt-2 z-50 w-[19rem] max-w-[88vw] overflow-hidden rounded-lg border border-line-strong bg-surface shadow-lg"
+    data-lang-panel
+  >
+    <div class="border-b border-line p-2">
+      <input
+        type="text"
+        class="field-input !py-1.5 !text-[0.85rem]"
+        placeholder={searchPlaceholder}
+        autocomplete="off"
+        spellcheck="false"
+        aria-label={searchPlaceholder}
+        data-lang-search
+      />
+    </div>
+    <div class="grid max-h-80 grid-cols-2 gap-1 overflow-y-auto p-2" role="listbox" aria-label={t.langSwitchAria} data-lang-grid>
+      {
+        LANGS.map((l) => (
+          <button
+            type="button"
+            role="option"
+            aria-selected={l === lang}
+            class:list={[
+              'cursor-pointer rounded-md px-2.5 py-2 text-left transition-colors duration-150 hover:bg-primary-soft/60',
+              l === lang ? 'border border-primary/40 bg-primary-soft' : 'border border-transparent',
+            ]}
+            data-lang-option
+            data-lang-value={l}
+            data-lang-search-text={`${LANG_META[l].label} ${LANG_META[l].labelEn} ${l}`.toLowerCase()}
+          >
+            <span class="block truncate text-[0.82rem] font-medium text-navy">{LANG_META[l].label}</span>
+            <span class="block truncate text-[0.68rem] text-muted">{LANG_META[l].labelEn}</span>
+          </button>
+        ))
+      }
+    </div>
+    <p class="hidden px-4 py-6 text-center text-[0.8rem] text-muted" data-lang-empty>{noResults}</p>
+  </div>
+</div>
+
+<script>
+  function closeAllPanels(except?: HTMLElement) {
+    document.querySelectorAll<HTMLElement>('[data-lang-panel]').forEach((panel) => {
+      if (panel === except) return;
+      panel.classList.add('hidden');
+      const trigger = panel.parentElement?.querySelector<HTMLButtonElement>('[data-lang-trigger]');
+      trigger?.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-lang-switcher]').forEach((root) => {
+    const trigger = root.querySelector<HTMLButtonElement>('[data-lang-trigger]');
+    const panel = root.querySelector<HTMLElement>('[data-lang-panel]');
+    const search = root.querySelector<HTMLInputElement>('[data-lang-search]');
+    const options = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-lang-option]'));
+    const empty = root.querySelector<HTMLElement>('[data-lang-empty]');
+    const grid = root.querySelector<HTMLElement>('[data-lang-grid]');
+    if (!trigger || !panel || !search || !grid) return;
+
+    const openPanel = () => {
+      closeAllPanels(panel);
+      panel.classList.remove('hidden');
+      trigger.setAttribute('aria-expanded', 'true');
+      search.value = '';
+      options.forEach((o) => o.classList.remove('hidden'));
+      empty?.classList.add('hidden');
+      grid.classList.remove('hidden');
+      // focus after layout so the panel is visible first
+      requestAnimationFrame(() => search.focus());
+    };
+    const closePanel = () => {
+      panel.classList.add('hidden');
+      trigger.setAttribute('aria-expanded', 'false');
+    };
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = !panel.classList.contains('hidden');
+      isOpen ? closePanel() : openPanel();
+    });
+
+    // stays open while interacting inside — only outside clicks / Escape / a
+    // selection close it, per the "pin it open so people can browse" ask
+    panel.addEventListener('click', (e) => e.stopPropagation());
+
+    search.addEventListener('input', () => {
+      const q = search.value.trim().toLowerCase();
+      let visibleCount = 0;
+      options.forEach((o) => {
+        const match = !q || (o.dataset.langSearchText ?? '').includes(q);
+        o.classList.toggle('hidden', !match);
+        if (match) visibleCount++;
+      });
+      empty?.classList.toggle('hidden', visibleCount > 0);
+      grid.classList.toggle('hidden', visibleCount === 0);
+    });
+
+    options.forEach((opt) =>
+      opt.addEventListener('click', () => {
+        const value = opt.dataset.langValue;
+        if (!value) return;
+        document.cookie = `lang=${value};path=/;max-age=31536000;SameSite=Lax`;
+        location.reload();
+      })
+    );
+
+    search.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closePanel();
+        trigger.focus();
+      }
+    });
+  });
+
+  document.addEventListener('click', () => closeAllPanels());
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAllPanels();
+  });
+</script>

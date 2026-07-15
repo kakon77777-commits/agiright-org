@@ -14,6 +14,23 @@ const intro =
 
 const ENTRIES = [
   {
+    version: 'v0.5.4',
+    date: '2026-07-15',
+    tag: { en: 'UI', zh: '介面' },
+    items: {
+      en: [
+        'Redesigned the language picker: the native dropdown is replaced with a searchable grid panel — type to filter by native or English name, browse a two-column matrix instead of one long list.',
+        'The panel stays open while you search or scroll inside it; it only closes when you pick a language, click outside, or press Escape — no more losing your place mid-search.',
+        'Verified in both LTR and RTL contexts: the panel mirrors correctly for Arabic and Persian without any special-casing, using logical CSS positioning.',
+      ],
+      zh: [
+        '重新設計語言選單:原生下拉選單換成可搜尋的矩陣格狀面板——輸入文字即可用原生名稱或英文名稱過濾,以雙欄格狀瀏覽取代單一長列。',
+        '面板在搜尋或捲動時保持開啟,只有在選定語言、點擊外部或按 Escape 時才會關閉——不會在搜尋途中意外關掉、失去進度。',
+        '在 LTR 與 RTL 情境下皆驗證:面板對阿拉伯文與波斯文能正確鏡像,不需任何特判邏輯,靠 CSS 邏輯定位屬性自動處理。',
+      ],
+    },
+  },
+  {
     version: 'v0.5.3',
     date: '2026-07-15',
     tag: { en: 'Languages', zh: '多語言' },

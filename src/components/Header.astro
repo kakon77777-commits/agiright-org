@@ -1,12 +1,12 @@
 ---
-import { NAV, UI, SITE, langPrefix, publicPath, LANGS, LANG_META, type Lang, pick } from '../data/site';
+import { NAV, SITE, langPrefix, publicPath, type Lang, pick } from '../data/site';
 import Logo from './Logo.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const t = UI[lang];
 const prefix = langPrefix(lang);
 const pathname = publicPath(Astro.url.pathname.replace(/\.html$/, ''));
 const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
@@ -40,23 +40,11 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
           </a>
         ))
       }
-      <select
-        class="spec-label !text-ink-soft border border-line-strong rounded-md bg-transparent px-2 py-1.5 hover:border-navy transition-colors duration-200 cursor-pointer"
-        aria-label={t.langSwitchAria}
-        data-lang-select
-      >
-        {LANGS.map((l) => <option value={l} selected={l === lang}>{LANG_META[l].label}</option>)}
-      </select>
+      <LanguageSwitcher lang={lang} id="lang-desktop" />
     </nav>
 
     <div class="flex items-center gap-3 lg:hidden">
-      <select
-        class="spec-label !text-ink-soft border border-line-strong rounded-md bg-transparent px-2 py-1.5 cursor-pointer"
-        aria-label={t.langSwitchAria}
-        data-lang-select
-      >
-        {LANGS.map((l) => <option value={l} selected={l === lang}>{LANG_META[l].label}</option>)}
-      </select>
+      <LanguageSwitcher lang={lang} id="lang-mobile" />
       <button
         type="button"
         class="flex h-10 w-10 items-center justify-center rounded-md border border-line-strong text-navy cursor-pointer"
@@ -103,13 +91,4 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
     openIcon?.classList.toggle('hidden', open);
     closeIcon?.classList.toggle('hidden', !open);
   });
-
-  // single-URL i18n: the switcher stores the choice and reloads — the edge
-  // worker serves the chosen language at the same URL
-  document.querySelectorAll<HTMLSelectElement>('[data-lang-select]').forEach((el) =>
-    el.addEventListener('change', () => {
-      document.cookie = `lang=${el.value};path=/;max-age=31536000;SameSite=Lax`;
-      location.reload();
-    })
-  );
 </script>
