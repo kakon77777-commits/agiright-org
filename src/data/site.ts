@@ -26,6 +26,11 @@ import { UI_CS, STRINGS as CS_STRINGS } from './translations/cs';
 import { UI_UK, STRINGS as UK_STRINGS } from './translations/uk';
 import { UI_MS, STRINGS as MS_STRINGS } from './translations/ms';
 import { UI_FI, STRINGS as FI_STRINGS } from './translations/fi';
+import { UI_RO, STRINGS as RO_STRINGS } from './translations/ro';
+import { UI_HU, STRINGS as HU_STRINGS } from './translations/hu';
+import { UI_DA, STRINGS as DA_STRINGS } from './translations/da';
+import { UI_NO, STRINGS as NO_STRINGS } from './translations/no';
+import { UI_SK, STRINGS as SK_STRINGS } from './translations/sk';
 
 export type Lang =
   | 'en'
@@ -57,13 +62,19 @@ export type Lang =
   | 'cs'
   | 'uk'
   | 'ms'
-  | 'fi';
+  | 'fi'
+  | 'ro'
+  | 'hu'
+  | 'da'
+  | 'no'
+  | 'sk';
 
 /** all supported languages; adding one = translation file + worker mapping */
 export const LANGS: Lang[] = [
   'en', 'zh', 'zh-cn', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru',
   'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl',
   'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi',
+  'ro', 'hu', 'da', 'no', 'sk',
 ];
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
@@ -103,6 +114,11 @@ export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: st
   uk: { html: 'uk', ogLocale: 'uk_UA', label: 'Українська', labelEn: 'Ukrainian', dir: 'ltr' },
   ms: { html: 'ms', ogLocale: 'ms_MY', label: 'Bahasa Melayu', labelEn: 'Malay', dir: 'ltr' },
   fi: { html: 'fi', ogLocale: 'fi_FI', label: 'Suomi', labelEn: 'Finnish', dir: 'ltr' },
+  ro: { html: 'ro', ogLocale: 'ro_RO', label: 'Română', labelEn: 'Romanian', dir: 'ltr' },
+  hu: { html: 'hu', ogLocale: 'hu_HU', label: 'Magyar', labelEn: 'Hungarian', dir: 'ltr' },
+  da: { html: 'da', ogLocale: 'da_DK', label: 'Dansk', labelEn: 'Danish', dir: 'ltr' },
+  no: { html: 'no', ogLocale: 'nb_NO', label: 'Norsk', labelEn: 'Norwegian', dir: 'ltr' },
+  sk: { html: 'sk', ogLocale: 'sk_SK', label: 'Slovenčina', labelEn: 'Slovak', dir: 'ltr' },
 };
 
 /** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
@@ -144,6 +160,11 @@ const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
   uk: UK_STRINGS,
   ms: MS_STRINGS,
   fi: FI_STRINGS,
+  ro: RO_STRINGS,
+  hu: HU_STRINGS,
+  da: DA_STRINGS,
+  no: NO_STRINGS,
+  sk: SK_STRINGS,
 };
 
 /** resolve a bilingual string for any language, falling back to English */
@@ -168,7 +189,7 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.5.6',
+  version: 'v0.5.7',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -381,4 +402,9 @@ export const UI: Record<Lang, UIStrings> = {
   uk: asUI(UI_UK),
   ms: asUI(UI_MS),
   fi: asUI(UI_FI),
+  ro: asUI(UI_RO),
+  hu: asUI(UI_HU),
+  da: asUI(UI_DA),
+  no: asUI(UI_NO),
+  sk: asUI(UI_SK),
 };

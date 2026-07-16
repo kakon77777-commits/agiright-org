@@ -15,7 +15,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -84,6 +84,11 @@ const COUNTRY_LANG = {
   MY: 'ms',
   BN: 'ms', // Brunei: Malay is the sole official language
   FI: 'fi',
+  RO: 'ro',
+  HU: 'hu',
+  DK: 'da',
+  NO: 'no',
+  SK: 'sk',
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -117,6 +122,11 @@ const CONTENT_LANG = {
   uk: 'uk',
   ms: 'ms',
   fi: 'fi',
+  ro: 'ro',
+  hu: 'hu',
+  da: 'da',
+  no: 'no',
+  sk: 'sk',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -174,6 +184,11 @@ function pickLang(request) {
   if (first.startsWith('uk')) return 'uk';
   if (first.startsWith('ms')) return 'ms';
   if (first.startsWith('fi')) return 'fi';
+  if (first.startsWith('ro')) return 'ro';
+  if (first.startsWith('hu')) return 'hu';
+  if (first.startsWith('da')) return 'da';
+  if (first.startsWith('no') || first.startsWith('nb') || first.startsWith('nn')) return 'no'; // nb=Bokmål, nn=Nynorsk — both map to the single Norwegian variant this site ships
+  if (first.startsWith('sk')) return 'sk';
   return DEFAULT_LANG;
 }
 
