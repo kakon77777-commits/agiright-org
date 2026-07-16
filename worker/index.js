@@ -15,7 +15,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -76,6 +76,14 @@ const COUNTRY_LANG = {
   SE: 'sv',
   PK: 'ur',
   TH: 'th',
+  // ta intentionally has no country mapping: Tamil's largest populations
+  // (India, Sri Lanka) are both majority-other-language countries — same
+  // reasoning as IN above. Accept-Language is the accurate per-user signal.
+  CZ: 'cs',
+  UA: 'uk',
+  MY: 'ms',
+  BN: 'ms', // Brunei: Malay is the sole official language
+  FI: 'fi',
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -104,6 +112,11 @@ const CONTENT_LANG = {
   sv: 'sv',
   ur: 'ur',
   th: 'th',
+  ta: 'ta',
+  cs: 'cs',
+  uk: 'uk',
+  ms: 'ms',
+  fi: 'fi',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -156,6 +169,11 @@ function pickLang(request) {
   if (first.startsWith('sv')) return 'sv';
   if (first.startsWith('ur')) return 'ur';
   if (first.startsWith('th')) return 'th';
+  if (first.startsWith('ta')) return 'ta';
+  if (first.startsWith('cs')) return 'cs';
+  if (first.startsWith('uk')) return 'uk';
+  if (first.startsWith('ms')) return 'ms';
+  if (first.startsWith('fi')) return 'fi';
   return DEFAULT_LANG;
 }
 
