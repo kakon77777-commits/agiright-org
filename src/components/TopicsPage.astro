@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from './PageHeader.astro';
+import { pick, type Lang } from '../data/site';
+import { TOPICS } from '../data/topics';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const title = pick({ en: 'Topics', zh: '議題專區' }, lang);
+const intro = pick(
+  {
+    en: 'A neutral index of third-party writing on AI ontology, philosophy, and frontier progress — not this site’s own position. Summaries are our paraphrase with attribution; read the source for the actual argument.',
+    zh: '收錄第三方對 AI 本體論、哲學與前沿進展的論述——並非本站自身的立場。摘要為我們的改寫並附出處,實際論點請見原文。',
+  },
+  lang
+);
+
+const sorted = [...TOPICS].sort((a, b) => (a.date > b.date ? -1 : 1));
+---
+
+<BaseLayout lang={lang} title={title} description={intro}>
+  <PageHeader
+    kicker={pick({ en: 'Neutral aggregation — not our position', zh: '中立聚合 — 非本站立場' }, lang)}
+    title={title}
+    intro={intro}
+    badges={[pick({ en: 'Hand-curated — no crawler yet', zh: '人工整理 — 尚未接自動化抓取' }, lang)]}
+  />
+
+  <div class="container-site py-14 md:py-20">
+    <div class="mx-auto max-w-3xl space-y-6">
+      {
+        sorted.map((item) => (
+          <article class="card p-6" data-reveal>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="badge">{pick(item.tag, lang)}</span>
+              <span class="spec-label">{item.date}</span>
+              <span class="spec-label !text-muted">{item.sourceName}</span>
+            </div>
+            <h2 class="font-serif mt-3 text-xl font-semibold text-navy">{pick(item.title, lang)}</h2>
+            <p class="mt-2 text-[0.9rem] leading-relaxed text-muted">{pick(item.summary, lang)}</p>
+            <a
+              href={item.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              class="link-quiet mt-3 inline-block text-[0.85rem] font-medium"
+            >
+              {pick({ en: 'Read the source', zh: '閱讀原文' }, lang)} →
+            </a>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="mx-auto mt-12 max-w-3xl rounded-md border-l-2 border-line-strong bg-surface px-5 py-4 text-[0.85rem] leading-relaxed text-muted" data-reveal>
+      {pick(
+        {
+          en: 'This page links to work we did not write. We do not endorse or vouch for any linked argument — inclusion here means we thought it relevant to AI ontology, philosophy, ethics, or frontier progress, not that we agree with it. Read the linked source before citing it.',
+          zh: '本頁連結的內容並非本站撰寫。收錄於此不代表本站認同或背書該論點,只代表我們認為它與 AI 本體論、哲學、倫理或前沿進展相關。引用前請務必查閱原文。',
+        },
+        lang
+      )}
+    </p>
+  </div>
+</BaseLayout>

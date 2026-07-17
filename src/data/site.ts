@@ -209,7 +209,7 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.6.0',
+  version: 'v0.6.1',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -243,6 +243,7 @@ export const NAV = [
   { href: '/protocols', en: 'Protocols', zh: '協議' },
   { href: '/specs', en: 'Specs', zh: '規範' },
   { href: '/docs', en: 'Whitepapers', zh: '白皮書' },
+  { href: '/topics', en: 'Topics', zh: '議題' },
   { href: '/studio', en: 'Studio', zh: '影音' },
   { href: '/playground', en: 'Playground', zh: '實驗工具' },
   { href: '/about', en: 'About', zh: '關於' },
