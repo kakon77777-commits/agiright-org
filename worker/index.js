@@ -15,7 +15,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -41,7 +41,11 @@ const COUNTRY_LANG = {
   BR: 'pt',
   RU: 'ru',
   BY: 'ru',
-  KZ: 'ru',
+  // KZ: Kazakh is the sole state language (constitution); Russian is widely
+  // used but this was an over-simplification from before a Kazakh
+  // translation existed — corrected now that kk is available, same kind of
+  // fix as the earlier BE (Belgium) correction below.
+  KZ: 'kk',
   // Arabic: GCC + Levant + Maghreb + Egypt/Iraq (major population centers)
   SA: 'ar',
   AE: 'ar',
@@ -89,6 +93,14 @@ const COUNTRY_LANG = {
   DK: 'da',
   NO: 'no',
   SK: 'sk',
+  PH: 'fil',
+  // TZ only, not KE: Swahili is Tanzania's dominant everyday language,
+  // while Kenya's web/business use skews English despite Swahili's
+  // co-official status — Accept-Language is the better signal for KE.
+  TZ: 'sw',
+  BA: 'bs',
+  // eo intentionally has no country mapping — Esperanto is constructed and
+  // has no national population; Accept-Language is the only real signal.
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -127,6 +139,11 @@ const CONTENT_LANG = {
   da: 'da',
   no: 'no',
   sk: 'sk',
+  fil: 'fil',
+  kk: 'kk',
+  sw: 'sw',
+  bs: 'bs',
+  eo: 'eo',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -189,6 +206,11 @@ function pickLang(request) {
   if (first.startsWith('da')) return 'da';
   if (first.startsWith('no') || first.startsWith('nb') || first.startsWith('nn')) return 'no'; // nb=Bokmål, nn=Nynorsk — both map to the single Norwegian variant this site ships
   if (first.startsWith('sk')) return 'sk';
+  if (first.startsWith('fil') || first.startsWith('tl')) return 'fil'; // 'tl' = ISO 639-1 Tagalog, still the more common Accept-Language tag for Filipino
+  if (first.startsWith('kk')) return 'kk';
+  if (first.startsWith('sw')) return 'sw';
+  if (first.startsWith('bs') || first.startsWith('sr')) return 'bs'; // this site ships one combined Bosnian/Serbian variant, not two
+  if (first.startsWith('eo')) return 'eo';
   return DEFAULT_LANG;
 }
 
