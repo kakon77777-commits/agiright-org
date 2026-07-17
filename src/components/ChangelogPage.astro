@@ -14,6 +14,19 @@ const intro =
 
 const ENTRIES = [
   {
+    version: 'v0.6.6',
+    date: '2026-07-17',
+    tag: { en: 'Bug fix', zh: '修正' },
+    items: {
+      en: [
+        'Fixed: switching pages or the per-page setting on /topics didn’t always show the new cards until a manual refresh. Cards beyond page 1 start hidden, so the site’s one-time scroll-reveal animation never had a chance to run on them; paging now forces those cards visible directly instead of waiting on an animation that already missed its moment.',
+      ],
+      zh: [
+        '修正:在 /topics 切換頁面或每頁筆數時,新出現的卡片有時要手動整理頁面才會顯示。第 1 頁以外的卡片一開始是隱藏的,導致本站那個「只跑一次」的捲動顯示動畫沒機會作用到它們;現在換頁時會直接強制卡片顯示,不再依賴一個已經錯過時機的動畫。',
+      ],
+    },
+  },
+  {
     version: 'v0.6.5',
     date: '2026-07-17',
     tag: { en: 'Pagination', zh: '分頁' },

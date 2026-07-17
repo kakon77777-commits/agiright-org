@@ -277,7 +277,17 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
     const visibleSet = new Set(matched.slice(start, start + pageSize));
 
     for (const item of items) {
-      item.classList.toggle('hidden', !visibleSet.has(item));
+      const shouldShow = visibleSet.has(item);
+      item.classList.toggle('hidden', !shouldShow);
+      if (shouldShow) {
+        // Cards beyond page 1 start display:none, so the site's one-time
+        // GSAP scroll-reveal (data-reveal) never had geometry to trigger on
+        // and leaves them stuck at the CSS opacity:0 it starts every
+        // [data-reveal] element at. Force full visibility here instead of
+        // waiting on an animation that already missed its only chance to run.
+        item.style.opacity = '1';
+        item.style.visibility = 'visible';
+      }
     }
 
     empty?.classList.toggle('hidden', matched.length > 0);
