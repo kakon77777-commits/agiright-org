@@ -19,6 +19,8 @@ const intro = pick(
 );
 
 const sorted = [...TOPICS].sort((a, b) => (a.date > b.date ? -1 : 1));
+const searchPlaceholder = pick({ en: 'Search topics — try a theme, source, or keyword…', zh: '搜尋議題——試試主題、來源或關鍵字…' }, lang);
+const noResults = pick({ en: 'No topics match your search.', zh: '沒有符合搜尋條件的議題。' }, lang);
 
 const leavingTitle = pick({ en: 'You are leaving AGIRight.org', zh: '您即將離開 AGIRight.org' }, lang);
 const leavingBody = pick(
@@ -41,34 +43,51 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
   />
 
   <div class="container-site py-14 md:py-20">
-    <div class="mx-auto max-w-3xl space-y-6">
+    <div class="mx-auto max-w-xl" data-reveal>
+      <input
+        type="text"
+        class="field-input"
+        placeholder={searchPlaceholder}
+        autocomplete="off"
+        spellcheck="false"
+        aria-label={searchPlaceholder}
+        data-topics-search
+      />
+    </div>
+
+    <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" data-topics-grid>
       {
-        sorted.map((item) => (
-          <article class="card p-6" data-reveal>
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="badge">{pick(item.tag, lang)}</span>
-              <span class="spec-label">{item.date}</span>
-              <span class="spec-label !text-muted">{item.sourceName}</span>
-            </div>
-            <h2 class="font-serif mt-3 text-xl font-semibold text-navy">{pick(item.title, lang)}</h2>
-            <p class="mt-2 text-[0.9rem] leading-relaxed text-muted">{pick(item.summary, lang)}</p>
-            <div class="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-              <a
-                href={item.sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                class="link-quiet text-[0.85rem] font-medium"
-                data-external-link
-                data-url={item.sourceUrl}
-              >
-                {pick({ en: 'Read the source', zh: '閱讀原文' }, lang)} →
-              </a>
-              <span class="break-all font-mono text-[0.75rem] text-muted">{item.sourceUrl}</span>
-            </div>
-          </article>
-        ))
+        sorted.map((item) => {
+          const searchText = `${pick(item.title, lang)} ${pick(item.summary, lang)} ${pick(item.tag, lang)} ${item.sourceName}`.toLowerCase();
+          return (
+            <article class="card flex flex-col p-6" data-reveal data-topics-item data-search-text={searchText}>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="badge">{pick(item.tag, lang)}</span>
+                <span class="spec-label">{item.date}</span>
+              </div>
+              <span class="spec-label !text-muted mt-1.5">{item.sourceName}</span>
+              <h2 class="font-serif mt-3 text-lg font-semibold leading-snug text-navy">{pick(item.title, lang)}</h2>
+              <p class="mt-2 flex-1 text-[0.85rem] leading-relaxed text-muted">{pick(item.summary, lang)}</p>
+              <div class="mt-3 flex flex-col items-start gap-1">
+                <a
+                  href={item.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  class="link-quiet text-[0.85rem] font-medium"
+                  data-external-link
+                  data-url={item.sourceUrl}
+                >
+                  {pick({ en: 'Read the source', zh: '閱讀原文' }, lang)} →
+                </a>
+                <span class="break-all font-mono text-[0.7rem] text-muted">{item.sourceUrl}</span>
+              </div>
+            </article>
+          );
+        })
       }
     </div>
+
+    <p class="hidden py-16 text-center text-[0.9rem] text-muted" data-topics-empty>{noResults}</p>
 
     <p class="mx-auto mt-12 max-w-3xl rounded-md border-l-2 border-line-strong bg-surface px-5 py-4 text-[0.85rem] leading-relaxed text-muted" data-reveal>
       {pick(
@@ -158,5 +177,22 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !overlay?.classList.contains('hidden')) closeLeaving();
+  });
+
+  const searchInput = document.querySelector<HTMLInputElement>('[data-topics-search]');
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-topics-item]'));
+  const grid = document.querySelector<HTMLElement>('[data-topics-grid]');
+  const empty = document.querySelector<HTMLElement>('[data-topics-empty]');
+
+  searchInput?.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    let visible = 0;
+    for (const item of items) {
+      const match = !q || (item.dataset.searchText ?? '').includes(q);
+      item.classList.toggle('hidden', !match);
+      if (match) visible++;
+    }
+    empty?.classList.toggle('hidden', visible > 0);
+    grid?.classList.toggle('hidden', visible === 0);
   });
 </script>
