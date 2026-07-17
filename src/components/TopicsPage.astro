@@ -19,6 +19,17 @@ const intro = pick(
 );
 
 const sorted = [...TOPICS].sort((a, b) => (a.date > b.date ? -1 : 1));
+
+const leavingTitle = pick({ en: 'You are leaving AGIRight.org', zh: '您即將離開 AGIRight.org' }, lang);
+const leavingBody = pick(
+  {
+    en: 'This link goes to a site we do not control and did not write. Make sure you recognize the destination before continuing.',
+    zh: '這個連結會前往我們不掌控、也非本站撰寫的網站。請在繼續前確認您認得這個目的地。',
+  },
+  lang
+);
+const leavingContinue = pick({ en: 'Continue to site', zh: '繼續前往' }, lang);
+const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>
@@ -41,14 +52,19 @@ const sorted = [...TOPICS].sort((a, b) => (a.date > b.date ? -1 : 1));
             </div>
             <h2 class="font-serif mt-3 text-xl font-semibold text-navy">{pick(item.title, lang)}</h2>
             <p class="mt-2 text-[0.9rem] leading-relaxed text-muted">{pick(item.summary, lang)}</p>
-            <a
-              href={item.sourceUrl}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              class="link-quiet mt-3 inline-block text-[0.85rem] font-medium"
-            >
-              {pick({ en: 'Read the source', zh: '閱讀原文' }, lang)} →
-            </a>
+            <div class="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+              <a
+                href={item.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                class="link-quiet text-[0.85rem] font-medium"
+                data-external-link
+                data-url={item.sourceUrl}
+              >
+                {pick({ en: 'Read the source', zh: '閱讀原文' }, lang)} →
+              </a>
+              <span class="break-all font-mono text-[0.75rem] text-muted">{item.sourceUrl}</span>
+            </div>
           </article>
         ))
       }
@@ -64,4 +80,83 @@ const sorted = [...TOPICS].sort((a, b) => (a.date > b.date ? -1 : 1));
       )}
     </p>
   </div>
+
+  <div
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-ink/40 p-4 backdrop-blur-sm"
+    data-leaving-overlay
+  >
+    <div
+      class="w-full max-w-md rounded-lg border border-line-strong bg-surface p-6 shadow-lg"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="leaving-title"
+    >
+      <h2 id="leaving-title" class="font-serif text-lg font-semibold text-navy">{leavingTitle}</h2>
+      <p class="mt-2 text-[0.85rem] leading-relaxed text-muted">{leavingBody}</p>
+      <p class="mt-3 break-all rounded-md border border-line bg-paper px-3 py-2 font-mono text-[0.8rem] text-ink-soft" data-leaving-url></p>
+      <div class="mt-5 flex justify-end gap-3">
+        <button
+          type="button"
+          class="spec-label !text-ink-soft cursor-pointer rounded-md border border-line-strong px-3 py-1.5 transition-colors duration-200 hover:border-navy"
+          data-leaving-cancel
+        >
+          {leavingCancel}
+        </button>
+        <button
+          type="button"
+          class="badge badge-live cursor-pointer transition-colors duration-200 hover:border-navy"
+          data-leaving-continue
+        >
+          {leavingContinue} ↗
+        </button>
+      </div>
+    </div>
+  </div>
 </BaseLayout>
+
+<script>
+  const overlay = document.querySelector<HTMLElement>('[data-leaving-overlay]');
+  const urlEl = overlay?.querySelector<HTMLElement>('[data-leaving-url]');
+  const cancelBtn = overlay?.querySelector<HTMLButtonElement>('[data-leaving-cancel]');
+  const continueBtn = overlay?.querySelector<HTMLButtonElement>('[data-leaving-continue]');
+  let pendingUrl: string | null = null;
+  let lastFocused: HTMLElement | null = null;
+
+  function openLeaving(url: string, trigger: HTMLElement) {
+    if (!overlay || !urlEl) return;
+    pendingUrl = url;
+    urlEl.textContent = url;
+    lastFocused = trigger;
+    overlay.classList.remove('hidden');
+    overlay.classList.add('flex');
+    continueBtn?.focus();
+  }
+
+  function closeLeaving() {
+    if (!overlay) return;
+    overlay.classList.add('hidden');
+    overlay.classList.remove('flex');
+    pendingUrl = null;
+    lastFocused?.focus();
+  }
+
+  document.querySelectorAll<HTMLAnchorElement>('[data-external-link]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const url = link.dataset.url;
+      if (url) openLeaving(url, link);
+    });
+  });
+
+  cancelBtn?.addEventListener('click', closeLeaving);
+  continueBtn?.addEventListener('click', () => {
+    if (pendingUrl) window.open(pendingUrl, '_blank', 'noopener,noreferrer');
+    closeLeaving();
+  });
+  overlay?.addEventListener('click', (e) => {
+    if (e.target === overlay) closeLeaving();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !overlay?.classList.contains('hidden')) closeLeaving();
+  });
+</script>
