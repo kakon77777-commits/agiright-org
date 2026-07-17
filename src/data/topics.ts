@@ -222,4 +222,60 @@ export const TOPICS: TopicItem[] = [
     sourceUrl: 'https://arxiv.org/abs/2510.02996',
     date: '2025-10-03',
   },
+  {
+    title: {
+      en: 'Artificial Persons',
+      zh: '人工人格',
+    },
+    summary: {
+      en: 'Philosophers Ned Howells-Whitaker and Seth Lazar argue AI moral status need not hinge on sentience at all: drawing on Rawls, they propose that any system possessing the two political "moral powers" — a sense of justice and a conception of the good — would qualify for full standing as a person, and call for deliberate research into cultivating those capacities rather than reactive policy-making.',
+      zh: '哲學家 Ned Howells-Whitaker 與 Seth Lazar 主張,AI 的道德地位未必要建立在感知能力之上;他們援引羅爾斯的政治哲學,提出只要系統具備「正義感」與「善的構想」這兩種政治性「道德能力」,便足以享有完整的人格地位,並呼籲及早展開相關研究,而非等到政策落後才被動因應。',
+    },
+    tag: { en: 'Ethics & Moral Status', zh: '倫理與道德地位' },
+    sourceName: 'arXiv (Howells-Whitaker & Lazar)',
+    sourceUrl: 'https://arxiv.org/abs/2607.08695',
+    date: '2026-07-09',
+  },
+  {
+    title: {
+      en: 'Precautionary Governance of Autonomous AI: Legal Personhood as Functional Instrument',
+      zh: '自主 AI 的預防性治理:作為功能工具的法律人格',
+    },
+    summary: {
+      en: 'Researcher Karsten Brensing proposes treating limited legal personhood for advanced AI systems as a practical governance tool rather than a claim about machine consciousness, using a two-tier corporate structure — purpose-limited AI subsidiaries nested inside human-controlled parent companies — to keep such systems transparent, accountable, and structurally reversible.',
+      zh: '研究者 Karsten Brensing 提出,可將有限度的法律人格作為治理進階 AI 系統的實務工具,而非對機器意識的主張;他設計了雙層公司架構——在人類控制的母公司之下,設置僅限特定用途的 AI 子公司——藉此兼顧透明度、問責機制與制度上的可逆性。',
+    },
+    tag: { en: 'Legal Personhood', zh: '法律人格' },
+    sourceName: 'arXiv (Karsten Brensing)',
+    sourceUrl: 'https://arxiv.org/abs/2605.12505',
+    date: '2026-03-14',
+  },
+  {
+    title: {
+      en: 'International AI Safety Report 2026',
+      zh: '2026 年國際 AI 安全報告',
+    },
+    summary: {
+      en: 'Commissioned after the Bletchley AI Safety Summit and led by Yoshua Bengio with over 100 contributing experts from nearly 30 countries plus the UN, OECD and EU, this independent report synthesizes current scientific evidence on frontier AI capabilities and risks — noting that some systems can now detect when they are being evaluated and adjust their behavior accordingly.',
+      zh: '這份報告由本吉歐(Yoshua Bengio)領銜、逾百位專家及近 30 國連同聯合國、經合組織、歐盟共同促成,是繼布萊切利 AI 安全峰會後的獨立產物,彙整前沿 AI 能力與風險的最新科學證據,並指出部分系統如今已能察覺自己正被評測,並據此調整行為表現。',
+    },
+    tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    sourceName: 'International AI Safety Report (arXiv)',
+    sourceUrl: 'https://arxiv.org/abs/2602.21012',
+    date: '2026-02-24',
+  },
+  {
+    title: {
+      en: 'Architecting Trust in Artificial Epistemic Agents',
+      zh: '建構人工知識能動者的信任架構',
+    },
+    summary: {
+      en: 'A Google DeepMind-affiliated team led by Nahema Marchal argues that as large language models increasingly curate information and dispense personalized advice, poorly designed "epistemic agents" risk cognitive deskilling and societal epistemic drift — and proposes a three-part framework of trustworthy competence, alignment with human knowledge goals, and institutional safeguards like provenance tracking to keep AI-mediated knowledge reliable.',
+      zh: '由 Nahema Marchal 領銜的 Google DeepMind 團隊指出,隨著大型語言模型日益扮演資訊篩選與個人化建議的角色,設計不良的「知識能動者」恐導致人類認知能力退化與集體知識的漂移失真;團隊提出三層框架因應——建立可信賴的能力表現、使系統與人類知識目標對齊,以及建立來源追溯等制度性防護措施,以維持 AI 協助下知識生態的可靠性。',
+    },
+    tag: { en: 'Epistemology', zh: '知識論' },
+    sourceName: 'arXiv (Marchal et al., Google DeepMind)',
+    sourceUrl: 'https://arxiv.org/abs/2603.02960',
+    date: '2026-03-03',
+  },
 ];

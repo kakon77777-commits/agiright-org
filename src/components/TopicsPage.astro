@@ -21,6 +21,10 @@ const intro = pick(
 const sorted = [...TOPICS].sort((a, b) => (a.date > b.date ? -1 : 1));
 const searchPlaceholder = pick({ en: 'Search topics — try a theme, source, or keyword…', zh: '搜尋議題——試試主題、來源或關鍵字…' }, lang);
 const noResults = pick({ en: 'No topics match your search.', zh: '沒有符合搜尋條件的議題。' }, lang);
+const perPageLabel = pick({ en: 'Per page', zh: '每頁筆數' }, lang);
+const prevLabel = pick({ en: 'Previous', zh: '上一頁' }, lang);
+const nextLabel = pick({ en: 'Next', zh: '下一頁' }, lang);
+const paginationLabel = pick({ en: 'Topics pagination', zh: '議題分頁導覽' }, lang);
 
 const leavingTitle = pick({ en: 'You are leaving AGIRight.org', zh: '您即將離開 AGIRight.org' }, lang);
 const leavingBody = pick(
@@ -43,16 +47,24 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
   />
 
   <div class="container-site py-14 md:py-20">
-    <div class="mx-auto max-w-xl" data-reveal>
+    <div class="flex flex-wrap items-center justify-between gap-4" data-reveal>
       <input
         type="text"
-        class="field-input"
+        class="field-input w-full max-w-md"
         placeholder={searchPlaceholder}
         autocomplete="off"
         spellcheck="false"
         aria-label={searchPlaceholder}
         data-topics-search
       />
+      <label class="flex items-center gap-2 text-[0.8rem] text-muted">
+        {perPageLabel}
+        <select class="field-select !w-auto" data-topics-pagesize>
+          <option value="9">9</option>
+          <option value="12">12</option>
+          <option value="15">15</option>
+        </select>
+      </label>
     </div>
 
     <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" data-topics-grid>
@@ -88,6 +100,29 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
     </div>
 
     <p class="hidden py-16 text-center text-[0.9rem] text-muted" data-topics-empty>{noResults}</p>
+
+    <nav
+      class="mt-8 hidden flex-wrap items-center justify-center gap-2"
+      data-topics-pagination
+      aria-label={paginationLabel}
+    >
+      <button
+        type="button"
+        class="spec-label !text-ink-soft cursor-pointer rounded-md border border-line-strong px-3 py-1.5 transition-colors duration-200 hover:border-navy disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-line-strong"
+        data-topics-prev
+      >
+        ← {prevLabel}
+      </button>
+      <div class="flex items-center gap-1.5" data-topics-page-numbers></div>
+      <button
+        type="button"
+        class="spec-label !text-ink-soft cursor-pointer rounded-md border border-line-strong px-3 py-1.5 transition-colors duration-200 hover:border-navy disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-line-strong"
+        data-topics-next
+      >
+        {nextLabel} →
+      </button>
+    </nav>
+    <p class="mt-2 text-center text-[0.75rem] text-muted" data-topics-page-info aria-live="polite"></p>
 
     <p class="mx-auto mt-12 max-w-3xl rounded-md border-l-2 border-line-strong bg-surface px-5 py-4 text-[0.85rem] leading-relaxed text-muted" data-reveal>
       {pick(
@@ -180,19 +215,110 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
   });
 
   const searchInput = document.querySelector<HTMLInputElement>('[data-topics-search]');
+  const pageSizeSelect = document.querySelector<HTMLSelectElement>('[data-topics-pagesize]');
   const items = Array.from(document.querySelectorAll<HTMLElement>('[data-topics-item]'));
   const grid = document.querySelector<HTMLElement>('[data-topics-grid]');
   const empty = document.querySelector<HTMLElement>('[data-topics-empty]');
+  const pagination = document.querySelector<HTMLElement>('[data-topics-pagination]');
+  const pageNumbers = document.querySelector<HTMLElement>('[data-topics-page-numbers]');
+  const pageInfo = document.querySelector<HTMLElement>('[data-topics-page-info]');
+  const prevBtn = document.querySelector<HTMLButtonElement>('[data-topics-prev]');
+  const nextBtn = document.querySelector<HTMLButtonElement>('[data-topics-next]');
+
+  const PAGE_SIZE_KEY = 'agiright-topics-page-size';
+  let currentPage = 1;
+
+  try {
+    const stored = localStorage.getItem(PAGE_SIZE_KEY);
+    if (stored && pageSizeSelect && ['9', '12', '15'].includes(stored)) {
+      pageSizeSelect.value = stored;
+    }
+  } catch {
+    // localStorage unavailable (private browsing etc.) — default page size still works
+  }
+
+  function getPageSize(): number {
+    return Number(pageSizeSelect?.value ?? 9);
+  }
+
+  function renderPageNumbers(totalPages: number) {
+    if (!pageNumbers) return;
+    pageNumbers.innerHTML = '';
+    for (let p = 1; p <= totalPages; p++) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = String(p);
+      btn.setAttribute('aria-current', p === currentPage ? 'page' : 'false');
+      btn.className =
+        p === currentPage
+          ? 'spec-label rounded-md border border-primary bg-primary-soft px-2.5 py-1 text-primary cursor-pointer'
+          : 'spec-label !text-ink-soft rounded-md border border-line-strong px-2.5 py-1 cursor-pointer transition-colors duration-200 hover:border-navy';
+      btn.addEventListener('click', () => {
+        currentPage = p;
+        render();
+        scrollToTop();
+      });
+      pageNumbers.appendChild(btn);
+    }
+  }
+
+  function scrollToTop() {
+    searchInput?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function render() {
+    const q = (searchInput?.value ?? '').trim().toLowerCase();
+    const matched = items.filter((item) => !q || (item.dataset.searchText ?? '').includes(q));
+
+    const pageSize = getPageSize();
+    const totalPages = Math.max(1, Math.ceil(matched.length / pageSize));
+    currentPage = Math.min(Math.max(1, currentPage), totalPages);
+    const start = (currentPage - 1) * pageSize;
+    const visibleSet = new Set(matched.slice(start, start + pageSize));
+
+    for (const item of items) {
+      item.classList.toggle('hidden', !visibleSet.has(item));
+    }
+
+    empty?.classList.toggle('hidden', matched.length > 0);
+    grid?.classList.toggle('hidden', matched.length === 0);
+
+    const needsPagination = matched.length > pageSize;
+    pagination?.classList.toggle('hidden', !needsPagination);
+    pagination?.classList.toggle('flex', needsPagination);
+    if (pageInfo) {
+      pageInfo.textContent = needsPagination
+        ? `${currentPage} / ${totalPages}`
+        : '';
+    }
+    if (prevBtn) prevBtn.disabled = currentPage <= 1;
+    if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+    renderPageNumbers(totalPages);
+  }
 
   searchInput?.addEventListener('input', () => {
-    const q = searchInput.value.trim().toLowerCase();
-    let visible = 0;
-    for (const item of items) {
-      const match = !q || (item.dataset.searchText ?? '').includes(q);
-      item.classList.toggle('hidden', !match);
-      if (match) visible++;
-    }
-    empty?.classList.toggle('hidden', visible > 0);
-    grid?.classList.toggle('hidden', visible === 0);
+    currentPage = 1;
+    render();
   });
+  pageSizeSelect?.addEventListener('change', () => {
+    try {
+      localStorage.setItem(PAGE_SIZE_KEY, pageSizeSelect.value);
+    } catch {
+      // ignore write failures
+    }
+    currentPage = 1;
+    render();
+  });
+  prevBtn?.addEventListener('click', () => {
+    currentPage--;
+    render();
+    scrollToTop();
+  });
+  nextBtn?.addEventListener('click', () => {
+    currentPage++;
+    render();
+    scrollToTop();
+  });
+
+  render();
 </script>
