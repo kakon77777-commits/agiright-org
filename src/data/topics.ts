@@ -278,4 +278,46 @@ export const TOPICS: TopicItem[] = [
     sourceUrl: 'https://arxiv.org/abs/2603.02960',
     date: '2026-03-03',
   },
+  {
+    title: {
+      en: 'A Meta-Epistemological Reason for Rejecting AI-Written Philosophy',
+      zh: '拒絕 AI 代筆哲學文章的後設知識論理由',
+    },
+    summary: {
+      en: 'Philosopher Eric Schwitzgebel argues, as reported by Justin Weinberg at Daily Nous, that a philosophy text’s worth partly derives from the fact that a human expert deliberately chose to write it — meta-evidence of intellectual rigor that an LLM-generated text cannot supply even when the prose reads identically.',
+      zh: '哲學家 Eric Schwitzgebel 透過 Daily Nous 撰稿人 Justin Weinberg 的報導指出,一篇哲學文章的價值,有部分來自「由人類專家刻意撰寫」這件事本身所提供的後設證據——即使文字表面看來相似,大型語言模型生成的文本也無法複製這種顯示思想嚴謹度的證據。',
+    },
+    tag: { en: 'Epistemology', zh: '知識論' },
+    sourceName: 'Daily Nous',
+    sourceUrl: 'https://dailynous.com/2026/07/16/a-meta-epistemological-reason-for-rejecting-ai-written-philosophy/',
+    date: '2026-07-16',
+  },
+  {
+    title: {
+      en: 'Can AI Be a Moral Victim? Ownership and Moral Patiency in Everyday Judgments',
+      zh: 'AI 能否成為道德受害者?日常判斷中的所有權與道德受動性',
+    },
+    summary: {
+      en: 'A study by Hyesun Choung and Soojong Kim finds people judge reusing AI-generated content far more leniently than reusing human-written work, and traces the gap to two factors: weaker belief that AI can suffer, and a tendency to credit ownership of AI output to whoever prompted it.',
+      zh: 'Hyesun Choung 與 Soojong Kim 的研究發現,人們在道德判斷上,對重複使用 AI 生成內容遠比使用人類創作內容來得寬容;此落差主要源於兩項因素:一是較不相信 AI 具備「受苦」的能力,二是傾向將 AI 輸出內容的所有權歸於下指令的使用者本人。',
+    },
+    tag: { en: 'Ethics & Moral Status', zh: '倫理與道德地位' },
+    sourceName: 'arXiv',
+    sourceUrl: 'https://arxiv.org/abs/2604.26956',
+    date: '2026-04-03',
+  },
+  {
+    title: {
+      en: 'Illinois Becomes First U.S. State to Mandate Independent Safety Audits for Frontier AI',
+      zh: '伊利諾州成為美國首個強制要求前沿 AI 獨立安全稽核的州',
+    },
+    summary: {
+      en: 'Governing reports that Illinois Governor JB Pritzker signed the Artificial Intelligence Safety Measures Act, requiring large frontier AI developers to publish catastrophic-risk assessments, report safety incidents within 72 hours, and undergo annual third-party audits starting in 2028.',
+      zh: '根據 Governing 報導,伊利諾州州長 JB Pritzker 簽署《人工智慧安全措施法案》,要求大型前沿 AI 開發商公開災難性風險評估、於 72 小時內通報安全事故,並自 2028 年起每年接受一次第三方獨立稽核。',
+    },
+    tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    sourceName: 'Governing',
+    sourceUrl: 'https://www.governing.com/artificial-intelligence/illinois-sets-a-new-standard-for-ai-oversight',
+    date: '2026-07-07',
+  },
 ];

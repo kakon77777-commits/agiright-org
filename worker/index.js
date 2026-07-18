@@ -15,7 +15,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -101,6 +101,11 @@ const COUNTRY_LANG = {
   BA: 'bs',
   // eo intentionally has no country mapping — Esperanto is constructed and
   // has no national population; Accept-Language is the only real signal.
+  // pa/te/mr intentionally have no country mapping: Punjab, Andhra
+  // Pradesh/Telangana, and Maharashtra are Indian states, not countries —
+  // same reasoning as the IN/ta/hi precedent above.
+  ET: 'am',
+  MM: 'my',
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -144,6 +149,11 @@ const CONTENT_LANG = {
   sw: 'sw',
   bs: 'bs',
   eo: 'eo',
+  pa: 'pa',
+  te: 'te',
+  mr: 'mr',
+  am: 'am',
+  my: 'my',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -211,6 +221,11 @@ function pickLang(request) {
   if (first.startsWith('sw')) return 'sw';
   if (first.startsWith('bs') || first.startsWith('sr')) return 'bs'; // this site ships one combined Bosnian/Serbian variant, not two
   if (first.startsWith('eo')) return 'eo';
+  if (first.startsWith('pa')) return 'pa';
+  if (first.startsWith('te')) return 'te';
+  if (first.startsWith('mr')) return 'mr';
+  if (first.startsWith('am')) return 'am';
+  if (first.startsWith('my')) return 'my';
   return DEFAULT_LANG;
 }
 
