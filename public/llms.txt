@@ -19,8 +19,10 @@ lang=ro (Romanian), lang=hu (Hungarian), lang=da (Danish), lang=no
 (Norwegian), lang=sk (Slovak), lang=fil (Filipino), lang=kk (Kazakh),
 lang=sw (Swahili), lang=bs (Bosnian/Serbian), lang=eo (Esperanto),
 lang=pa (Punjabi), lang=te (Telugu), lang=mr (Marathi), lang=am
-(Amharic), lang=my (Burmese) — 45 languages total and growing; new
-languages are added on an ongoing basis toward full global coverage.
+(Amharic), lang=my (Burmese), lang=ne (Nepali), lang=si (Sinhala),
+lang=uz (Uzbek), lang=ha (Hausa), lang=az (Azerbaijani) — 50 languages
+total and growing; new languages are added on an ongoing basis toward
+full global coverage.
 Machine-readable files are language-neutral; untranslated strings
 fall back to English. The on-page language picker (header) is a searchable grid — type a language's
 native or English name to filter it.

@@ -15,7 +15,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -106,6 +106,16 @@ const COUNTRY_LANG = {
   // same reasoning as the IN/ta/hi precedent above.
   ET: 'am',
   MM: 'my',
+  NP: 'ne',
+  // LK: Sinhala is the majority/national language (~74%) — unlike the
+  // IN/ta/pa/te/mr precedent above, Sri Lanka's two official languages
+  // (Sinhala, Tamil) have a clear majority, so country mapping is safe here.
+  LK: 'si',
+  UZ: 'uz',
+  AZ: 'az',
+  // ha intentionally has no country mapping: Nigeria's official language is
+  // English and Hausa is a major regional lingua franca (not a nationwide
+  // majority) — same reasoning as the IN/ta precedent above.
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -154,6 +164,11 @@ const CONTENT_LANG = {
   mr: 'mr',
   am: 'am',
   my: 'my',
+  ne: 'ne',
+  si: 'si',
+  uz: 'uz',
+  ha: 'ha',
+  az: 'az',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -226,6 +241,11 @@ function pickLang(request) {
   if (first.startsWith('mr')) return 'mr';
   if (first.startsWith('am')) return 'am';
   if (first.startsWith('my')) return 'my';
+  if (first.startsWith('ne')) return 'ne';
+  if (first.startsWith('si')) return 'si';
+  if (first.startsWith('uz')) return 'uz';
+  if (first.startsWith('ha')) return 'ha';
+  if (first.startsWith('az')) return 'az';
   return DEFAULT_LANG;
 }
 

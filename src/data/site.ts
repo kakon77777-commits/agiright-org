@@ -41,6 +41,11 @@ import { UI_TE, STRINGS as TE_STRINGS } from './translations/te';
 import { UI_MR, STRINGS as MR_STRINGS } from './translations/mr';
 import { UI_AM, STRINGS as AM_STRINGS } from './translations/am';
 import { UI_MY, STRINGS as MY_STRINGS } from './translations/my';
+import { UI_NE, STRINGS as NE_STRINGS } from './translations/ne';
+import { UI_SI, STRINGS as SI_STRINGS } from './translations/si';
+import { UI_UZ, STRINGS as UZ_STRINGS } from './translations/uz';
+import { UI_HA, STRINGS as HA_STRINGS } from './translations/ha';
+import { UI_AZ, STRINGS as AZ_STRINGS } from './translations/az';
 
 export type Lang =
   | 'en'
@@ -87,7 +92,12 @@ export type Lang =
   | 'te'
   | 'mr'
   | 'am'
-  | 'my';
+  | 'my'
+  | 'ne'
+  | 'si'
+  | 'uz'
+  | 'ha'
+  | 'az';
 
 /** all supported languages; adding one = translation file + worker mapping */
 export const LANGS: Lang[] = [
@@ -96,6 +106,7 @@ export const LANGS: Lang[] = [
   'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi',
   'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo',
   'pa', 'te', 'mr', 'am', 'my',
+  'ne', 'si', 'uz', 'ha', 'az',
 ];
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
@@ -150,6 +161,11 @@ export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: st
   mr: { html: 'mr', ogLocale: 'mr_IN', label: 'मराठी', labelEn: 'Marathi', dir: 'ltr' },
   am: { html: 'am', ogLocale: 'am_ET', label: 'አማርኛ', labelEn: 'Amharic', dir: 'ltr' },
   my: { html: 'my', ogLocale: 'my_MM', label: 'မြန်မာဘာသာ', labelEn: 'Burmese', dir: 'ltr' },
+  ne: { html: 'ne', ogLocale: 'ne_NP', label: 'नेपाली', labelEn: 'Nepali', dir: 'ltr' },
+  si: { html: 'si', ogLocale: 'si_LK', label: 'සිංහල', labelEn: 'Sinhala', dir: 'ltr' },
+  uz: { html: 'uz', ogLocale: 'uz_UZ', label: 'Oʻzbekcha', labelEn: 'Uzbek', dir: 'ltr' },
+  ha: { html: 'ha', ogLocale: 'ha_NG', label: 'Hausa', labelEn: 'Hausa', dir: 'ltr' },
+  az: { html: 'az', ogLocale: 'az_AZ', label: 'Azərbaycanca', labelEn: 'Azerbaijani', dir: 'ltr' },
 };
 
 /** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
@@ -206,6 +222,11 @@ const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
   mr: MR_STRINGS,
   am: AM_STRINGS,
   my: MY_STRINGS,
+  ne: NE_STRINGS,
+  si: SI_STRINGS,
+  uz: UZ_STRINGS,
+  ha: HA_STRINGS,
+  az: AZ_STRINGS,
 };
 
 /** resolve a bilingual string for any language, falling back to English */
@@ -230,7 +251,7 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.6.7',
+  version: 'v0.6.8',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -459,4 +480,9 @@ export const UI: Record<Lang, UIStrings> = {
   mr: asUI(UI_MR),
   am: asUI(UI_AM),
   my: asUI(UI_MY),
+  ne: asUI(UI_NE),
+  si: asUI(UI_SI),
+  uz: asUI(UI_UZ),
+  ha: asUI(UI_HA),
+  az: asUI(UI_AZ),
 };

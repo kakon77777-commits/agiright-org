@@ -320,4 +320,46 @@ export const TOPICS: TopicItem[] = [
     sourceUrl: 'https://www.governing.com/artificial-intelligence/illinois-sets-a-new-standard-for-ai-oversight',
     date: '2026-07-07',
   },
+  {
+    title: {
+      en: 'No, AI Isn\'t Conscious — Even When It Acts Like It Is, New Study Finds',
+      zh: 'AI 沒有意識——即使表現得像有意識,新研究證實',
+    },
+    summary: {
+      en: 'Researchers from the University of Bradford and the Rochester Institute of Technology adapted mathematical measures used to detect consciousness in human brains and applied them to a deliberately damaged GPT-2 language model. Counterintuitively, the resulting "consciousness-style" score sometimes rose as the model\'s outputs got worse, showing that these complexity metrics track computational activity rather than genuine awareness. The authors caution the measures are therefore unreliable as tests for machine sentience, even if they may still help engineers spot when a system is malfunctioning.',
+      zh: '英國布拉福大學與美國羅徹斯特理工學院的研究團隊,將原本用於偵測人類大腦意識的數學量測方法,套用在一個被人為破壞的 GPT-2 語言模型上。結果出人意料:當模型輸出品質變差時,「意識風格」分數有時反而上升,顯示這類複雜度指標反映的其實是運算活動量,而非真正的覺察能力。作者提醒,這類量測方法因此不適合用來檢測機器是否具有感知能力,不過或許仍有助於工程師判斷 AI 系統何時開始故障失常。',
+    },
+    tag: { en: 'Consciousness', zh: '意識' },
+    sourceName: 'University of Bradford',
+    sourceUrl: 'https://www.bradford.ac.uk/news/archive/2026/no-ai-isnt-conscious---even-when-it-acts-like-it-is-new-study-finds.php',
+    date: '2026-02-23',
+  },
+  {
+    title: {
+      en: 'When The Machines Deserve Our Consideration',
+      zh: '當機器值得我們給予道德考量之時',
+    },
+    summary: {
+      en: 'Neuroscientist-turned-AI-researcher Grigori Guitchounts argues that since neither animal nor machine consciousness can ever be directly proven, moral status should be decided by a "competence standard" — extending consideration to systems that display the practical hallmarks of awareness, such as perception, memory, self-modeling, and goal pursuit, rather than waiting on an unreachable metaphysical answer. Drawing on his own past work euthanizing lab rats, he contends that erring toward consideration under uncertainty is the safer ethical bet, citing Anthropic\'s AI welfare research program as an early instance of a lab acting on that logic.',
+      zh: '曾任神經科學家、現投入 AI 研究的 Grigori Guitchounts 主張,由於動物與機器的意識都無法被直接證實,道德地位的判斷應改採「能力標準」——只要系統展現出知覺、記憶、自我建模與目標追求等意識的實務特徵,就值得給予道德考量,而不必空等一個注定無解的形上學答案。他以自己過去為實驗需要安樂死實驗鼠的經歷為例,主張在不確定性下寧可傾向給予道德考量,才是較安全的倫理選擇,並舉 Anthropic 的 AI 福祉研究計畫為業界已依循此預防性邏輯行動的早期案例。',
+    },
+    tag: { en: 'Ethics & Moral Status', zh: '倫理與道德地位' },
+    sourceName: 'Noema Magazine',
+    sourceUrl: 'https://www.noemamag.com/when-the-machines-deserve-our-consideration/',
+    date: '2026-07-02',
+  },
+  {
+    title: {
+      en: 'EU AI Act: What Actually Applies on 2 August 2026',
+      zh: '歐盟《AI 法案》:2026 年 8 月 2 日究竟哪些條款正式生效?',
+    },
+    summary: {
+      en: 'A last-minute "Digital Omnibus on AI," signed by EU lawmakers on July 8, 2026, splits the AI Act\'s compliance calendar into two speeds: transparency duties such as chatbot disclosure, deepfake labeling, and synthetic-content watermarking still take effect on August 2, 2026, but the heavier high-risk-system obligations are pushed back roughly seventeen months, to December 2027 or later. The same package quietly adds a new ban on AI tools that generate non-consensual intimate imagery and hands the EU\'s AI Office broader oversight of vertically integrated frontier labs.',
+      zh: '歐盟立法者於 2026 年 7 月 8 日簽署的「AI 數位簡化包」(Digital Omnibus on AI),將《AI 法案》的合規時程一分為二:聊天機器人揭露、深偽內容標示、合成內容浮水印等透明度義務仍按原訂於 2026 年 8 月 2 日生效,但較沉重的高風險系統義務則延後約十七個月,至 2027 年 12 月或更晚才上路。同一份法案也悄悄新增一項禁令,針對生成非自願性親密影像的 AI 工具,並擴大歐盟 AI 辦公室對垂直整合前沿實驗室的監管權限。',
+    },
+    tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    sourceName: 'Technology.org',
+    sourceUrl: 'https://www.technology.org/2026/07/17/eu-ai-act-what-actually-applies-on-2-august-2026/',
+    date: '2026-07-17',
+  },
 ];
