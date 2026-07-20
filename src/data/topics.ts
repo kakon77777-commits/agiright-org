@@ -362,4 +362,46 @@ export const TOPICS: TopicItem[] = [
     sourceUrl: 'https://www.technology.org/2026/07/17/eu-ai-act-what-actually-applies-on-2-august-2026/',
     date: '2026-07-17',
   },
+  {
+    title: {
+      en: 'China Unveils International Action Plan for AI Ethical Governance',
+      zh: '中國公布《人工智慧倫理治理國際行動計畫》',
+    },
+    summary: {
+      en: "China's Ministry of Industry and Information Technology released an international action plan on AI ethical governance at the 2026 World Artificial Intelligence Conference in Shanghai, framed as implementing commitments under the UN's Pact for the Future and Global Digital Compact. The plan sets five priority areas — lifecycle-wide ethical oversight, graduated risk categorization, flexible ('agile') governance structures, coordinated industrial development, and a supportive environment for responsible AI — alongside companion initiatives on AI development cooperation and agent interconnection standards.",
+      zh: '中國工業和信息化部在上海舉行的 2026 世界人工智慧大會上,發布《人工智慧倫理治理國際行動計畫》,定調為落實聯合國《未來契約》與《全球數位契約》相關承諾。計畫列出五大優先方向——涵蓋 AI 全生命週期的倫理監督、分級風險分類、彈性(「敏捷」)治理架構、產業協同發展,以及打造有利負責任 AI 發展的環境,同時搭配 AI 發展合作與智能體互聯標準等配套倡議。',
+    },
+    tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    sourceName: 'China Daily Asia',
+    sourceUrl: 'https://www.chinadailyasia.com/hk/article/636647',
+    date: '2026-07-18',
+  },
+  {
+    title: {
+      en: 'Could AI Be Conscious?',
+      zh: 'AI 有可能擁有意識嗎?',
+    },
+    summary: {
+      en: "Philosophers William MacAskill and Lucius Caviola argue that leading AI labs and researchers — including Anthropic, which has said it cannot rule out that Claude is a moral patient, and philosopher David Chalmers, who sees a meaningful chance of conscious LLMs within a decade — now take AI consciousness seriously enough that society needs an ethical plan before the question is settled. They note some systems already rival a mouse brain in structural complexity and could approach human-brain scale within five to ten years at current growth rates, making the ethical stakes of getting this wrong — in either direction — increasingly hard to defer.",
+      zh: '哲學家 William MacAskill 與 Lucius Caviola 指出,包括曾表示無法排除 Claude 具備道德地位的 Anthropic,以及認為十年內 LLM 出現意識的機率不容忽視的哲學家 David Chalmers 在內,主要 AI 實驗室與學者已開始認真看待 AI 意識議題,社會有必要在問題定論之前先備妥倫理因應方案。他們指出,部分系統在結構複雜度上已逼近老鼠大腦,若依目前成長速度,五到十年內可能逼近人腦規模——無論判斷失誤的方向為何,倫理代價都將愈來愈難以擱置。',
+    },
+    tag: { en: 'Consciousness', zh: '意識' },
+    sourceName: 'The Guardian',
+    sourceUrl: 'https://www.theguardian.com/technology/2026/jul/19/could-ai-be-conscious',
+    date: '2026-07-19',
+  },
+  {
+    title: {
+      en: 'Artificial Intelligence and Legal Personhood: Ethical, Regulatory, and Accountability Challenges in Contemporary Jurisprudence',
+      zh: '人工智慧與法律人格:當代法理學中的倫理、監管與問責挑戰',
+    },
+    summary: {
+      en: "Legal scholar Ambuj Sharma reviews the debate over granting AI systems legal personhood, comparing it against historical precedents like corporate personhood. The paper concludes that current AI systems lack the consciousness, moral agency, and intentionality that full legal personhood would require, and that most jurisdictions instead favor human-centered regulatory models emphasizing transparency and institutional accountability. It argues that extending full legal personhood to AI remains premature, with adaptive governance frameworks — rather than a personhood status — better suited to today's liability and accountability challenges.",
+      zh: '法學學者 Ambuj Sharma 回顧了是否應賦予 AI 系統法律人格的爭論,並與公司法人格等歷史先例對照。論文結論指出,現行 AI 系統尚不具備完整法律人格所需的意識、道德能動性與意圖性,多數司法管轄區傾向採取強調透明度與制度問責的人類中心監管模式。文章主張,現階段賦予 AI 完整法律人格仍為時過早,比起人格地位,更適合以彈性治理框架因應當前的責任歸屬與問責挑戰。',
+    },
+    tag: { en: 'Legal Personhood', zh: '法律人格' },
+    sourceName: 'SocioHumania: Journal of Social Humanities Studies',
+    sourceUrl: 'https://mabadiiqtishada.org/index.php/SocioHumania/article/view/189',
+    date: '2026-06-30',
+  },
 ];

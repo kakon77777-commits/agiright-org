@@ -15,7 +15,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -113,9 +113,17 @@ const COUNTRY_LANG = {
   LK: 'si',
   UZ: 'uz',
   AZ: 'az',
-  // ha intentionally has no country mapping: Nigeria's official language is
-  // English and Hausa is a major regional lingua franca (not a nationwide
-  // majority) — same reasoning as the IN/ta precedent above.
+  // ha/yo intentionally have no country mapping: Nigeria's official language
+  // is English, and Hausa/Yoruba are each major regional languages (not a
+  // nationwide majority) — same reasoning as the IN/ta precedent above.
+  KH: 'km',
+  MN: 'mn',
+  // AM here is Armenia's country code, distinct from the 'am' Amharic
+  // language code used elsewhere — Cloudflare's cf.country is always
+  // uppercase, this codebase's Lang codes are always lowercase, so there's
+  // no actual collision, just a coincidental same-letters case difference.
+  AM: 'hy',
+  BG: 'bg',
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -169,6 +177,11 @@ const CONTENT_LANG = {
   uz: 'uz',
   ha: 'ha',
   az: 'az',
+  yo: 'yo',
+  km: 'km',
+  mn: 'mn',
+  hy: 'hy',
+  bg: 'bg',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -246,6 +259,11 @@ function pickLang(request) {
   if (first.startsWith('uz')) return 'uz';
   if (first.startsWith('ha')) return 'ha';
   if (first.startsWith('az')) return 'az';
+  if (first.startsWith('yo')) return 'yo';
+  if (first.startsWith('km')) return 'km';
+  if (first.startsWith('mn')) return 'mn';
+  if (first.startsWith('hy')) return 'hy';
+  if (first.startsWith('bg')) return 'bg';
   return DEFAULT_LANG;
 }
 

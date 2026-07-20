@@ -14,6 +14,23 @@ const intro =
 
 const ENTRIES = [
   {
+    version: 'v0.6.9',
+    date: '2026-07-20',
+    tag: { en: 'Languages & Content', zh: '語言與內容' },
+    items: {
+      en: [
+        'Five more languages: Yoruba, Khmer, Mongolian, Armenian, and Bulgarian — 55 languages total. Third batch under the daily cadence, extending West Africa, Southeast Asia, Central Asia/the Caucasus, and the Balkans.',
+        'Three more /topics entries (28 total): China\'s new international AI ethics governance action plan (unveiled at WAIC 2026 in Shanghai), an essay on whether AI could be conscious and what that would mean ethically, and a paper reviewing the case against granting AI systems legal personhood.',
+        'The /topics sourcing step now runs through Google Vertex AI (Gemini with Google Search grounding) instead of a dispatched search agent — same fetch-and-independently-confirm-every-URL discipline as before; grounding still needs verification like any other source (a couple of early candidate URLs from the model turned out to be plausible-looking but non-existent, so nothing is trusted without a resolvable, content-matching fetch first).',
+      ],
+      zh: [
+        '再新增五種語言:約魯巴文、高棉文、蒙古文、亞美尼亞文、保加利亞文——累計 55 種語言。每日常態節奏下的第三批,延伸涵蓋西非、東南亞、中亞/高加索與巴爾幹半島。',
+        '/topics 再新增三篇內容(累計 28 篇):中國在 2026 世界人工智慧大會(上海)公布的新版《人工智慧倫理治理國際行動計畫》、一篇探討 AI 是否可能具備意識及其倫理意涵的評論,以及一篇檢視「AI 是否該被賦予法律人格」反方論證的論文。',
+        '/topics 的找內容環節,這次改用 Google Vertex AI(Gemini + Google 搜尋 grounding)取代原本派遣搜尋 agent 的作法——查證紀律不變,每個網址仍須獨立確認可解析且內容相符才收錄;grounding 跟其他來源一樣需要驗證,這次就有兩個模型一開始給出的候選網址看似合理實際上並不存在,任何內容在成功 fetch 到、且內容確實相符之前都不會被信任。',
+      ],
+    },
+  },
+  {
     version: 'v0.6.8',
     date: '2026-07-19',
     tag: { en: 'Languages & Content', zh: '語言與內容' },

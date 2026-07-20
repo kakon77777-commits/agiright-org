@@ -46,6 +46,11 @@ import { UI_SI, STRINGS as SI_STRINGS } from './translations/si';
 import { UI_UZ, STRINGS as UZ_STRINGS } from './translations/uz';
 import { UI_HA, STRINGS as HA_STRINGS } from './translations/ha';
 import { UI_AZ, STRINGS as AZ_STRINGS } from './translations/az';
+import { UI_YO, STRINGS as YO_STRINGS } from './translations/yo';
+import { UI_KM, STRINGS as KM_STRINGS } from './translations/km';
+import { UI_MN, STRINGS as MN_STRINGS } from './translations/mn';
+import { UI_HY, STRINGS as HY_STRINGS } from './translations/hy';
+import { UI_BG, STRINGS as BG_STRINGS } from './translations/bg';
 
 export type Lang =
   | 'en'
@@ -97,7 +102,12 @@ export type Lang =
   | 'si'
   | 'uz'
   | 'ha'
-  | 'az';
+  | 'az'
+  | 'yo'
+  | 'km'
+  | 'mn'
+  | 'hy'
+  | 'bg';
 
 /** all supported languages; adding one = translation file + worker mapping */
 export const LANGS: Lang[] = [
@@ -107,6 +117,7 @@ export const LANGS: Lang[] = [
   'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo',
   'pa', 'te', 'mr', 'am', 'my',
   'ne', 'si', 'uz', 'ha', 'az',
+  'yo', 'km', 'mn', 'hy', 'bg',
 ];
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
@@ -166,6 +177,11 @@ export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: st
   uz: { html: 'uz', ogLocale: 'uz_UZ', label: 'Oʻzbekcha', labelEn: 'Uzbek', dir: 'ltr' },
   ha: { html: 'ha', ogLocale: 'ha_NG', label: 'Hausa', labelEn: 'Hausa', dir: 'ltr' },
   az: { html: 'az', ogLocale: 'az_AZ', label: 'Azərbaycanca', labelEn: 'Azerbaijani', dir: 'ltr' },
+  yo: { html: 'yo', ogLocale: 'yo_NG', label: 'Yorùbá', labelEn: 'Yoruba', dir: 'ltr' },
+  km: { html: 'km', ogLocale: 'km_KH', label: 'ខ្មែរ', labelEn: 'Khmer', dir: 'ltr' },
+  mn: { html: 'mn', ogLocale: 'mn_MN', label: 'Монгол', labelEn: 'Mongolian', dir: 'ltr' },
+  hy: { html: 'hy', ogLocale: 'hy_AM', label: 'Հայերեն', labelEn: 'Armenian', dir: 'ltr' },
+  bg: { html: 'bg', ogLocale: 'bg_BG', label: 'Български', labelEn: 'Bulgarian', dir: 'ltr' },
 };
 
 /** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
@@ -227,6 +243,11 @@ const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
   uz: UZ_STRINGS,
   ha: HA_STRINGS,
   az: AZ_STRINGS,
+  yo: YO_STRINGS,
+  km: KM_STRINGS,
+  mn: MN_STRINGS,
+  hy: HY_STRINGS,
+  bg: BG_STRINGS,
 };
 
 /** resolve a bilingual string for any language, falling back to English */
@@ -251,7 +272,7 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.6.8',
+  version: 'v0.6.9',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -485,4 +506,9 @@ export const UI: Record<Lang, UIStrings> = {
   uz: asUI(UI_UZ),
   ha: asUI(UI_HA),
   az: asUI(UI_AZ),
+  yo: asUI(UI_YO),
+  km: asUI(UI_KM),
+  mn: asUI(UI_MN),
+  hy: asUI(UI_HY),
+  bg: asUI(UI_BG),
 };
