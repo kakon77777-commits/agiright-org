@@ -15,7 +15,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -124,6 +124,17 @@ const COUNTRY_LANG = {
   // no actual collision, just a coincidental same-letters case difference.
   AM: 'hy',
   BG: 'bg',
+  GE: 'ka',
+  LA: 'lo',
+  // SO: Somalia's constitution names both Somali and Arabic official, but
+  // Somali is the overwhelming everyday-vernacular majority (Arabic is
+  // largely religious/liturgical use) — same "clear majority despite
+  // co-official status" reasoning as the earlier LK/si precedent.
+  SO: 'so',
+  HR: 'hr',
+  // ig intentionally has no country mapping: Nigeria's official language is
+  // English and Igbo is a major regional language (not a nationwide
+  // majority) — same reasoning as the ha/yo precedent above.
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -182,6 +193,11 @@ const CONTENT_LANG = {
   mn: 'mn',
   hy: 'hy',
   bg: 'bg',
+  ig: 'ig',
+  ka: 'ka',
+  lo: 'lo',
+  so: 'so',
+  hr: 'hr',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -264,6 +280,11 @@ function pickLang(request) {
   if (first.startsWith('mn')) return 'mn';
   if (first.startsWith('hy')) return 'hy';
   if (first.startsWith('bg')) return 'bg';
+  if (first.startsWith('ig')) return 'ig';
+  if (first.startsWith('ka')) return 'ka';
+  if (first.startsWith('lo')) return 'lo';
+  if (first.startsWith('so')) return 'so';
+  if (first.startsWith('hr')) return 'hr';
   return DEFAULT_LANG;
 }
 

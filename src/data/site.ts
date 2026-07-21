@@ -51,6 +51,11 @@ import { UI_KM, STRINGS as KM_STRINGS } from './translations/km';
 import { UI_MN, STRINGS as MN_STRINGS } from './translations/mn';
 import { UI_HY, STRINGS as HY_STRINGS } from './translations/hy';
 import { UI_BG, STRINGS as BG_STRINGS } from './translations/bg';
+import { UI_IG, STRINGS as IG_STRINGS } from './translations/ig';
+import { UI_KA, STRINGS as KA_STRINGS } from './translations/ka';
+import { UI_LO, STRINGS as LO_STRINGS } from './translations/lo';
+import { UI_SO, STRINGS as SO_STRINGS } from './translations/so';
+import { UI_HR, STRINGS as HR_STRINGS } from './translations/hr';
 
 export type Lang =
   | 'en'
@@ -107,7 +112,12 @@ export type Lang =
   | 'km'
   | 'mn'
   | 'hy'
-  | 'bg';
+  | 'bg'
+  | 'ig'
+  | 'ka'
+  | 'lo'
+  | 'so'
+  | 'hr';
 
 /** all supported languages; adding one = translation file + worker mapping */
 export const LANGS: Lang[] = [
@@ -118,6 +128,7 @@ export const LANGS: Lang[] = [
   'pa', 'te', 'mr', 'am', 'my',
   'ne', 'si', 'uz', 'ha', 'az',
   'yo', 'km', 'mn', 'hy', 'bg',
+  'ig', 'ka', 'lo', 'so', 'hr',
 ];
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
@@ -182,6 +193,11 @@ export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: st
   mn: { html: 'mn', ogLocale: 'mn_MN', label: 'Монгол', labelEn: 'Mongolian', dir: 'ltr' },
   hy: { html: 'hy', ogLocale: 'hy_AM', label: 'Հայերեն', labelEn: 'Armenian', dir: 'ltr' },
   bg: { html: 'bg', ogLocale: 'bg_BG', label: 'Български', labelEn: 'Bulgarian', dir: 'ltr' },
+  ig: { html: 'ig', ogLocale: 'ig_NG', label: 'Igbo', labelEn: 'Igbo', dir: 'ltr' },
+  ka: { html: 'ka', ogLocale: 'ka_GE', label: 'ქართული', labelEn: 'Georgian', dir: 'ltr' },
+  lo: { html: 'lo', ogLocale: 'lo_LA', label: 'ລາວ', labelEn: 'Lao', dir: 'ltr' },
+  so: { html: 'so', ogLocale: 'so_SO', label: 'Soomaali', labelEn: 'Somali', dir: 'ltr' },
+  hr: { html: 'hr', ogLocale: 'hr_HR', label: 'Hrvatski', labelEn: 'Croatian', dir: 'ltr' },
 };
 
 /** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
@@ -248,6 +264,11 @@ const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
   mn: MN_STRINGS,
   hy: HY_STRINGS,
   bg: BG_STRINGS,
+  ig: IG_STRINGS,
+  ka: KA_STRINGS,
+  lo: LO_STRINGS,
+  so: SO_STRINGS,
+  hr: HR_STRINGS,
 };
 
 /** resolve a bilingual string for any language, falling back to English */
@@ -272,7 +293,7 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.6.9',
+  version: 'v0.7.0',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -511,4 +532,9 @@ export const UI: Record<Lang, UIStrings> = {
   mn: asUI(UI_MN),
   hy: asUI(UI_HY),
   bg: asUI(UI_BG),
+  ig: asUI(UI_IG),
+  ka: asUI(UI_KA),
+  lo: asUI(UI_LO),
+  so: asUI(UI_SO),
+  hr: asUI(UI_HR),
 };

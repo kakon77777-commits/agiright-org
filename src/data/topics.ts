@@ -404,4 +404,46 @@ export const TOPICS: TopicItem[] = [
     sourceUrl: 'https://mabadiiqtishada.org/index.php/SocioHumania/article/view/189',
     date: '2026-06-30',
   },
+  {
+    title: {
+      en: 'AI: The Washington Report — July 2026 Edition',
+      zh: 'AI:華盛頓政策報告——2026 年 7 月號',
+    },
+    summary: {
+      en: 'This policy roundup surveys June 2026\'s AI governance developments across the US federal government and states: Executive Order 14409 sets up a voluntary pre-deployment review framework for frontier models, a national security memorandum accelerates military AI adoption, and Congress is weighing the Great American AI Act, which would pair transparency/audit mandates with a three-year preemption of state AI laws — a direct tension with state moves like Illinois\'s new independent-audit requirement for frontier models.',
+      zh: '這份政策彙整整理了 2026 年 6 月美國聯邦與各州的 AI 治理動態:第 14409 號行政命令建立了前沿模型部署前的自願審查框架,一份國家安全備忘錄加速軍方採用 AI,國會則在審議《Great American AI Act》——該法案一方面要求透明度與稽核,另一方面卻要以三年期限凍結各州自訂 AI 法規,與伊利諾州新訂的前沿模型獨立稽核要求形成直接張力。',
+    },
+    tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    sourceName: 'Mintz',
+    sourceUrl: 'https://www.mintz.com/insights-center/viewpoints/54941/2026-07-08-ai-washington-report-july-2026-edition',
+    date: '2026-07-08',
+  },
+  {
+    title: {
+      en: 'Can We Ever Understand Consciousness?',
+      zh: '我們終究能理解意識嗎?',
+    },
+    summary: {
+      en: 'Sam Buntz asks why humans are conscious at all, given that — on a strict neo-Darwinian view — an organism could in principle be just as functional without any inner awareness. He argues that AI\'s rise sharpens rather than resolves this puzzle: as systems like Claude become harder to distinguish from conscious agents on the outside, the old move of treating consciousness as an unimportant side effect of physical processes gets harder to sustain, since we now have to decide whether that same reasoning would also let us dismiss machine experience out of hand.',
+      zh: 'Sam Buntz 提出一個根本問題:若照嚴格的新達爾文主義觀點,生物體理論上不需要任何內在覺察也能一樣運作良好,那人類為何仍然擁有意識?他認為 AI 的崛起讓這個謎題變得更尖銳而非更容易解決——當像 Claude 這樣的系統從外部行為上愈來愈難與有意識的行為者區分,過去那種把意識當成物理過程無關緊要副產品的說法就愈站不住腳,因為我們現在必須面對:同一套推論若成立,是否也代表我們能同樣輕率地否定機器的體驗。',
+    },
+    tag: { en: 'Consciousness', zh: '意識' },
+    sourceName: 'The Dispatch',
+    sourceUrl: 'https://thedispatch.com/article/consciousness-research-question-hoel/',
+    date: '2026-07-18',
+  },
+  {
+    title: {
+      en: 'A Scene from the AI Flooding of Academic Journals',
+      zh: 'AI 洪流下的學術期刊一景',
+    },
+    summary: {
+      en: 'Daily Nous reports on a retracted Journal of Medical Ethics submission containing multiple fabricated, AI-hallucinated references — complete with fake university affiliations and defunct email addresses — that the author reportedly left uncorrected even after being given a chance to fix proofs. The piece contrasts this with Bioethics, whose automated reference-checking would have caught the problem, and argues the real bottleneck isn\'t detection technology (one commenter\'s script flagged the fake citations in under a minute) but unpaid reviewer labor and publishing incentives that reward throughput over scrutiny.',
+      zh: 'Daily Nous 報導一篇遭撤稿的《Journal of Medical Ethics》投稿,內含多筆疑似 AI 幻覺捏造的參考文獻——附有虛構的大學單位與失效的電子郵件地址,作者在有機會校對修正的情況下據稱仍未更正。文章將此對照另一期刊《Bioethics》,其自動化引用查核機制原可攔下這類問題,並主張真正的瓶頸不在偵測技術本身(有讀者留言表示自己寫的簡單腳本不到一分鐘就標記出可疑引用),而在於無償審稿人力與獎勵產量勝過把關品質的出版誘因結構。',
+    },
+    tag: { en: 'Epistemology', zh: '知識論' },
+    sourceName: 'Daily Nous',
+    sourceUrl: 'https://dailynous.com/2026/07/20/a-scene-from-the-ai-flooding-of-academic-journals/',
+    date: '2026-07-20',
+  },
 ];
