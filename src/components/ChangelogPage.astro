@@ -14,6 +14,19 @@ const intro =
 
 const ENTRIES = [
   {
+    version: 'v0.8.1',
+    date: '2026-07-21',
+    tag: { en: 'Multilingual architecture', zh: '多語架構' },
+    items: {
+      en: [
+        'Refined this morning\'s language-URL work into what a follow-up planning doc calls "Option A+": a locale being routable no longer automatically means it\'s hreflang-advertised and sitemap-listed — that\'s now gated by an explicit per-locale publication status (reserved → generated → reviewed → published → indexable → stale). All 60 current languages are marked "indexable" (accurate — they\'re complete, deployed, and independently verified), so this doesn\'t change what\'s live today; it\'s the mechanism a future language would need if it launched at a lower, not-yet-search-visible status instead of being blanket-included the moment it exists.',
+      ],
+      zh: [
+        '把今天稍早做的語言網址架構,依照後續一份規劃文件的說法精煉成「方案 A+」:一個語系可以被路由存取,不再自動代表它會被 hreflang 宣告與列入 sitemap——現在改由明確的每語系發布狀態把關(reserved→generated→reviewed→published→indexable→stale)。目前 60 種語言全部標記為「indexable」(如實反映現況——都是完整、已部署、且經過獨立驗證的翻譯),所以今天上線的內容沒有任何改變;這只是幫未來語言預留的機制,若某語言未來以較低、尚未適合被搜尋引擎看見的狀態上線,不會像現在這樣一存在就被全部收錄。',
+      ],
+    },
+  },
+  {
     version: 'v0.8.0',
     date: '2026-07-21',
     tag: { en: 'Site audit & metadata', zh: '網站盤點與元資料' },

@@ -133,6 +133,38 @@ export const LANGS: Lang[] = [
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
 /**
+ * Per-locale publication status ("Option A+" from the 2026-07-21 multilingual
+ * architecture plan v1.1): a locale existing in LANGS/having a routable URL
+ * does NOT by itself mean it should be hreflang-advertised or sitemap-listed
+ * — those are gated by this status instead. The plan's ladder:
+ * reserved → unavailable → generated → reviewed → published → indexable → stale.
+ *
+ * All 60 languages here default to 'indexable' via the fallback in
+ * `localeStatus()` below — every one of them is a complete, deployed
+ * translation that was independently verified byte-exact against the
+ * English source before merging (see project memory), so 'indexable' is
+ * their honest status, not an inflated one. This map exists so a *future*
+ * language can be added at a lower status (e.g. 'generated', not yet
+ * hreflang/sitemap-eligible) without that being the default for everyone —
+ * the old behavior (blanket-include whatever's in LANGS) is exactly what
+ * this plan says not to do going forward.
+ */
+export type LocaleStatus = 'reserved' | 'unavailable' | 'generated' | 'reviewed' | 'published' | 'indexable' | 'stale';
+const LOCALE_STATUS_OVERRIDES: Partial<Record<Lang, LocaleStatus>> = {};
+
+export function localeStatus(lang: Lang): LocaleStatus {
+  return LOCALE_STATUS_OVERRIDES[lang] ?? 'indexable';
+}
+
+/** hreflang/sitemap-eligible — 'published' would also qualify once that status is ever used for a non-indexable-yet public locale */
+export function isIndexable(lang: Lang): boolean {
+  const s = localeStatus(lang);
+  return s === 'indexable' || s === 'published';
+}
+
+export const INDEXABLE_LANGS = LANGS.filter(isIndexable);
+
+/**
  * label = native/endonym name (what a speaker of that language calls it).
  * labelEn = English name, used so the language-picker search matches both
  * "Deutsch" and "German".
@@ -293,7 +325,7 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.8.0',
+  version: 'v0.8.1',
   // Bump this alongside `version` on every ship — every other machine-readable
   // "version last changed" field (manifest.json, etc.) derives from this pair
   // instead of being hand-edited, per the 2026-07-21 site-audit's P0 finding

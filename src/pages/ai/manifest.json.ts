@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { SITE, LANGS, LANG_META } from '../../data/site';
+import { SITE, LANG_META, INDEXABLE_LANGS } from '../../data/site';
 
 // Generated from SITE.version/SITE.updatedAt and the live LANGS list instead
 // of being hand-edited — this file used to be a static public/ JSON and its
@@ -21,10 +21,15 @@ export const GET: APIRoute = () => {
       model: 'hybrid',
       note: "Every page has a language-negotiated bare URL (lang cookie > IP country > Accept-Language > English) AND a stable, independently indexable per-language URL (e.g. /ja/about) with matching hreflang tags — pick whichever fits: the bare URL for a smart default, the prefixed URL for a citable, language-stable link. Machine-readable files under /ai/, /.well-known/, and /schemas/ are language-neutral. AI systems and crawlers receive English by default at the bare URL. Untranslated strings gracefully fall back to English.",
       cookie: 'lang',
-      supported: LANGS.map((l) => LANG_META[l].html),
-      cookie_values: LANGS,
+      // Only locales at 'indexable'/'published' status are advertised here —
+      // see localeStatus()/isIndexable() in site.ts ("Option A+", v1.1
+      // multilingual plan). Currently equal to the full LANGS list since
+      // every shipped language has that status, but this is the field that
+      // would shrink first if a future language launched at a lower status.
+      supported: INDEXABLE_LANGS.map((l) => LANG_META[l].html),
+      cookie_values: INDEXABLE_LANGS,
       default: 'en',
-      rtl_languages: LANGS.filter((l) => LANG_META[l].dir === 'rtl'),
+      rtl_languages: INDEXABLE_LANGS.filter((l) => LANG_META[l].dir === 'rtl'),
       example: "curl -H 'Cookie: lang=nl' https://agiright.org/",
     },
     status: 'draft',
