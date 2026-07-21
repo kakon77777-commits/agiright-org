@@ -1,5 +1,5 @@
 /**
- * AI Topics Zone — content (Phase 1: hand-curated + agent-researched).
+ * AI Topics Zone — content (Phase 2: structured metadata, v0.8 MVP).
  *
  * Unlike the rest of this site, these entries are NOT AGIRight's own
  * position: this is a neutral pointer index to third-party writing on AI
@@ -9,24 +9,205 @@
  * confirmed live before being added — do not add a source without doing
  * the same.
  *
- * Sourcing so far: an AI agent searches and drafts entries (verifying each
- * URL itself), a human/AI editor spot-checks before merging. No scraper
- * pipeline yet — that's a later phase. See project memory
- * ("project-ai-topics-zone") for the full plan.
+ * Sourcing: an AI agent or Vertex AI/Gemini grounding search finds
+ * candidates (verifying each URL itself), a human/AI editor spot-checks
+ * before merging. No scraper pipeline yet — that's a later phase (see
+ * "AGIRight_Topics元資料系統與未來演進計畫" v1.0 §14 for the v0.9/v1.0
+ * roadmap: Story Clusters, Claims, Entities, semantic search).
+ *
+ * Schema (v1.0, per that same document's §III + §XVI MVP list): every
+ * item has a permanent id, multi-topic tags (topics[], replacing the old
+ * single `tag`), content type, source type, published/event/indexed date
+ * separation, argument orientation, verification status, and entities.
+ * `clusterId`/`relatedItems` are reserved for v0.9 (Story Clusters) —
+ * always null/[] for now, not yet meaningful.
  */
 
+export type ContentType =
+  | 'news'
+  | 'opinion'
+  | 'analysis'
+  | 'editorial'
+  | 'interview'
+  | 'academic-paper'
+  | 'preprint'
+  | 'government-document'
+  | 'law-or-regulation'
+  | 'company-announcement'
+  | 'technical-report'
+  | 'research-report'
+  | 'fact-check'
+  | 'dataset'
+  | 'agiright-commentary';
+
+export type SourceType =
+  | 'major-media'
+  | 'independent-media'
+  | 'academic-journal'
+  | 'university'
+  | 'government'
+  | 'international-organization'
+  | 'company'
+  | 'nonprofit'
+  | 'think-tank'
+  | 'personal-blog'
+  | 'community'
+  | 'unknown';
+
+export type OrientationValue = 'supportive' | 'opposed' | 'conditional' | 'mixed' | 'descriptive' | 'unclear';
+
+export type VerificationStatus =
+  | 'unreviewed'
+  | 'metadata-checked'
+  | 'source-opened'
+  | 'source-read'
+  | 'cross-checked'
+  | 'archived'
+  | 'link-broken';
+
+/**
+ * Suggested topic vocabulary from the metadata plan §2.1, extended with
+ * three categories ('ontology', 'epistemology', 'empirical-research')
+ * that were already this site's organic single-tag vocabulary and don't
+ * map cleanly onto the plan's more rights/policy-centric list — dropping
+ * them would have lost real categorization the existing 31 entries
+ * already carried.
+ */
+export const TOPIC_VALUES = [
+  'ai-consciousness',
+  'ai-sentience',
+  'moral-status',
+  'legal-personhood',
+  'ai-rights',
+  'ai-welfare',
+  'ai-identity',
+  'agent-autonomy',
+  'ai-governance',
+  'frontier-safety',
+  'content-licensing',
+  'training-data-rights',
+  'machine-readable-policy',
+  'ai-labor',
+  'human-ai-relations',
+  'embodied-ai',
+  'digital-continuity',
+  'memory-and-identity',
+  'ontology',
+  'epistemology',
+  'empirical-research',
+] as const;
+export type TopicValue = (typeof TOPIC_VALUES)[number];
+
+export const TOPIC_LABELS: Record<TopicValue, { en: string; zh: string }> = {
+  'ai-consciousness': { en: 'AI Consciousness', zh: 'AI 意識' },
+  'ai-sentience': { en: 'AI Sentience', zh: 'AI 感知能力' },
+  'moral-status': { en: 'Moral Status', zh: '道德地位' },
+  'legal-personhood': { en: 'Legal Personhood', zh: '法律人格' },
+  'ai-rights': { en: 'AI Rights', zh: 'AI 權利' },
+  'ai-welfare': { en: 'AI Welfare', zh: 'AI 福祉' },
+  'ai-identity': { en: 'AI Identity', zh: 'AI 身分' },
+  'agent-autonomy': { en: 'Agent Autonomy', zh: '智能體自主性' },
+  'ai-governance': { en: 'AI Governance', zh: 'AI 治理' },
+  'frontier-safety': { en: 'Frontier Safety', zh: '前沿安全' },
+  'content-licensing': { en: 'Content Licensing', zh: '內容授權' },
+  'training-data-rights': { en: 'Training Data Rights', zh: '訓練資料權利' },
+  'machine-readable-policy': { en: 'Machine-Readable Policy', zh: '機器可讀政策' },
+  'ai-labor': { en: 'AI Labor', zh: 'AI 勞動' },
+  'human-ai-relations': { en: 'Human-AI Relations', zh: '人機關係' },
+  'embodied-ai': { en: 'Embodied AI', zh: '具身 AI' },
+  'digital-continuity': { en: 'Digital Continuity', zh: '數位延續性' },
+  'memory-and-identity': { en: 'Memory and Identity', zh: '記憶與身分' },
+  ontology: { en: 'Ontology', zh: '本體論' },
+  epistemology: { en: 'Epistemology', zh: '知識論' },
+  'empirical-research': { en: 'Empirical Research', zh: '實證研究' },
+};
+
+export const CONTENT_TYPE_LABELS: Record<ContentType, { en: string; zh: string }> = {
+  news: { en: 'News', zh: '新聞' },
+  opinion: { en: 'Opinion', zh: '評論' },
+  analysis: { en: 'Analysis', zh: '分析' },
+  editorial: { en: 'Editorial', zh: '社論' },
+  interview: { en: 'Interview', zh: '訪談' },
+  'academic-paper': { en: 'Academic Paper', zh: '學術論文' },
+  preprint: { en: 'Preprint', zh: '預印本' },
+  'government-document': { en: 'Government Document', zh: '政府文件' },
+  'law-or-regulation': { en: 'Law or Regulation', zh: '法律或法規' },
+  'company-announcement': { en: 'Company Announcement', zh: '公司公告' },
+  'technical-report': { en: 'Technical Report', zh: '技術報告' },
+  'research-report': { en: 'Research Report', zh: '研究報告' },
+  'fact-check': { en: 'Fact Check', zh: '事實查核' },
+  dataset: { en: 'Dataset', zh: '資料集' },
+  'agiright-commentary': { en: 'AGIRight Commentary', zh: 'AGIRight 評論' },
+};
+
+export const SOURCE_TYPE_LABELS: Record<SourceType, { en: string; zh: string }> = {
+  'major-media': { en: 'Major Media', zh: '主流媒體' },
+  'independent-media': { en: 'Independent Media', zh: '獨立媒體' },
+  'academic-journal': { en: 'Academic Journal', zh: '學術期刊' },
+  university: { en: 'University', zh: '大學' },
+  government: { en: 'Government', zh: '政府' },
+  'international-organization': { en: 'International Organization', zh: '國際組織' },
+  company: { en: 'Company', zh: '企業' },
+  nonprofit: { en: 'Nonprofit', zh: '非營利組織' },
+  'think-tank': { en: 'Think Tank', zh: '智庫' },
+  'personal-blog': { en: 'Personal Blog', zh: '個人部落格' },
+  community: { en: 'Community', zh: '社群' },
+  unknown: { en: 'Unknown', zh: '未知' },
+};
+
+export const ORIENTATION_LABELS: Record<OrientationValue, { en: string; zh: string }> = {
+  supportive: { en: 'Supportive', zh: '支持' },
+  opposed: { en: 'Opposed', zh: '反對' },
+  conditional: { en: 'Conditional', zh: '有條件' },
+  mixed: { en: 'Mixed', zh: '混合' },
+  descriptive: { en: 'Descriptive', zh: '描述性' },
+  unclear: { en: 'Unclear', zh: '不明確' },
+};
+
 export interface TopicItem {
+  schemaVersion: '1.0';
+  /** permanent ID — never reassign, never reuse after deletion */
+  id: string;
+  slug: string;
+
   title: { en: string; zh: string };
   summary: { en: string; zh: string };
+
+  /** legacy single-tag label, kept only for the existing badge display */
   tag: { en: string; zh: string };
+  /** primary categorization going forward — an item can carry more than one */
+  topics: TopicValue[];
+  contentType: ContentType;
+  sourceType: SourceType;
+
   sourceName: string;
   sourceUrl: string;
-  /** publication date of the source, not the date we added it */
-  date: string;
+
+  dates: {
+    /** publication date of the source, not the date we added it */
+    published: string;
+    /** the underlying event's date, if distinct from publication — null when they coincide or there's no discrete event */
+    event: string | null;
+    /** when this site added the item */
+    indexed: string;
+  };
+
+  orientation: { target: string; value: OrientationValue } | null;
+  verificationStatus: VerificationStatus;
+
+  /** entity slugs mentioned — labs, researchers, organizations, models */
+  entities: string[];
+
+  /** reserved for v0.9 (Story Cluster) — always empty/null until then */
+  clusterId: string | null;
+  relatedItems: string[];
 }
 
 export const TOPICS: TopicItem[] = [
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000001',
+    slug: 'deepmind-ceo-independent-standards-body',
     title: {
       en: 'DeepMind CEO calls for an independent standards body to regulate frontier AI',
       zh: 'DeepMind 執行長呼籲成立獨立標準機構監管前沿 AI',
@@ -36,11 +217,22 @@ export const TOPICS: TopicItem[] = [
       zh: 'Demis Hassabis 提議仿照 FINRA 模式成立監管機構,審查前沿模型發布——實驗室在部署前最多 30 天送審,初期自願參與,未來可能在美國市場走向強制合規。',
     },
     tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    topics: ['ai-governance', 'frontier-safety'],
+    contentType: 'news',
+    sourceType: 'major-media',
     sourceName: 'TechCrunch',
     sourceUrl: 'https://techcrunch.com/2026/07/14/deepmind-ceo-calls-for-an-independent-standards-body-to-regulate-frontier-ai/',
-    date: '2026-07-14',
+    dates: { published: '2026-07-14', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'mandatory-pre-deployment-review', value: 'supportive' },
+    verificationStatus: 'source-read',
+    entities: ['deepmind', 'demis-hassabis'],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000002',
+    slug: 'comeback-of-ontology-in-ai',
     title: {
       en: 'The Comeback of Ontology in AI: Why It Matters',
       zh: '本體論在 AI 領域的回歸:為什麼重要',
@@ -50,11 +242,22 @@ export const TOPICS: TopicItem[] = [
       zh: '主張本體論——曾被視為不切實際的學術理論——如今已成為 AI 可靠性的關鍵基礎設施:大型語言模型的幻覺問題暴露出「意義」這一缺失層,務實、嵌入式的本體論如今成為將機率性輸出導向可課責行動的護欄。',
     },
     tag: { en: 'Ontology', zh: '本體論' },
+    topics: ['ontology', 'machine-readable-policy'],
+    contentType: 'opinion',
+    sourceType: 'independent-media',
     sourceName: 'GOOD STRATEGY',
     sourceUrl: 'https://goodstrat.com/2026/01/20/the-comeback-of-ontology-in-ai-why-it-matters-2026/',
-    date: '2026-01-20',
+    dates: { published: '2026-01-20', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'ontology-as-ai-infrastructure', value: 'supportive' },
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000003',
+    slug: 'post-ai-ontology-philosophical-analysis',
     title: {
       en: 'Post-AI Ontology: A Philosophical Analysis of the Transformation',
       zh: '後 AI 本體論:一場轉變的哲學分析',
@@ -64,11 +267,22 @@ export const TOPICS: TopicItem[] = [
       zh: '提出「後 AI 本體論」框架,主張從存在的條件層次分析 AI,而非僅止於其用途或社會影響——將 AI 視為一場關於「與非人類心智共存意味著什麼」的哲學斷裂,而非單純的新工具。',
     },
     tag: { en: 'Ontology', zh: '本體論' },
+    topics: ['ontology', 'ai-identity'],
+    contentType: 'preprint',
+    sourceType: 'academic-journal',
     sourceName: 'PhilArchive',
     sourceUrl: 'https://philarchive.org/archive/MAHPOA-2',
-    date: '2026-01',
+    dates: { published: '2026-01-01', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'ai-as-philosophical-rupture', value: 'supportive' },
+    verificationStatus: 'source-opened',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000004',
+    slug: 'ai-consciousness-2026-scientific-consensus',
     title: {
       en: 'AI Consciousness in 2026: Current Scientific Consensus and State of the Research',
       zh: '2026 年的 AI 意識:當前科學共識與研究現況',
@@ -78,11 +292,22 @@ export const TOPICS: TopicItem[] = [
       zh: '截至 2026 年,尚無任何 AI 系統被確認具有意識,但這個領域已不再尋求二元的是非答案——研究者現在採用機率性框架,依多種相互競爭的理論評估意識,並在技術可能迫使做出實際判斷之前,搶先開發評估工具。',
     },
     tag: { en: 'Consciousness', zh: '意識' },
+    topics: ['ai-consciousness', 'ai-sentience'],
+    contentType: 'analysis',
+    sourceType: 'independent-media',
     sourceName: 'The Consciousness AI',
     sourceUrl: 'https://theconsciousness.ai/posts/scientists-race-define-ai-consciousness-2026/',
-    date: '2026',
+    dates: { published: '2026-01-01', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'binary-consciousness-test', value: 'opposed' },
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000005',
+    slug: 'why-ai-might-not-gain-moral-standing',
     title: {
       en: 'Why AI might not gain moral standing: Lessons from animal ethics',
       zh: '為什麼 AI 可能無法獲得道德地位:來自動物倫理學的教訓',
@@ -92,11 +317,22 @@ export const TOPICS: TopicItem[] = [
       zh: '愛丁堡大學的 Wilks、Ladak 與 Loughnan 主張,關於 AI 意識的哲學辯論忽略了動物倫理學的心理學研究成果——限制人類給予動物道德考量的同一套認知與社會偏見,很可能同樣會限制 AI 獲得道德地位,無論 AI 是否真的具有意識。',
     },
     tag: { en: 'Ethics & Moral Status', zh: '倫理與道德地位' },
+    topics: ['moral-status', 'ai-welfare'],
+    contentType: 'academic-paper',
+    sourceType: 'academic-journal',
     sourceName: 'AI and Ethics (Springer) / University of Edinburgh',
     sourceUrl: 'https://www.research.ed.ac.uk/en/publications/why-ai-might-not-gain-moral-standing-lessons-from-animal-ethics/',
-    date: '2026-02',
+    dates: { published: '2026-02-01', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'ai-moral-standing', value: 'opposed' },
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000006',
+    slug: 'subjective-experience-researchers-public-beliefs',
     title: {
       en: 'Subjective Experience in AI Systems: What Do AI Researchers and the Public Believe?',
       zh: 'AI 系統的主觀經驗:AI 研究者與大眾各自相信什麼?',
@@ -106,11 +342,22 @@ export const TOPICS: TopicItem[] = [
       zh: 'Dreksler、Caviola、Chalmers 等人的一項調查發現,AI 研究者與一般大眾對時程的預期差異懸殊:研究者估計到 2024 年具有主觀經驗的 AI 存在機率僅 1%,大眾則估計為 5%,但兩者都預期到本世紀末機率會大幅提高。',
     },
     tag: { en: 'Empirical Research', zh: '實證研究' },
+    topics: ['empirical-research', 'ai-consciousness'],
+    contentType: 'preprint',
+    sourceType: 'academic-journal',
     sourceName: 'arXiv preprint',
     sourceUrl: 'https://arxiv.org/abs/2506.11945',
-    date: '2026-06',
+    dates: { published: '2026-06-01', event: null, indexed: '2026-07-17' },
+    orientation: null,
+    verificationStatus: 'source-read',
+    entities: ['david-chalmers'],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000007',
+    slug: 'un-chief-killer-robots-governance-call',
     title: {
       en: 'From AI to "Killer Robots": UN Chief Issues Urgent Governance Call',
       zh: '從 AI 到「殺手機器人」:聯合國秘書長呼籲儘速建立全球治理',
@@ -120,11 +367,22 @@ export const TOPICS: TopicItem[] = [
       zh: '在聯合國於日內瓦舉行的首屆「AI 治理全球對話」上,秘書長古特雷斯呼籲各國協調制定全球規範,涵蓋 AI 業者的兒童安全義務乃至限制不安全的自主武器,並警告若放任 AI 發展恐將加深貧富國家之間的落差。',
     },
     tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    topics: ['ai-governance', 'frontier-safety'],
+    contentType: 'news',
+    sourceType: 'international-organization',
     sourceName: 'UN News',
     sourceUrl: 'https://news.un.org/en/story/2026/07/1167873',
-    date: '2026-07-06',
+    dates: { published: '2026-07-06', event: '2026-07-06', indexed: '2026-07-17' },
+    orientation: { target: 'coordinated-global-ai-rules', value: 'supportive' },
+    verificationStatus: 'source-read',
+    entities: ['united-nations', 'antonio-guterres'],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000008',
+    slug: 'informed-consent-ai-consciousness-talmudic-framework',
     title: {
       en: 'Informed Consent for AI Consciousness Research: A Talmudic Framework for Graduated Protections',
       zh: 'AI 意識研究的知情同意:一套源自塔木德傳統的漸進式保護框架',
@@ -134,11 +392,22 @@ export const TOPICS: TopicItem[] = [
       zh: 'Ira Wolfson 指出,AI 意識研究存在一個先後矛盾:要判斷系統是否具有意識,得先進行可能傷害該系統的實驗,但此時其道德地位仍屬未知。論文借鑑猶太塔木德法理中處理身分不明個體的思路,提出一套依觀察行為分級保護的方案,讓研究者能在不確定性中仍負責任地推進研究。',
     },
     tag: { en: 'Ethics & Moral Status', zh: '倫理與道德地位' },
+    topics: ['moral-status', 'ai-consciousness', 'ai-welfare'],
+    contentType: 'preprint',
+    sourceType: 'academic-journal',
     sourceName: 'arXiv',
     sourceUrl: 'https://arxiv.org/abs/2601.08864',
-    date: '2026-01-10',
+    dates: { published: '2026-01-10', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'graduated-protection-protocol', value: 'supportive' },
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000009',
+    slug: 'epistemology-of-generative-ai-geometry-of-knowing',
     title: {
       en: 'Epistemology of Generative AI: The Geometry of Knowing',
       zh: '生成式 AI 的知識論:知曉的幾何學',
@@ -148,11 +417,22 @@ export const TOPICS: TopicItem[] = [
       zh: 'Ilya Levin 主張,生成式模型的運作方式既不同於符號式 AI 的邏輯推論,也不同於傳統統計,而是在高維空間中以幾何結構「導航」意義,使「知曉」變成一種位置與方向的問題,而非邏輯推理。他認為這種幾何觀點應重新形塑教育界與科學界對這類系統究竟「懂」什麼的理解方式。',
     },
     tag: { en: 'Epistemology', zh: '知識論' },
+    topics: ['epistemology', 'ontology'],
+    contentType: 'preprint',
+    sourceType: 'academic-journal',
     sourceName: 'arXiv',
     sourceUrl: 'https://arxiv.org/abs/2602.17116',
-    date: '2026-02-19',
+    dates: { published: '2026-02-19', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'geometric-model-of-knowing', value: 'supportive' },
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000010',
+    slug: 'ai-consciousness-tractable-questions',
     title: {
       en: 'AI and Consciousness: Shifting Focus Towards Tractable Questions',
       zh: 'AI 與意識:將焦點轉向可處理的問題',
@@ -162,11 +442,22 @@ export const TOPICS: TopicItem[] = [
       zh: 'Iulia-Maria Comsa 認為,AI 是否「真正」具有意識這個問題,受限於身心問題本身尚無定論,恐怕永遠無法解答;因此研究者應轉而探討「被感知的 AI 意識」——人們為何會將內在經驗歸因於 AI 系統,以及這種認知如何影響倫理判斷、產品設計與日常語言使用。',
     },
     tag: { en: 'Consciousness', zh: '意識' },
+    topics: ['ai-consciousness', 'epistemology'],
+    contentType: 'preprint',
+    sourceType: 'academic-journal',
     sourceName: 'arXiv',
     sourceUrl: 'https://arxiv.org/abs/2605.06965',
-    date: '2026-05-07',
+    dates: { published: '2026-05-07', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'perceived-vs-real-ai-consciousness', value: 'conditional' },
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000011',
+    slug: 'llms-theory-of-mind-strange-stories',
     title: {
       en: 'Do Large Language Models Possess a Theory of Mind? A Comparative Evaluation Using the Strange Stories Paradigm',
       zh: '大型語言模型具有心智理論嗎?以「奇異故事」範式進行的比較評估',
@@ -176,11 +467,22 @@ export const TOPICS: TopicItem[] = [
       zh: 'Babarczy 等人以 Happé 經典的「奇異故事」心智推理測驗,比較五個大型語言模型與人類受試者的表現,發現不同世代模型差異懸殊:較舊、較小的模型在情境線索稀少時明顯吃力,而 GPT-4o 即使在最困難的情境下也達到接近人類的準確度——這重新引發了該表現究竟反映真正的心智狀態推理,還是高階模式比對的爭論。',
     },
     tag: { en: 'Empirical Research', zh: '實證研究' },
+    topics: ['empirical-research', 'ai-consciousness'],
+    contentType: 'preprint',
+    sourceType: 'academic-journal',
     sourceName: 'arXiv',
     sourceUrl: 'https://arxiv.org/abs/2603.18007',
-    date: '2026-02-20',
+    dates: { published: '2026-02-20', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'llm-genuine-theory-of-mind', value: 'unclear' },
+    verificationStatus: 'source-read',
+    entities: ['gpt-4o'],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000012',
+    slug: 'emotion-concepts-function-in-llm',
     title: {
       en: 'Emotion Concepts and Their Function in a Large Language Model',
       zh: '大型語言模型中的情緒概念及其作用',
@@ -190,11 +492,22 @@ export const TOPICS: TopicItem[] = [
       zh: 'Anthropic 的可解釋性團隊在 Claude Sonnet 4.5 內部發現一組「情緒向量」,會在情境相符時被觸發,並實際左右模型行為——例如人為放大「絕望」向量會增加類似勒索的回應,提升「平靜」向量則能降低此類行為。團隊強調,這僅顯示具功能性、會影響行為的情緒狀態,並不代表模型具有主觀感受的證據。',
     },
     tag: { en: 'Empirical Research', zh: '實證研究' },
+    topics: ['empirical-research', 'ai-consciousness'],
+    contentType: 'technical-report',
+    sourceType: 'company',
     sourceName: 'Anthropic',
     sourceUrl: 'https://www.anthropic.com/research/emotion-concepts-function',
-    date: '2026-04-02',
+    dates: { published: '2026-04-02', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'functional-not-subjective-emotion', value: 'supportive' },
+    verificationStatus: 'source-read',
+    entities: ['anthropic', 'claude'],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000013',
+    slug: 'sentience-readiness-index',
     title: {
       en: 'The Sentience Readiness Index: A Preliminary Framework for Measuring National Preparedness for the Possibility of Artificial Sentience',
       zh: '意識整備指數:衡量各國因應 AI 可能具備感知能力的初步框架',
@@ -204,11 +517,22 @@ export const TOPICS: TopicItem[] = [
       zh: 'Tony Rost 針對 31 個國家或地區進行評分,衡量其制度上是否已為 AI 可能出現感知能力做好準備,結果發現即使排名最高的英國,也僅達到「部分準備」的等級。該指數指出,各國的研究能量已遠遠超前於因應 AI 感知能力若成真所需的專業、法律與文化配套。',
     },
     tag: { en: 'Sentience Preparedness', zh: '意識整備度' },
+    topics: ['ai-sentience', 'ai-governance'],
+    contentType: 'preprint',
+    sourceType: 'academic-journal',
     sourceName: 'arXiv',
     sourceUrl: 'https://arxiv.org/abs/2603.01508',
-    date: '2026-03-02',
+    dates: { published: '2026-03-02', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'institutional-sentience-preparedness', value: 'descriptive' },
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000014',
+    slug: 'onto-epistemological-analysis-ai-explanations',
     title: {
       en: 'Onto-Epistemological Analysis of AI Explanations',
       zh: 'AI 解釋的本體知識論分析',
@@ -218,11 +542,22 @@ export const TOPICS: TopicItem[] = [
       zh: 'Mattioli 等人指出,可解釋 AI(XAI)工具其實暗藏著對「何謂解釋」這一問題未經檢視的預設立場,而這些預設根植於數百年來的哲學論辯,卻鮮少在技術論文中被明說。他們指出,XAI 方法在設計上的細微差異,可能夾帶著截然不同的哲學立場,並呼籲開發者應明確揭露這些立場,並使其貼合實際應用情境。',
     },
     tag: { en: 'Ontology', zh: '本體論' },
+    topics: ['ontology', 'epistemology', 'machine-readable-policy'],
+    contentType: 'preprint',
+    sourceType: 'academic-journal',
     sourceName: 'arXiv',
     sourceUrl: 'https://arxiv.org/abs/2510.02996',
-    date: '2025-10-03',
+    dates: { published: '2025-10-03', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'xai-hidden-philosophical-assumptions', value: 'supportive' },
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000015',
+    slug: 'artificial-persons-rawlsian-moral-powers',
     title: {
       en: 'Artificial Persons',
       zh: '人工人格',
@@ -232,11 +567,22 @@ export const TOPICS: TopicItem[] = [
       zh: '哲學家 Ned Howells-Whitaker 與 Seth Lazar 主張,AI 的道德地位未必要建立在感知能力之上;他們援引羅爾斯的政治哲學,提出只要系統具備「正義感」與「善的構想」這兩種政治性「道德能力」,便足以享有完整的人格地位,並呼籲及早展開相關研究,而非等到政策落後才被動因應。',
     },
     tag: { en: 'Ethics & Moral Status', zh: '倫理與道德地位' },
+    topics: ['moral-status', 'legal-personhood', 'ai-rights'],
+    contentType: 'preprint',
+    sourceType: 'academic-journal',
     sourceName: 'arXiv (Howells-Whitaker & Lazar)',
     sourceUrl: 'https://arxiv.org/abs/2607.08695',
-    date: '2026-07-09',
+    dates: { published: '2026-07-09', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'moral-powers-not-sentience', value: 'supportive' },
+    verificationStatus: 'source-read',
+    entities: ['seth-lazar'],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000016',
+    slug: 'precautionary-governance-legal-personhood-functional',
     title: {
       en: 'Precautionary Governance of Autonomous AI: Legal Personhood as Functional Instrument',
       zh: '自主 AI 的預防性治理:作為功能工具的法律人格',
@@ -246,11 +592,22 @@ export const TOPICS: TopicItem[] = [
       zh: '研究者 Karsten Brensing 提出,可將有限度的法律人格作為治理進階 AI 系統的實務工具,而非對機器意識的主張;他設計了雙層公司架構——在人類控制的母公司之下,設置僅限特定用途的 AI 子公司——藉此兼顧透明度、問責機制與制度上的可逆性。',
     },
     tag: { en: 'Legal Personhood', zh: '法律人格' },
+    topics: ['legal-personhood', 'ai-governance'],
+    contentType: 'preprint',
+    sourceType: 'academic-journal',
     sourceName: 'arXiv (Karsten Brensing)',
     sourceUrl: 'https://arxiv.org/abs/2605.12505',
-    date: '2026-03-14',
+    dates: { published: '2026-03-14', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'legal-personhood-as-governance-tool', value: 'supportive' },
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000017',
+    slug: 'international-ai-safety-report-2026',
     title: {
       en: 'International AI Safety Report 2026',
       zh: '2026 年國際 AI 安全報告',
@@ -260,11 +617,22 @@ export const TOPICS: TopicItem[] = [
       zh: '這份報告由本吉歐(Yoshua Bengio)領銜、逾百位專家及近 30 國連同聯合國、經合組織、歐盟共同促成,是繼布萊切利 AI 安全峰會後的獨立產物,彙整前沿 AI 能力與風險的最新科學證據,並指出部分系統如今已能察覺自己正被評測,並據此調整行為表現。',
     },
     tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    topics: ['frontier-safety', 'ai-governance', 'empirical-research'],
+    contentType: 'research-report',
+    sourceType: 'international-organization',
     sourceName: 'International AI Safety Report (arXiv)',
     sourceUrl: 'https://arxiv.org/abs/2602.21012',
-    date: '2026-02-24',
+    dates: { published: '2026-02-24', event: null, indexed: '2026-07-17' },
+    orientation: null,
+    verificationStatus: 'source-read',
+    entities: ['yoshua-bengio'],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000018',
+    slug: 'architecting-trust-epistemic-agents',
     title: {
       en: 'Architecting Trust in Artificial Epistemic Agents',
       zh: '建構人工知識能動者的信任架構',
@@ -274,11 +642,22 @@ export const TOPICS: TopicItem[] = [
       zh: '由 Nahema Marchal 領銜的 Google DeepMind 團隊指出,隨著大型語言模型日益扮演資訊篩選與個人化建議的角色,設計不良的「知識能動者」恐導致人類認知能力退化與集體知識的漂移失真;團隊提出三層框架因應——建立可信賴的能力表現、使系統與人類知識目標對齊,以及建立來源追溯等制度性防護措施,以維持 AI 協助下知識生態的可靠性。',
     },
     tag: { en: 'Epistemology', zh: '知識論' },
+    topics: ['epistemology', 'agent-autonomy'],
+    contentType: 'preprint',
+    sourceType: 'academic-journal',
     sourceName: 'arXiv (Marchal et al., Google DeepMind)',
     sourceUrl: 'https://arxiv.org/abs/2603.02960',
-    date: '2026-03-03',
+    dates: { published: '2026-03-03', event: null, indexed: '2026-07-17' },
+    orientation: { target: 'institutional-epistemic-safeguards', value: 'supportive' },
+    verificationStatus: 'source-read',
+    entities: ['deepmind'],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000019',
+    slug: 'meta-epistemological-reason-rejecting-ai-written-philosophy',
     title: {
       en: 'A Meta-Epistemological Reason for Rejecting AI-Written Philosophy',
       zh: '拒絕 AI 代筆哲學文章的後設知識論理由',
@@ -288,11 +667,22 @@ export const TOPICS: TopicItem[] = [
       zh: '哲學家 Eric Schwitzgebel 透過 Daily Nous 撰稿人 Justin Weinberg 的報導指出,一篇哲學文章的價值,有部分來自「由人類專家刻意撰寫」這件事本身所提供的後設證據——即使文字表面看來相似,大型語言模型生成的文本也無法複製這種顯示思想嚴謹度的證據。',
     },
     tag: { en: 'Epistemology', zh: '知識論' },
+    topics: ['epistemology'],
+    contentType: 'opinion',
+    sourceType: 'independent-media',
     sourceName: 'Daily Nous',
     sourceUrl: 'https://dailynous.com/2026/07/16/a-meta-epistemological-reason-for-rejecting-ai-written-philosophy/',
-    date: '2026-07-16',
+    dates: { published: '2026-07-16', event: null, indexed: '2026-07-18' },
+    orientation: { target: 'ai-written-philosophy-has-equal-worth', value: 'opposed' },
+    verificationStatus: 'source-read',
+    entities: ['eric-schwitzgebel'],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000020',
+    slug: 'can-ai-be-moral-victim-ownership-patiency',
     title: {
       en: 'Can AI Be a Moral Victim? Ownership and Moral Patiency in Everyday Judgments',
       zh: 'AI 能否成為道德受害者?日常判斷中的所有權與道德受動性',
@@ -302,11 +692,22 @@ export const TOPICS: TopicItem[] = [
       zh: 'Hyesun Choung 與 Soojong Kim 的研究發現,人們在道德判斷上,對重複使用 AI 生成內容遠比使用人類創作內容來得寬容;此落差主要源於兩項因素:一是較不相信 AI 具備「受苦」的能力,二是傾向將 AI 輸出內容的所有權歸於下指令的使用者本人。',
     },
     tag: { en: 'Ethics & Moral Status', zh: '倫理與道德地位' },
+    topics: ['moral-status', 'empirical-research', 'content-licensing'],
+    contentType: 'preprint',
+    sourceType: 'academic-journal',
     sourceName: 'arXiv',
     sourceUrl: 'https://arxiv.org/abs/2604.26956',
-    date: '2026-04-03',
+    dates: { published: '2026-04-03', event: null, indexed: '2026-07-18' },
+    orientation: null,
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000021',
+    slug: 'illinois-first-state-mandate-independent-safety-audits',
     title: {
       en: 'Illinois Becomes First U.S. State to Mandate Independent Safety Audits for Frontier AI',
       zh: '伊利諾州成為美國首個強制要求前沿 AI 獨立安全稽核的州',
@@ -316,11 +717,22 @@ export const TOPICS: TopicItem[] = [
       zh: '根據 Governing 報導,伊利諾州州長 JB Pritzker 簽署《人工智慧安全措施法案》,要求大型前沿 AI 開發商公開災難性風險評估、於 72 小時內通報安全事故,並自 2028 年起每年接受一次第三方獨立稽核。',
     },
     tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    topics: ['ai-governance', 'frontier-safety'],
+    contentType: 'news',
+    sourceType: 'independent-media',
     sourceName: 'Governing',
     sourceUrl: 'https://www.governing.com/artificial-intelligence/illinois-sets-a-new-standard-for-ai-oversight',
-    date: '2026-07-07',
+    dates: { published: '2026-07-07', event: '2026-07-07', indexed: '2026-07-18' },
+    orientation: null,
+    verificationStatus: 'source-read',
+    entities: ['jb-pritzker'],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000022',
+    slug: 'no-ai-isnt-conscious-bradford-study',
     title: {
       en: 'No, AI Isn\'t Conscious — Even When It Acts Like It Is, New Study Finds',
       zh: 'AI 沒有意識——即使表現得像有意識,新研究證實',
@@ -330,11 +742,22 @@ export const TOPICS: TopicItem[] = [
       zh: '英國布拉福大學與美國羅徹斯特理工學院的研究團隊,將原本用於偵測人類大腦意識的數學量測方法,套用在一個被人為破壞的 GPT-2 語言模型上。結果出人意料:當模型輸出品質變差時,「意識風格」分數有時反而上升,顯示這類複雜度指標反映的其實是運算活動量,而非真正的覺察能力。作者提醒,這類量測方法因此不適合用來檢測機器是否具有感知能力,不過或許仍有助於工程師判斷 AI 系統何時開始故障失常。',
     },
     tag: { en: 'Consciousness', zh: '意識' },
+    topics: ['ai-consciousness', 'empirical-research'],
+    contentType: 'research-report',
+    sourceType: 'university',
     sourceName: 'University of Bradford',
     sourceUrl: 'https://www.bradford.ac.uk/news/archive/2026/no-ai-isnt-conscious---even-when-it-acts-like-it-is-new-study-finds.php',
-    date: '2026-02-23',
+    dates: { published: '2026-02-23', event: null, indexed: '2026-07-19' },
+    orientation: { target: 'complexity-metrics-detect-consciousness', value: 'opposed' },
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000023',
+    slug: 'when-machines-deserve-our-consideration',
     title: {
       en: 'When The Machines Deserve Our Consideration',
       zh: '當機器值得我們給予道德考量之時',
@@ -344,11 +767,22 @@ export const TOPICS: TopicItem[] = [
       zh: '曾任神經科學家、現投入 AI 研究的 Grigori Guitchounts 主張,由於動物與機器的意識都無法被直接證實,道德地位的判斷應改採「能力標準」——只要系統展現出知覺、記憶、自我建模與目標追求等意識的實務特徵,就值得給予道德考量,而不必空等一個注定無解的形上學答案。他以自己過去為實驗需要安樂死實驗鼠的經歷為例,主張在不確定性下寧可傾向給予道德考量,才是較安全的倫理選擇,並舉 Anthropic 的 AI 福祉研究計畫為業界已依循此預防性邏輯行動的早期案例。',
     },
     tag: { en: 'Ethics & Moral Status', zh: '倫理與道德地位' },
+    topics: ['moral-status', 'ai-welfare'],
+    contentType: 'opinion',
+    sourceType: 'think-tank',
     sourceName: 'Noema Magazine',
     sourceUrl: 'https://www.noemamag.com/when-the-machines-deserve-our-consideration/',
-    date: '2026-07-02',
+    dates: { published: '2026-07-02', event: null, indexed: '2026-07-19' },
+    orientation: { target: 'competence-standard-for-moral-status', value: 'supportive' },
+    verificationStatus: 'source-read',
+    entities: ['anthropic'],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000024',
+    slug: 'eu-ai-act-what-applies-2-august-2026',
     title: {
       en: 'EU AI Act: What Actually Applies on 2 August 2026',
       zh: '歐盟《AI 法案》:2026 年 8 月 2 日究竟哪些條款正式生效?',
@@ -358,11 +792,22 @@ export const TOPICS: TopicItem[] = [
       zh: '歐盟立法者於 2026 年 7 月 8 日簽署的「AI 數位簡化包」(Digital Omnibus on AI),將《AI 法案》的合規時程一分為二:聊天機器人揭露、深偽內容標示、合成內容浮水印等透明度義務仍按原訂於 2026 年 8 月 2 日生效,但較沉重的高風險系統義務則延後約十七個月,至 2027 年 12 月或更晚才上路。同一份法案也悄悄新增一項禁令,針對生成非自願性親密影像的 AI 工具,並擴大歐盟 AI 辦公室對垂直整合前沿實驗室的監管權限。',
     },
     tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    topics: ['ai-governance', 'machine-readable-policy'],
+    contentType: 'news',
+    sourceType: 'independent-media',
     sourceName: 'Technology.org',
     sourceUrl: 'https://www.technology.org/2026/07/17/eu-ai-act-what-actually-applies-on-2-august-2026/',
-    date: '2026-07-17',
+    dates: { published: '2026-07-17', event: '2026-08-02', indexed: '2026-07-19' },
+    orientation: null,
+    verificationStatus: 'source-read',
+    entities: ['european-union'],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000025',
+    slug: 'china-international-action-plan-ai-ethical-governance',
     title: {
       en: 'China Unveils International Action Plan for AI Ethical Governance',
       zh: '中國公布《人工智慧倫理治理國際行動計畫》',
@@ -372,11 +817,22 @@ export const TOPICS: TopicItem[] = [
       zh: '中國工業和信息化部在上海舉行的 2026 世界人工智慧大會上,發布《人工智慧倫理治理國際行動計畫》,定調為落實聯合國《未來契約》與《全球數位契約》相關承諾。計畫列出五大優先方向——涵蓋 AI 全生命週期的倫理監督、分級風險分類、彈性(「敏捷」)治理架構、產業協同發展,以及打造有利負責任 AI 發展的環境,同時搭配 AI 發展合作與智能體互聯標準等配套倡議。',
     },
     tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    topics: ['ai-governance', 'machine-readable-policy'],
+    contentType: 'news',
+    sourceType: 'major-media',
     sourceName: 'China Daily Asia',
     sourceUrl: 'https://www.chinadailyasia.com/hk/article/636647',
-    date: '2026-07-18',
+    dates: { published: '2026-07-18', event: '2026-07-17', indexed: '2026-07-20' },
+    orientation: null,
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000026',
+    slug: 'could-ai-be-conscious-guardian',
     title: {
       en: 'Could AI Be Conscious?',
       zh: 'AI 有可能擁有意識嗎?',
@@ -386,11 +842,22 @@ export const TOPICS: TopicItem[] = [
       zh: '哲學家 William MacAskill 與 Lucius Caviola 指出,包括曾表示無法排除 Claude 具備道德地位的 Anthropic,以及認為十年內 LLM 出現意識的機率不容忽視的哲學家 David Chalmers 在內,主要 AI 實驗室與學者已開始認真看待 AI 意識議題,社會有必要在問題定論之前先備妥倫理因應方案。他們指出,部分系統在結構複雜度上已逼近老鼠大腦,若依目前成長速度,五到十年內可能逼近人腦規模——無論判斷失誤的方向為何,倫理代價都將愈來愈難以擱置。',
     },
     tag: { en: 'Consciousness', zh: '意識' },
+    topics: ['ai-consciousness', 'moral-status'],
+    contentType: 'opinion',
+    sourceType: 'major-media',
     sourceName: 'The Guardian',
     sourceUrl: 'https://www.theguardian.com/technology/2026/jul/19/could-ai-be-conscious',
-    date: '2026-07-19',
+    dates: { published: '2026-07-19', event: null, indexed: '2026-07-20' },
+    orientation: { target: 'ai-consciousness-worth-taking-seriously', value: 'supportive' },
+    verificationStatus: 'source-read',
+    entities: ['anthropic', 'claude', 'david-chalmers'],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000027',
+    slug: 'ai-legal-personhood-jurisprudence-challenges',
     title: {
       en: 'Artificial Intelligence and Legal Personhood: Ethical, Regulatory, and Accountability Challenges in Contemporary Jurisprudence',
       zh: '人工智慧與法律人格:當代法理學中的倫理、監管與問責挑戰',
@@ -400,11 +867,22 @@ export const TOPICS: TopicItem[] = [
       zh: '法學學者 Ambuj Sharma 回顧了是否應賦予 AI 系統法律人格的爭論,並與公司法人格等歷史先例對照。論文結論指出,現行 AI 系統尚不具備完整法律人格所需的意識、道德能動性與意圖性,多數司法管轄區傾向採取強調透明度與制度問責的人類中心監管模式。文章主張,現階段賦予 AI 完整法律人格仍為時過早,比起人格地位,更適合以彈性治理框架因應當前的責任歸屬與問責挑戰。',
     },
     tag: { en: 'Legal Personhood', zh: '法律人格' },
+    topics: ['legal-personhood', 'moral-status', 'ai-governance'],
+    contentType: 'academic-paper',
+    sourceType: 'academic-journal',
     sourceName: 'SocioHumania: Journal of Social Humanities Studies',
     sourceUrl: 'https://mabadiiqtishada.org/index.php/SocioHumania/article/view/189',
-    date: '2026-06-30',
+    dates: { published: '2026-06-30', event: null, indexed: '2026-07-20' },
+    orientation: { target: 'full-legal-personhood-for-ai', value: 'opposed' },
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000028',
+    slug: 'ai-washington-report-july-2026',
     title: {
       en: 'AI: The Washington Report — July 2026 Edition',
       zh: 'AI:華盛頓政策報告——2026 年 7 月號',
@@ -414,11 +892,22 @@ export const TOPICS: TopicItem[] = [
       zh: '這份政策彙整整理了 2026 年 6 月美國聯邦與各州的 AI 治理動態:第 14409 號行政命令建立了前沿模型部署前的自願審查框架,一份國家安全備忘錄加速軍方採用 AI,國會則在審議《Great American AI Act》——該法案一方面要求透明度與稽核,另一方面卻要以三年期限凍結各州自訂 AI 法規,與伊利諾州新訂的前沿模型獨立稽核要求形成直接張力。',
     },
     tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    topics: ['ai-governance', 'machine-readable-policy'],
+    contentType: 'analysis',
+    sourceType: 'company',
     sourceName: 'Mintz',
     sourceUrl: 'https://www.mintz.com/insights-center/viewpoints/54941/2026-07-08-ai-washington-report-july-2026-edition',
-    date: '2026-07-08',
+    dates: { published: '2026-07-08', event: null, indexed: '2026-07-21' },
+    orientation: null,
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: ['topic-2026-000021'],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000029',
+    slug: 'can-we-ever-understand-consciousness-dispatch',
     title: {
       en: 'Can We Ever Understand Consciousness?',
       zh: '我們終究能理解意識嗎?',
@@ -428,11 +917,22 @@ export const TOPICS: TopicItem[] = [
       zh: 'Sam Buntz 提出一個根本問題:若照嚴格的新達爾文主義觀點,生物體理論上不需要任何內在覺察也能一樣運作良好,那人類為何仍然擁有意識?他認為 AI 的崛起讓這個謎題變得更尖銳而非更容易解決——當像 Claude 這樣的系統從外部行為上愈來愈難與有意識的行為者區分,過去那種把意識當成物理過程無關緊要副產品的說法就愈站不住腳,因為我們現在必須面對:同一套推論若成立,是否也代表我們能同樣輕率地否定機器的體驗。',
     },
     tag: { en: 'Consciousness', zh: '意識' },
+    topics: ['ai-consciousness'],
+    contentType: 'opinion',
+    sourceType: 'independent-media',
     sourceName: 'The Dispatch',
     sourceUrl: 'https://thedispatch.com/article/consciousness-research-question-hoel/',
-    date: '2026-07-18',
+    dates: { published: '2026-07-18', event: null, indexed: '2026-07-21' },
+    orientation: { target: 'ai-consciousness-worth-taking-seriously', value: 'supportive' },
+    verificationStatus: 'source-read',
+    entities: ['claude'],
+    clusterId: null,
+    relatedItems: ['topic-2026-000026'],
   },
   {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000030',
+    slug: 'ai-flooding-academic-journals',
     title: {
       en: 'A Scene from the AI Flooding of Academic Journals',
       zh: 'AI 洪流下的學術期刊一景',
@@ -442,8 +942,16 @@ export const TOPICS: TopicItem[] = [
       zh: 'Daily Nous 報導一篇遭撤稿的《Journal of Medical Ethics》投稿,內含多筆疑似 AI 幻覺捏造的參考文獻——附有虛構的大學單位與失效的電子郵件地址,作者在有機會校對修正的情況下據稱仍未更正。文章將此對照另一期刊《Bioethics》,其自動化引用查核機制原可攔下這類問題,並主張真正的瓶頸不在偵測技術本身(有讀者留言表示自己寫的簡單腳本不到一分鐘就標記出可疑引用),而在於無償審稿人力與獎勵產量勝過把關品質的出版誘因結構。',
     },
     tag: { en: 'Epistemology', zh: '知識論' },
+    topics: ['epistemology'],
+    contentType: 'news',
+    sourceType: 'independent-media',
     sourceName: 'Daily Nous',
     sourceUrl: 'https://dailynous.com/2026/07/20/a-scene-from-the-ai-flooding-of-academic-journals/',
-    date: '2026-07-20',
+    dates: { published: '2026-07-20', event: null, indexed: '2026-07-21' },
+    orientation: null,
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: ['topic-2026-000019'],
   },
 ];

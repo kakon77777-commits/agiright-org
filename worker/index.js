@@ -3,11 +3,19 @@
  *
  * 1. Host canonicalization — serves agiright.org; 301s every other bound
  *    hostname (www.agiright.org, asiright.org, www.asiright.org) to it.
- * 2. Single-URL multilingual — one public URL per page. The language is
- *    negotiated per request: `lang` cookie (manual choice) > IP country >
- *    Accept-Language > English. Localized trees (e.g. /zh/...) exist only
- *    as internal build artifacts; requests are rewritten to them here.
- *    Legacy /zh/* URLs 301 to the bare URL and persist the preference.
+ * 2. Hybrid multilingual (since 2026-07-21, per the site's own audit doc):
+ *    every page has a language-negotiated bare URL (`lang` cookie > IP
+ *    country > Accept-Language > English) AND a stable, directly-servable,
+ *    independently indexable per-language URL (e.g. /ja/about) carrying
+ *    matching hreflang tags (see BaseLayout.astro). Both are first-class —
+ *    visiting /ja/about serves that build tree directly (no redirect) and
+ *    sets the lang cookie, so a later visit to the bare URL keeps the same
+ *    language. Before 2026-07-21 this same request pattern 301-redirected
+ *    to the bare URL instead, which made the prefixed URLs unusable as
+ *    hreflang targets (Google requires hreflang URLs not to redirect) and
+ *    contradicted the "single URL" language_negotiation.model claim in
+ *    /ai/manifest.json for every language but the one this loop explicitly
+ *    handled.
  *
  * Adding a language later: add its code to LANGS (and country/accept rules),
  * build the tree under /<code>/ — no other worker change needed.
@@ -324,18 +332,21 @@ export default {
       return handleMedia(url, request, env);
     }
 
-    // --- legacy localized URLs: /zh/foo → /foo + remembered preference ---
+    // --- unified sitemap entry point (P0-4): /sitemap.xml mirrors the
+    //     @astrojs/sitemap-generated index instead of a separate filename ---
+    if (url.pathname === '/sitemap.xml') {
+      const idx = await env.ASSETS.fetch(new URL('/sitemap-index.xml', url));
+      return new Response(idx.body, idx);
+    }
+
+    // --- per-language URLs: served directly now, not redirected away ---
     for (const lang of LANGS) {
       const m = url.pathname.match(new RegExp(`^/${lang}(/.*)?$`));
-      if (m) {
-        const target = m[1] && m[1] !== '/' ? m[1] : '/';
-        return new Response(null, {
-          status: 301,
-          headers: {
-            Location: url.origin + target + url.search,
-            'Set-Cookie': `${LANG_COOKIE}=${lang}; ${COOKIE_ATTRS}`,
-          },
-        });
+      if (m && isPagePath(url.pathname)) {
+        const res = await env.ASSETS.fetch(request);
+        const out = withLangHeaders(res, lang);
+        out.headers.append('Set-Cookie', `${LANG_COOKIE}=${lang}; ${COOKIE_ATTRS}`);
+        return out;
       }
     }
 

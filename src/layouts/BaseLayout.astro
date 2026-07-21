@@ -8,16 +8,25 @@ interface Props {
   lang: Lang;
   title?: string;
   description?: string;
+  /** true only for pages with no per-language build (currently just 404) —
+   * hreflang alternates would otherwise point at URLs that don't exist. */
+  noHreflang?: boolean;
 }
 
-const { lang, title, description } = Astro.props;
+const { lang, title, description, noHreflang = false } = Astro.props;
 
 const pageTitle = title ? `${title} · ${SITE.name}` : pick(SITE.title, lang);
 const pageDesc = description ?? pick(SITE.description, lang);
-// one public URL per page: the /zh build tree is internal, so canonical
-// always points at the bare path (the edge worker serves the variant there)
 const pathname = publicPath(Astro.url.pathname.replace(/\.html$/, ''));
-const canonical = new URL(pathname, SITE.url).href;
+/** this page's URL in a given language: bare for English, /<lang>/... otherwise */
+function langPath(l: Lang): string {
+  if (l === 'en') return pathname;
+  return pathname === '/' ? `/${l}` : `/${l}${pathname}`;
+}
+// Self-referential canonical: each language's URL is now a first-class,
+// independently indexable page (see hreflang below), not collapsed onto the
+// bare English URL the way it was before the 2026-07-21 site audit.
+const canonical = new URL(langPath(lang), SITE.url).href;
 const htmlLang = LANG_META[lang].html;
 const htmlDir = LANG_META[lang].dir;
 
@@ -45,6 +54,16 @@ const jsonLd = {
     <meta name="description" content={pageDesc} />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonical} />
+    {
+      !noHreflang && (
+        <>
+          {LANGS.map((l) => (
+            <link rel="alternate" hreflang={LANG_META[l].html} href={new URL(langPath(l), SITE.url).href} />
+          ))}
+          <link rel="alternate" hreflang="x-default" href={new URL(pathname, SITE.url).href} />
+        </>
+      )
+    }
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/feed.xml" />
 

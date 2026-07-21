@@ -6,11 +6,10 @@ export default defineConfig({
   site: 'https://agiright.org',
   trailingSlash: 'never',
   integrations: [
-    sitemap({
-      // single-URL i18n: localized build trees (/zh/...) are internal —
-      // only bare URLs are public, so exclude them from the sitemap
-      filter: (page) => !/agiright\.org\/zh(\/|$)/.test(page),
-    }),
+    // Every language's build tree (/ja/..., /zh/..., etc.) is a first-class,
+    // independently indexable URL as of 2026-07-21 (see BaseLayout.astro's
+    // hreflang tags) — no filter needed, all of them belong in the sitemap.
+    sitemap(),
   ],
   vite: {
     plugins: [tailwindcss()],

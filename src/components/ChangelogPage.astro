@@ -14,6 +14,23 @@ const intro =
 
 const ENTRIES = [
   {
+    version: 'v0.8.0',
+    date: '2026-07-21',
+    tag: { en: 'Site audit & metadata', zh: '網站盤點與元資料' },
+    items: {
+      en: [
+        'Site-wide fixes from a technical audit: (1) the site version is now generated from one source (site.ts) instead of drifting between files — /ai/manifest.json was stuck on a stale "0.4.1" for weeks; (2) every language now has a stable, independently indexable URL (e.g. /ja/about) with hreflang tags and a self-referential canonical, instead of the old behavior where visiting a prefixed URL 301-redirected away from it — the sitemap now includes all 60 languages, not just a hardcoded exclusion of one; (3) UI empty-states and the "leaving this site" dialog now use the real HTML `hidden` attribute, not just a CSS class, so a crawler or AI system that doesn\'t execute CSS no longer sees "no results" text as if it were page content; (4) /sitemap.xml is now the one advertised entry point everywhere (robots.txt, footer, manifest).',
+        '/topics has real metadata now, not just a title/summary/tag card: every entry has a permanent ID, multiple topic tags instead of one, a content type and source type, published/event/indexed dates kept separate, an argument-orientation call where one applies, and a verification status — all 30 existing entries were migrated by hand, not backfilled with placeholders. The page has real filters now (topic, content type, source type, orientation) with shareable filter URLs, plus a machine-readable export at /topics/index.json.',
+        'This is the "v0.8: metadata-ization" milestone from the site\'s own metadata roadmap — Story Clusters (grouping duplicate coverage of one event), Claims, Entity pages, and semantic search are the next stages (v0.9 and v1.0), not built yet.',
+      ],
+      zh: [
+        '根據一份技術盤點文件完成的全站修正:(1) 網站版本現在由單一來源(site.ts)產生,不再各檔案各自漂移——/ai/manifest.json 先前卡在過期的「0.4.1」好幾週都沒發現;(2) 每個語言現在都有穩定、可獨立索引的網址(例如 /ja/about)並附上 hreflang 標籤與自我參照的 canonical,取代先前造訪語言前綴網址會被 301 導回原網址的舊行為——sitemap 現在涵蓋全部 60 種語言,不再是寫死只排除其中一種的舊邏輯;(3) UI 空結果狀態與「即將離開本站」對話框現在使用真正的 HTML `hidden` 屬性,不只是 CSS class,讓不執行 CSS 的爬蟲或 AI 系統不會把「沒有結果」文字誤判為頁面內容;(4) /sitemap.xml 現在是各處(robots.txt、頁尾、manifest)統一對外宣告的正式入口。',
+        '/topics 現在有真正的元資料,不再只是標題/摘要/單一標籤的卡片:每篇內容都有永久 ID、可承載多個主題標籤(不再只有一個)、內容類型與來源類型、發布/事件/收錄三種日期各自分開、有立場方向判斷時會標註、以及查證狀態——現有 30 篇內容全部手動遷移,沒有用佔位資料隨便填。頁面現在有真正的篩選功能(主題、內容類型、來源類型、立場方向),篩選結果網址可分享,另外新增機器可讀匯出 /topics/index.json。',
+        '這是網站自己的元資料路線圖裡「v0.8:元資料化」這個里程碑——事件群組(把同一事件的重複報導聚合起來)、主張索引、實體頁面、語意搜尋是下一階段(v0.9 與 v1.0)才會做,這次還沒動工。',
+      ],
+    },
+  },
+  {
     version: 'v0.7.0',
     date: '2026-07-21',
     tag: { en: 'Languages & Content', zh: '語言與內容' },

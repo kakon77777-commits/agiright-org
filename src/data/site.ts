@@ -293,7 +293,12 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.7.0',
+  version: 'v0.8.0',
+  // Bump this alongside `version` on every ship — every other machine-readable
+  // "version last changed" field (manifest.json, etc.) derives from this pair
+  // instead of being hand-edited, per the 2026-07-21 site-audit's P0 finding
+  // that manifest.json's site_version had drifted to a stale "0.4.1".
+  updatedAt: '2026-07-21',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -311,8 +316,18 @@ export const SITE = {
  * Localized build trees (/zh/..., /ja/...) are internal, so links never
  * carry a language prefix.
  */
-export function langPrefix(_lang: Lang): string {
-  return '';
+/**
+ * Internal-link prefix for a page rendered in this language: '' for English
+ * (bare URLs), '/<lang>' otherwise — so a page browsed at /ja/about links to
+ * /ja/research, /ja/protocols, etc. instead of collapsing back to the bare
+ * (English-built) URL. Before 2026-07-21 this always returned '' because the
+ * /<lang>/ build trees were an internal implementation detail the worker
+ * redirected away from; now they're first-class indexable pages (see
+ * BaseLayout.astro's hreflang tags), so internal links should stay
+ * self-consistent with whichever URL the visitor is actually on.
+ */
+export function langPrefix(lang: Lang): string {
+  return lang === 'en' ? '' : `/${lang}`;
 }
 
 const LANG_PREFIX_RE = new RegExp(`^/(${NON_DEFAULT_LANGS.join('|')})(?=/|$)`);

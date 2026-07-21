@@ -4,10 +4,12 @@ AGIRight.org is an independent research and protocol hub for AI rights, AI conte
 
 We explore how AI systems, agents, creators, content providers, platforms, and the public can interact through rights, licenses, payments, audit logs, and governance protocols.
 
-Language: single-URL model — each page has one URL serving a negotiated
-language (lang cookie > IP country > Accept-Language > English). AI systems
-and crawlers receive English by default. Human translations available via
-cookie: lang=zh (Traditional Chinese), lang=zh-cn (Simplified Chinese),
+Language: hybrid model — every page has a language-negotiated bare URL
+(lang cookie > IP country > Accept-Language > English) AND a stable,
+independently indexable per-language URL (e.g. /ja/about, with matching
+hreflang tags) that always serves that language directly. AI systems and
+crawlers receive English by default at the bare URL. Human translations
+available via cookie: lang=zh (Traditional Chinese), lang=zh-cn (Simplified Chinese),
 lang=ja (Japanese), lang=ko (Korean), lang=fr (French), lang=de (German),
 lang=es (Spanish), lang=pt (Portuguese), lang=ru (Russian), lang=ar (Arabic,
 RTL), lang=tr (Turkish), lang=fa (Persian, RTL), lang=bn (Bengali),

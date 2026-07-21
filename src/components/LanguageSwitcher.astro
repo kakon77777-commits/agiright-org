@@ -41,6 +41,7 @@ const noResults = pick({ en: 'No languages found', zh: '找不到符合的語言
   <div
     id={`${id}-panel`}
     class="hidden absolute end-0 top-full mt-2 z-50 w-[19rem] max-w-[88vw] overflow-hidden rounded-lg border border-line-strong bg-surface shadow-lg"
+    hidden
     data-lang-panel
   >
     <div class="border-b border-line p-2">
@@ -75,7 +76,7 @@ const noResults = pick({ en: 'No languages found', zh: '找不到符合的語言
         ))
       }
     </div>
-    <p class="hidden px-4 py-6 text-center text-[0.8rem] text-muted" data-lang-empty>{noResults}</p>
+    <p class="hidden px-4 py-6 text-center text-[0.8rem] text-muted" hidden data-lang-empty>{noResults}</p>
   </div>
 </div>
 
@@ -84,6 +85,7 @@ const noResults = pick({ en: 'No languages found', zh: '找不到符合的語言
     document.querySelectorAll<HTMLElement>('[data-lang-panel]').forEach((panel) => {
       if (panel === except) return;
       panel.classList.add('hidden');
+      panel.hidden = true;
       const trigger = panel.parentElement?.querySelector<HTMLButtonElement>('[data-lang-trigger]');
       trigger?.setAttribute('aria-expanded', 'false');
     });
@@ -101,22 +103,28 @@ const noResults = pick({ en: 'No languages found', zh: '找不到符合的語言
     const openPanel = () => {
       closeAllPanels(panel);
       panel.classList.remove('hidden');
+      panel.hidden = false;
       trigger.setAttribute('aria-expanded', 'true');
       search.value = '';
-      options.forEach((o) => o.classList.remove('hidden'));
+      options.forEach((o) => {
+        o.classList.remove('hidden');
+        o.hidden = false;
+      });
       empty?.classList.add('hidden');
+      if (empty) empty.hidden = true;
       grid.classList.remove('hidden');
       // focus after layout so the panel is visible first
       requestAnimationFrame(() => search.focus());
     };
     const closePanel = () => {
       panel.classList.add('hidden');
+      panel.hidden = true;
       trigger.setAttribute('aria-expanded', 'false');
     };
 
     trigger.addEventListener('click', (e) => {
       e.stopPropagation();
-      const isOpen = !panel.classList.contains('hidden');
+      const isOpen = !panel.hidden;
       isOpen ? closePanel() : openPanel();
     });
 
@@ -130,9 +138,11 @@ const noResults = pick({ en: 'No languages found', zh: '找不到符合的語言
       options.forEach((o) => {
         const match = !q || (o.dataset.langSearchText ?? '').includes(q);
         o.classList.toggle('hidden', !match);
+        o.hidden = !match;
         if (match) visibleCount++;
       });
       empty?.classList.toggle('hidden', visibleCount > 0);
+      if (empty) empty.hidden = visibleCount > 0;
       grid.classList.toggle('hidden', visibleCount === 0);
     });
 

@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from './PageHeader.astro';
 import { pick, type Lang } from '../data/site';
-import { TOPICS } from '../data/topics';
+import { TOPICS, TOPIC_VALUES, TOPIC_LABELS, CONTENT_TYPE_LABELS, SOURCE_TYPE_LABELS, ORIENTATION_LABELS, type ContentType, type SourceType, type OrientationValue } from '../data/topics';
 
 interface Props {
   lang: Lang;
@@ -18,13 +18,27 @@ const intro = pick(
   lang
 );
 
-const sorted = [...TOPICS].sort((a, b) => (a.date > b.date ? -1 : 1));
+const sorted = [...TOPICS].sort((a, b) => (a.dates.published > b.dates.published ? -1 : 1));
 const searchPlaceholder = pick({ en: 'Search topics — try a theme, source, or keyword…', zh: '搜尋議題——試試主題、來源或關鍵字…' }, lang);
-const noResults = pick({ en: 'No topics match your search.', zh: '沒有符合搜尋條件的議題。' }, lang);
+const noResults = pick({ en: 'No topics match your search or filters.', zh: '沒有符合搜尋條件或篩選條件的議題。' }, lang);
 const perPageLabel = pick({ en: 'Per page', zh: '每頁筆數' }, lang);
 const prevLabel = pick({ en: 'Previous', zh: '上一頁' }, lang);
 const nextLabel = pick({ en: 'Next', zh: '下一頁' }, lang);
 const paginationLabel = pick({ en: 'Topics pagination', zh: '議題分頁導覽' }, lang);
+
+const allTopicLabel = pick({ en: 'All topics', zh: '所有主題' }, lang);
+const allTypeLabel = pick({ en: 'All content types', zh: '所有內容類型' }, lang);
+const allSourceLabel = pick({ en: 'All source types', zh: '所有來源類型' }, lang);
+const allOrientationLabel = pick({ en: 'All orientations', zh: '所有立場方向' }, lang);
+const filtersLabel = pick({ en: 'Filters', zh: '篩選' }, lang);
+const clearFiltersLabel = pick({ en: 'Clear filters', zh: '清除篩選' }, lang);
+const jsonExportLabel = pick({ en: 'Export as JSON', zh: '匯出為 JSON' }, lang);
+
+/** used only for the content-types/source-types/orientations actually present in TOPICS, so the dropdowns never offer an empty-result option */
+const presentContentTypes = [...new Set(TOPICS.map((t) => t.contentType))].sort() as ContentType[];
+const presentSourceTypes = [...new Set(TOPICS.map((t) => t.sourceType))].sort() as SourceType[];
+const presentOrientations = [...new Set(TOPICS.filter((t) => t.orientation).map((t) => t.orientation!.value))].sort() as OrientationValue[];
+const presentTopics = TOPIC_VALUES.filter((tv) => TOPICS.some((t) => t.topics.includes(tv)));
 
 const leavingTitle = pick({ en: 'You are leaving AGIRight.org', zh: '您即將離開 AGIRight.org' }, lang);
 const leavingBody = pick(
@@ -57,25 +71,66 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
         aria-label={searchPlaceholder}
         data-topics-search
       />
-      <label class="flex items-center gap-2 text-[0.8rem] text-muted">
-        {perPageLabel}
-        <select class="field-select !w-auto" data-topics-pagesize>
-          <option value="9">9</option>
-          <option value="12">12</option>
-          <option value="15">15</option>
-        </select>
-      </label>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="/topics/index.json" class="spec-label !text-ink-soft link-quiet" data-topics-json-link>
+          {jsonExportLabel} ↓
+        </a>
+        <label class="flex items-center gap-2 text-[0.8rem] text-muted">
+          {perPageLabel}
+          <select class="field-select !w-auto" data-topics-pagesize>
+            <option value="9">9</option>
+            <option value="12">12</option>
+            <option value="15">15</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="mt-4 flex flex-wrap items-center gap-2.5" data-reveal>
+      <span class="spec-label !text-muted">{filtersLabel}</span>
+      <select class="field-select !w-auto !text-[0.8rem]" data-topics-filter="topic">
+        <option value="">{allTopicLabel}</option>
+        {presentTopics.map((tv) => <option value={tv}>{pick(TOPIC_LABELS[tv], lang)}</option>)}
+      </select>
+      <select class="field-select !w-auto !text-[0.8rem]" data-topics-filter="type">
+        <option value="">{allTypeLabel}</option>
+        {presentContentTypes.map((ct) => <option value={ct}>{pick(CONTENT_TYPE_LABELS[ct], lang)}</option>)}
+      </select>
+      <select class="field-select !w-auto !text-[0.8rem]" data-topics-filter="source">
+        <option value="">{allSourceLabel}</option>
+        {presentSourceTypes.map((st) => <option value={st}>{pick(SOURCE_TYPE_LABELS[st], lang)}</option>)}
+      </select>
+      <select class="field-select !w-auto !text-[0.8rem]" data-topics-filter="orientation">
+        <option value="">{allOrientationLabel}</option>
+        {presentOrientations.map((o) => <option value={o}>{pick(ORIENTATION_LABELS[o], lang)}</option>)}
+      </select>
+      <button type="button" class="spec-label !text-ink-soft cursor-pointer rounded-md border border-line-strong px-2.5 py-1 transition-colors duration-200 hover:border-navy" data-topics-clear-filters>
+        {clearFiltersLabel}
+      </button>
     </div>
 
     <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" data-topics-grid>
       {
         sorted.map((item) => {
-          const searchText = `${pick(item.title, lang)} ${pick(item.summary, lang)} ${pick(item.tag, lang)} ${item.sourceName}`.toLowerCase();
+          const topicLabels = item.topics.map((tv) => pick(TOPIC_LABELS[tv], lang));
+          const searchText = `${pick(item.title, lang)} ${pick(item.summary, lang)} ${pick(item.tag, lang)} ${topicLabels.join(' ')} ${item.sourceName} ${item.entities.join(' ')}`.toLowerCase();
           return (
-            <article class="card flex flex-col p-6" data-reveal data-topics-item data-search-text={searchText}>
-              <div class="flex flex-wrap items-center gap-2">
-                <span class="badge">{pick(item.tag, lang)}</span>
-                <span class="spec-label">{item.date}</span>
+            <article
+              class="card flex flex-col p-6"
+              data-reveal
+              data-topics-item
+              data-search-text={searchText}
+              data-id={item.id}
+              data-topics={item.topics.join(' ')}
+              data-content-type={item.contentType}
+              data-source-type={item.sourceType}
+              data-orientation={item.orientation?.value ?? ''}
+            >
+              <div class="flex flex-wrap items-center gap-1.5">
+                {item.topics.map((tv) => (
+                  <span class="badge">{pick(TOPIC_LABELS[tv], lang)}</span>
+                ))}
+                <span class="spec-label ms-auto">{item.dates.published}</span>
               </div>
               <span class="spec-label !text-muted mt-1.5">{item.sourceName}</span>
               <h2 class="font-serif mt-3 text-lg font-semibold leading-snug text-navy">{pick(item.title, lang)}</h2>
@@ -99,10 +154,11 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
       }
     </div>
 
-    <p class="hidden py-16 text-center text-[0.9rem] text-muted" data-topics-empty>{noResults}</p>
+    <p class="hidden py-16 text-center text-[0.9rem] text-muted" hidden data-topics-empty>{noResults}</p>
 
     <nav
       class="mt-8 hidden flex-wrap items-center justify-center gap-2"
+      hidden
       data-topics-pagination
       aria-label={paginationLabel}
     >
@@ -137,6 +193,7 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
 
   <div
     class="fixed inset-0 z-50 hidden items-center justify-center bg-ink/40 p-4 backdrop-blur-sm"
+    hidden
     data-leaving-overlay
   >
     <div
@@ -183,6 +240,7 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
     lastFocused = trigger;
     overlay.classList.remove('hidden');
     overlay.classList.add('flex');
+    overlay.hidden = false;
     continueBtn?.focus();
   }
 
@@ -190,6 +248,7 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
     if (!overlay) return;
     overlay.classList.add('hidden');
     overlay.classList.remove('flex');
+    overlay.hidden = true;
     pendingUrl = null;
     lastFocused?.focus();
   }
@@ -211,11 +270,13 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
     if (e.target === overlay) closeLeaving();
   });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !overlay?.classList.contains('hidden')) closeLeaving();
+    if (e.key === 'Escape' && overlay && !overlay.hidden) closeLeaving();
   });
 
   const searchInput = document.querySelector<HTMLInputElement>('[data-topics-search]');
   const pageSizeSelect = document.querySelector<HTMLSelectElement>('[data-topics-pagesize]');
+  const filterSelects = Array.from(document.querySelectorAll<HTMLSelectElement>('[data-topics-filter]'));
+  const clearFiltersBtn = document.querySelector<HTMLButtonElement>('[data-topics-clear-filters]');
   const items = Array.from(document.querySelectorAll<HTMLElement>('[data-topics-item]'));
   const grid = document.querySelector<HTMLElement>('[data-topics-grid]');
   const empty = document.querySelector<HTMLElement>('[data-topics-empty]');
@@ -239,6 +300,35 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
 
   function getPageSize(): number {
     return Number(pageSizeSelect?.value ?? 9);
+  }
+
+  // --- URL-ized filter state (v0.8 metadata plan §5.3: shareable filter URLs) ---
+  const FILTER_PARAM: Record<string, string> = { topic: 'topic', type: 'type', source: 'source', orientation: 'orientation' };
+
+  function readStateFromUrl() {
+    const params = new URLSearchParams(location.search);
+    const q = params.get('q');
+    if (q && searchInput) searchInput.value = q;
+    for (const sel of filterSelects) {
+      const key = sel.dataset.topicsFilter;
+      if (!key) continue;
+      const value = params.get(FILTER_PARAM[key]);
+      if (value) sel.value = value;
+    }
+  }
+
+  function writeStateToUrl() {
+    const params = new URLSearchParams();
+    const q = (searchInput?.value ?? '').trim();
+    if (q) params.set('q', q);
+    for (const sel of filterSelects) {
+      const key = sel.dataset.topicsFilter;
+      if (!key || !sel.value) continue;
+      params.set(FILTER_PARAM[key], sel.value);
+    }
+    const qs = params.toString();
+    const newUrl = location.pathname + (qs ? `?${qs}` : '');
+    history.replaceState(null, '', newUrl);
   }
 
   function renderPageNumbers(totalPages: number) {
@@ -268,7 +358,20 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
 
   function render() {
     const q = (searchInput?.value ?? '').trim().toLowerCase();
-    const matched = items.filter((item) => !q || (item.dataset.searchText ?? '').includes(q));
+    const activeFilters: Record<string, string> = {};
+    for (const sel of filterSelects) {
+      const key = sel.dataset.topicsFilter;
+      if (key && sel.value) activeFilters[key] = sel.value;
+    }
+
+    const matched = items.filter((item) => {
+      if (q && !(item.dataset.searchText ?? '').includes(q)) return false;
+      if (activeFilters.topic && !(item.dataset.topics ?? '').split(' ').includes(activeFilters.topic)) return false;
+      if (activeFilters.type && item.dataset.contentType !== activeFilters.type) return false;
+      if (activeFilters.source && item.dataset.sourceType !== activeFilters.source) return false;
+      if (activeFilters.orientation && item.dataset.orientation !== activeFilters.orientation) return false;
+      return true;
+    });
 
     const pageSize = getPageSize();
     const totalPages = Math.max(1, Math.ceil(matched.length / pageSize));
@@ -292,10 +395,12 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
 
     empty?.classList.toggle('hidden', matched.length > 0);
     grid?.classList.toggle('hidden', matched.length === 0);
+    if (empty) empty.hidden = matched.length > 0;
 
     const needsPagination = matched.length > pageSize;
     pagination?.classList.toggle('hidden', !needsPagination);
     pagination?.classList.toggle('flex', needsPagination);
+    if (pagination) pagination.hidden = !needsPagination;
     if (pageInfo) {
       pageInfo.textContent = needsPagination
         ? `${currentPage} / ${totalPages}`
@@ -308,6 +413,7 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
 
   searchInput?.addEventListener('input', () => {
     currentPage = 1;
+    writeStateToUrl();
     render();
   });
   pageSizeSelect?.addEventListener('change', () => {
@@ -317,6 +423,20 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
       // ignore write failures
     }
     currentPage = 1;
+    render();
+  });
+  filterSelects.forEach((sel) => {
+    sel.addEventListener('change', () => {
+      currentPage = 1;
+      writeStateToUrl();
+      render();
+    });
+  });
+  clearFiltersBtn?.addEventListener('click', () => {
+    if (searchInput) searchInput.value = '';
+    filterSelects.forEach((sel) => (sel.value = ''));
+    currentPage = 1;
+    writeStateToUrl();
     render();
   });
   prevBtn?.addEventListener('click', () => {
@@ -330,5 +450,6 @@ const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
     scrollToTop();
   });
 
+  readStateFromUrl();
   render();
 </script>

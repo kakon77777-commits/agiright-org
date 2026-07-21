@@ -8,4 +8,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://agiright.org/sitemap-index.xml
+Sitemap: https://agiright.org/sitemap.xml
