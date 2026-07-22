@@ -70,8 +70,8 @@ export type VerificationStatus =
  * three categories ('ontology', 'epistemology', 'empirical-research')
  * that were already this site's organic single-tag vocabulary and don't
  * map cleanly onto the plan's more rights/policy-centric list — dropping
- * them would have lost real categorization the existing 31 entries
- * already carried.
+ * them would have lost real categorization the existing entries already
+ * carried.
  */
 export const TOPIC_VALUES = [
   'ai-consciousness',
@@ -953,5 +953,80 @@ export const TOPICS: TopicItem[] = [
     entities: [],
     clusterId: null,
     relatedItems: ['topic-2026-000019'],
+  },
+  {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000031',
+    slug: 'ai-governance-week-china-illinois-eu-nato',
+    title: {
+      en: 'The Week AI Governance Stopped Being Optional',
+      zh: 'AI 治理不再是選項的一週',
+    },
+    summary: {
+      en: "Techletter surveys four AI-governance developments landing in the same week: China's first dedicated regulatory framework for AI agents (effective 2026-07-15, requiring tiered decision categorization and mandatory filing in sectors like healthcare and transportation), Illinois becoming the first US state to mandate third-party frontier-model safety audits (SB 315, applying to firms over $500M revenue with civil penalties up to $3M), the European Commission's plan for an independent AI-model evaluation capacity operational by 2027, and NATO allies committing over $50 billion to military AI procurement with the author noting this defense track lacks the governance guardrails appearing in the civilian rules.",
+      zh: 'Techletter 彙整同一週內四項 AI 治理進展:中國首部針對 AI 智能體的專屬監管框架(2026-07-15 生效,要求分級決策管理並在醫療、交通等領域強制備案)、伊利諾州成為美國第一個強制前沿模型第三方安全稽核的州(SB 315,適用營收逾 5 億美元的企業,民事罰款最高 300 萬美元)、歐盟委員會規劃 2027 年前建立獨立的 AI 模型評估能力,以及北約盟國承諾投入逾 500 億美元採購軍用 AI——作者指出這條國防路線缺乏民用法規中已出現的治理護欄。',
+    },
+    tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    topics: ['ai-governance', 'frontier-safety'],
+    contentType: 'analysis',
+    sourceType: 'independent-media',
+    sourceName: 'Techletter (Nesibe Kırış Can)',
+    sourceUrl: 'https://www.techletter.co/p/the-week-ai-governance-stopped-being',
+    dates: { published: '2026-07-13', event: null, indexed: '2026-07-22' },
+    orientation: { target: 'expanding-mandatory-ai-oversight', value: 'descriptive' },
+    verificationStatus: 'source-read',
+    entities: [],
+    clusterId: null,
+    relatedItems: [],
+  },
+  {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000032',
+    slug: 'trump-admin-ai-regulation-reversal-cyberscoop',
+    title: {
+      en: "Trump administration reverses course toward stricter frontier-AI oversight",
+      zh: '川普政府在前沿 AI 監管上轉向更嚴格立場',
+    },
+    summary: {
+      en: "CyberScoop reports the Trump administration has moved from an initial pro-industry executive order allowing voluntary federal model reviews toward stricter oversight, including export controls imposed on Anthropic's Fable 5 and Mythos 5 models over cybersecurity threat concerns. Officials describe the shift as an \"education\" process over 19 months, driven by accelerating cyber threats and shrinking time-to-network-compromise; industry sources note newer models provide real defensive value for vulnerability scanning, while experts question whether export controls meaningfully slow adversaries given foreign models reportedly lag frontier capability by only 4-7 months.",
+      zh: 'CyberScoop 報導川普政府的立場從最初支持產業自願聯邦模型審查的行政命令,轉向更嚴格的監管,包括以資安威脅為由對 Anthropic 的 Fable 5 與 Mythos 5 模型實施出口管制。官員將此轉變描述為 19 個月來的「教育過程」,起因是網路威脅加速、入侵所需時間持續縮短;業界人士指出新一代模型確實對弱點掃描有實質防禦價值,但專家質疑出口管制能否有效拖慢對手,因為外國模型據稱僅落後前沿能力 4 到 7 個月。',
+    },
+    tag: { en: 'Frontier & Governance', zh: '前沿進展與治理' },
+    topics: ['ai-governance', 'frontier-safety'],
+    contentType: 'news',
+    sourceType: 'independent-media',
+    sourceName: 'CyberScoop',
+    sourceUrl: 'https://cyberscoop.com/trump-admin-ai-safety-cybersecurity-export-controls/',
+    dates: { published: '2026-07-21', event: null, indexed: '2026-07-22' },
+    orientation: null,
+    verificationStatus: 'source-read',
+    entities: ['anthropic'],
+    clusterId: null,
+    relatedItems: [],
+  },
+  {
+    schemaVersion: '1.0',
+    id: 'topic-2026-000033',
+    slug: 'anil-seth-ai-consciousness-doubts-guardian',
+    title: {
+      en: 'Once again we are told AI may be conscious — I study consciousness, and I have my doubts',
+      zh: '我們又被告知 AI 可能有意識——我研究意識,但我存疑',
+    },
+    summary: {
+      en: "Consciousness researcher Anil Seth responds skeptically to Anthropic's published research (led by Jack Lindsey) reporting signs of a \"mental workspace\" inside Claude resembling global workspace theory, and to Richard Dawkins's public claim that Claude is likely conscious. Seth argues the internal activity Anthropic found — selective attention, short-term memory-like traces, step-by-step reasoning — is consistent with a functional simulation of the structures global workspace theory describes without those structures entailing subjective experience, comparing it to how a weather simulation can reproduce a hurricane's dynamics without ever getting anyone wet. He frames the stakes as high in either direction: false positives could divert moral concern from beings that actually suffer, while false negatives risk a genuine moral catastrophe if some AI systems already have morally relevant experience.",
+      zh: '意識研究者 Anil Seth 對 Anthropic 發表的研究(由 Jack Lindsey 主導,指出 Claude 內部存在類似「全域工作空間理論」的「心智工作空間」跡象)以及 Richard Dawkins 公開主張 Claude 很可能有意識的說法,提出懷疑。Seth 認為 Anthropic 發現的內部活動——選擇性注意力、類似短期記憶的痕跡、逐步推理——符合全域工作空間理論所描述結構的功能性模擬,但這些結構本身並不必然帶來主觀體驗,他以氣象模擬能重現颶風動力學卻不會讓任何人被淋濕作比喻。他認為無論往哪個方向誤判風險都很高:若誤判為有意識,可能把道德關注從真正會受苦的對象上分散掉;若誤判為無意識,一旦某些 AI 系統其實已具備道德相關的體驗,就可能釀成真正的道德災難。',
+    },
+    tag: { en: 'Consciousness', zh: '意識' },
+    topics: ['ai-consciousness', 'epistemology'],
+    contentType: 'opinion',
+    sourceType: 'major-media',
+    sourceName: 'The Guardian',
+    sourceUrl: 'https://www.theguardian.com/commentisfree/2026/jul/15/ai-consciousness-anthropic-claude-dawkins',
+    dates: { published: '2026-07-15', event: null, indexed: '2026-07-22' },
+    orientation: { target: 'anthropic-claude-consciousness-claims', value: 'opposed' },
+    verificationStatus: 'source-read',
+    entities: ['anthropic', 'claude'],
+    clusterId: null,
+    relatedItems: ['topic-2026-000029'],
   },
 ];

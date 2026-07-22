@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -143,6 +143,11 @@ const COUNTRY_LANG = {
   // ig intentionally has no country mapping: Nigeria's official language is
   // English and Igbo is a major regional language (not a nationwide
   // majority) — same reasoning as the ha/yo precedent above.
+  LT: 'lt',
+  LV: 'lv',
+  EE: 'et',
+  SI: 'sl',
+  MT: 'mt',
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -206,6 +211,11 @@ const CONTENT_LANG = {
   lo: 'lo',
   so: 'so',
   hr: 'hr',
+  lt: 'lt',
+  lv: 'lv',
+  et: 'et',
+  sl: 'sl',
+  mt: 'mt',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -293,6 +303,11 @@ function pickLang(request) {
   if (first.startsWith('lo')) return 'lo';
   if (first.startsWith('so')) return 'so';
   if (first.startsWith('hr')) return 'hr';
+  if (first.startsWith('lt')) return 'lt';
+  if (first.startsWith('lv')) return 'lv';
+  if (first.startsWith('et')) return 'et';
+  if (first.startsWith('sl')) return 'sl';
+  if (first.startsWith('mt')) return 'mt';
   return DEFAULT_LANG;
 }
 

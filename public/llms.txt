@@ -25,9 +25,10 @@ lang=pa (Punjabi), lang=te (Telugu), lang=mr (Marathi), lang=am
 lang=uz (Uzbek), lang=ha (Hausa), lang=az (Azerbaijani), lang=yo
 (Yoruba), lang=km (Khmer), lang=mn (Mongolian), lang=hy (Armenian),
 lang=bg (Bulgarian), lang=ig (Igbo), lang=ka (Georgian), lang=lo
-(Lao), lang=so (Somali), lang=hr (Croatian) — 60 languages total and
-growing; new languages are added on an ongoing basis toward
-full global coverage.
+(Lao), lang=so (Somali), lang=hr (Croatian), lang=lt (Lithuanian),
+lang=lv (Latvian), lang=et (Estonian), lang=sl (Slovenian), lang=mt
+(Maltese) — 65 languages total and growing; new languages are added
+on an ongoing basis toward full global coverage.
 Machine-readable files are language-neutral; untranslated strings
 fall back to English. The on-page language picker (header) is a searchable grid — type a language's
 native or English name to filter it.
