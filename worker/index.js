@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -148,6 +148,29 @@ const COUNTRY_LANG = {
   EE: 'et',
   SI: 'sl',
   MT: 'mt',
+  // ga (Irish) intentionally has no country mapping: Irish is Ireland's
+  // constitutional first official language, but English is the
+  // overwhelming everyday-use language there — same reasoning as the
+  // ha/yo/ig precedent above (constitutional/official status without
+  // practical-majority everyday use).
+  // jv (Javanese) intentionally has no country mapping: Javanese has more
+  // native speakers than Indonesian itself, but Indonesia's national
+  // lingua franca and sole official language is Bahasa Indonesia (already
+  // ID → id) — Javanese is a regional/ethnic language, not a national
+  // one, same reasoning as the IN/ta/pa precedent above.
+  // zu/af (Zulu, Afrikaans) intentionally have no country mapping: South
+  // Africa has 12 official languages with no majority — Zulu is merely
+  // the largest single home language at ~24%, not a majority like the
+  // LK/si or SO/so precedents required — Accept-Language is the accurate
+  // per-user signal here, same reasoning as the IN precedent above.
+  // ps (Pashto) intentionally has no new country mapping: Afghanistan (AF)
+  // already maps to 'fa' (Dari/Persian) — Dari and Pashto are both
+  // official and roughly comparable in population share with no clear
+  // majority, so this doesn't meet the bar the earlier KZ/kk correction
+  // needed (a genuine sole-official-language case) — leaving the existing
+  // AF → fa default unchanged rather than an under-justified reversal;
+  // Pashto speakers in both Afghanistan and Pakistan are served by
+  // Accept-Language instead.
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -216,6 +239,11 @@ const CONTENT_LANG = {
   et: 'et',
   sl: 'sl',
   mt: 'mt',
+  ga: 'ga',
+  jv: 'jv',
+  zu: 'zu',
+  af: 'af',
+  ps: 'ps',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -308,6 +336,11 @@ function pickLang(request) {
   if (first.startsWith('et')) return 'et';
   if (first.startsWith('sl')) return 'sl';
   if (first.startsWith('mt')) return 'mt';
+  if (first.startsWith('ga')) return 'ga';
+  if (first.startsWith('jv')) return 'jv';
+  if (first.startsWith('zu')) return 'zu';
+  if (first.startsWith('af')) return 'af';
+  if (first.startsWith('ps')) return 'ps';
   return DEFAULT_LANG;
 }
 
