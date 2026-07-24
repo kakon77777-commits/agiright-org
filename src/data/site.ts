@@ -66,6 +66,11 @@ import { UI_JV, STRINGS as JV_STRINGS } from './translations/jv';
 import { UI_ZU, STRINGS as ZU_STRINGS } from './translations/zu';
 import { UI_AF, STRINGS as AF_STRINGS } from './translations/af';
 import { UI_PS, STRINGS as PS_STRINGS } from './translations/ps';
+import { UI_XH, STRINGS as XH_STRINGS } from './translations/xh';
+import { UI_ST, STRINGS as ST_STRINGS } from './translations/st';
+import { UI_TN, STRINGS as TN_STRINGS } from './translations/tn';
+import { UI_SS, STRINGS as SS_STRINGS } from './translations/ss';
+import { UI_VE, STRINGS as VE_STRINGS } from './translations/ve';
 
 export type Lang =
   | 'en'
@@ -137,7 +142,12 @@ export type Lang =
   | 'jv'
   | 'zu'
   | 'af'
-  | 'ps';
+  | 'ps'
+  | 'xh'
+  | 'st'
+  | 'tn'
+  | 'ss'
+  | 've';
 
 /** all supported languages; adding one = translation file + worker mapping */
 export const LANGS: Lang[] = [
@@ -151,6 +161,7 @@ export const LANGS: Lang[] = [
   'ig', 'ka', 'lo', 'so', 'hr',
   'lt', 'lv', 'et', 'sl', 'mt',
   'ga', 'jv', 'zu', 'af', 'ps',
+  'xh', 'st', 'tn', 'ss', 've',
 ];
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
@@ -263,6 +274,11 @@ export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: st
   af: { html: 'af', ogLocale: 'af_ZA', label: 'Afrikaans', labelEn: 'Afrikaans', dir: 'ltr' },
   // ps (Pashto) is written in an extended Perso-Arabic script — RTL, like ar/fa/he/ur.
   ps: { html: 'ps', ogLocale: 'ps_AF', label: 'پښتو', labelEn: 'Pashto', dir: 'rtl' },
+  xh: { html: 'xh', ogLocale: 'xh_ZA', label: 'isiXhosa', labelEn: 'Xhosa', dir: 'ltr' },
+  st: { html: 'st', ogLocale: 'st_ZA', label: 'Sesotho', labelEn: 'Southern Sotho', dir: 'ltr' },
+  tn: { html: 'tn', ogLocale: 'tn_ZA', label: 'Setswana', labelEn: 'Tswana', dir: 'ltr' },
+  ss: { html: 'ss', ogLocale: 'ss_ZA', label: 'siSwati', labelEn: 'Swati', dir: 'ltr' },
+  ve: { html: 've', ogLocale: 've_ZA', label: 'Tshivenḓa', labelEn: 'Venda', dir: 'ltr' },
 };
 
 /** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
@@ -344,6 +360,11 @@ const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
   zu: ZU_STRINGS,
   af: AF_STRINGS,
   ps: PS_STRINGS,
+  xh: XH_STRINGS,
+  st: ST_STRINGS,
+  tn: TN_STRINGS,
+  ss: SS_STRINGS,
+  ve: VE_STRINGS,
 };
 
 /** resolve a bilingual string for any language, falling back to English */
@@ -368,12 +389,12 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.8.3',
+  version: 'v0.8.4',
   // Bump this alongside `version` on every ship — every other machine-readable
   // "version last changed" field (manifest.json, etc.) derives from this pair
   // instead of being hand-edited, per the 2026-07-21 site-audit's P0 finding
   // that manifest.json's site_version had drifted to a stale "0.4.1".
-  updatedAt: '2026-07-23',
+  updatedAt: '2026-07-24',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -637,4 +658,9 @@ export const UI: Record<Lang, UIStrings> = {
   zu: asUI(UI_ZU),
   af: asUI(UI_AF),
   ps: asUI(UI_PS),
+  xh: asUI(UI_XH),
+  st: asUI(UI_ST),
+  tn: asUI(UI_TN),
+  ss: asUI(UI_SS),
+  ve: asUI(UI_VE),
 };

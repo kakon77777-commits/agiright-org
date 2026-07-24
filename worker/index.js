@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -171,6 +171,12 @@ const COUNTRY_LANG = {
   // AF → fa default unchanged rather than an under-justified reversal;
   // Pashto speakers in both Afghanistan and Pakistan are served by
   // Accept-Language instead.
+  // xh/st/tn/ss/ve (Xhosa, Southern Sotho, Tswana, Swati, Venda)
+  // intentionally have no country mapping: same reasoning as zu/af above —
+  // South Africa has 12 official languages with no majority, so ZA isn't
+  // mapped to any single one of them; Accept-Language is the accurate
+  // per-user signal for all of South Africa's official languages on this
+  // site (af, zu, xh, st, tn, ss, ve so far).
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -244,6 +250,11 @@ const CONTENT_LANG = {
   zu: 'zu',
   af: 'af',
   ps: 'ps',
+  xh: 'xh',
+  st: 'st',
+  tn: 'tn',
+  ss: 'ss',
+  ve: 've',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -341,6 +352,11 @@ function pickLang(request) {
   if (first.startsWith('zu')) return 'zu';
   if (first.startsWith('af')) return 'af';
   if (first.startsWith('ps')) return 'ps';
+  if (first.startsWith('xh')) return 'xh';
+  if (first.startsWith('st')) return 'st';
+  if (first.startsWith('tn')) return 'tn';
+  if (first.startsWith('ss')) return 'ss';
+  if (first.startsWith('ve')) return 've';
   return DEFAULT_LANG;
 }
 
