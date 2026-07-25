@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -177,6 +177,15 @@ const COUNTRY_LANG = {
   // mapped to any single one of them; Accept-Language is the accurate
   // per-user signal for all of South Africa's official languages on this
   // site (af, zu, xh, st, tn, ss, ve so far).
+  // nr/nso/ts (Southern Ndebele, Northern Sotho, Tsonga) complete the same
+  // South Africa set, same no-country-mapping reasoning.
+  // su (Sundanese) intentionally has no country mapping: same reasoning as
+  // jv (Javanese) above — Indonesia's sole official/national language is
+  // Bahasa Indonesia (already ID → id), Sundanese is a regional language.
+  // ceb (Cebuano) intentionally has no country mapping: the Philippines'
+  // official languages are Filipino and English (already PH → fil);
+  // Cebuano is a major regional language (Visayas/Mindanao) without
+  // nationwide-majority status — same reasoning as the ha/yo/ig precedent.
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -255,6 +264,11 @@ const CONTENT_LANG = {
   tn: 'tn',
   ss: 'ss',
   ve: 've',
+  nr: 'nr',
+  nso: 'nso',
+  ts: 'ts',
+  su: 'su',
+  ceb: 'ceb',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -315,6 +329,7 @@ function pickLang(request) {
   if (first.startsWith('ro')) return 'ro';
   if (first.startsWith('hu')) return 'hu';
   if (first.startsWith('da')) return 'da';
+  if (first.startsWith('nso')) return 'nso'; // must be checked before 'no' below — 'nso' (Northern Sotho) would otherwise false-match the Norwegian prefix check
   if (first.startsWith('no') || first.startsWith('nb') || first.startsWith('nn')) return 'no'; // nb=Bokmål, nn=Nynorsk — both map to the single Norwegian variant this site ships
   if (first.startsWith('sk')) return 'sk';
   if (first.startsWith('fil') || first.startsWith('tl')) return 'fil'; // 'tl' = ISO 639-1 Tagalog, still the more common Accept-Language tag for Filipino
@@ -357,6 +372,10 @@ function pickLang(request) {
   if (first.startsWith('tn')) return 'tn';
   if (first.startsWith('ss')) return 'ss';
   if (first.startsWith('ve')) return 've';
+  if (first.startsWith('nr')) return 'nr';
+  if (first.startsWith('ts')) return 'ts';
+  if (first.startsWith('su')) return 'su';
+  if (first.startsWith('ceb')) return 'ceb';
   return DEFAULT_LANG;
 }
 
