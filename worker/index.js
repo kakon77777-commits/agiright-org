@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -186,6 +186,25 @@ const COUNTRY_LANG = {
   // official languages are Filipino and English (already PH → fil);
   // Cebuano is a major regional language (Visayas/Mindanao) without
   // nationwide-majority status — same reasoning as the ha/yo/ig precedent.
+  // qu (Quechua) intentionally has no country mapping: spoken across Peru,
+  // Bolivia, and Ecuador, co-official in Peru/Bolivia, but Spanish is the
+  // everyday lingua franca in all three — no single country has a clear
+  // Quechua-speaking majority, same reasoning as the IN precedent above.
+  // bo (Tibetan) and ug (Uyghur) intentionally have no country mapping:
+  // both are minority languages within China (already CN → zh-cn) without
+  // their own country — Accept-Language is the only real per-user signal.
+  // ku (Kurdish) intentionally has no country mapping: spoken across
+  // Turkey, Iraq, Iran, and Syria, none of which have Kurdish as a
+  // national-level majority language (Iraq's Kurdistan Region is a
+  // sub-national exception) — those four countries already map to their
+  // own dominant languages (tr/ar/fa/ar respectively).
+  // ht: Haitian Creole IS mapped, unlike the languages above — Haiti's
+  // other official language is French, but Haitian Creole is the
+  // overwhelming everyday/native language of the vast majority of the
+  // population (French is a minority elite language) — a genuine clear
+  // majority despite co-official status, same reasoning as the earlier
+  // LK/si and SO/so precedents.
+  HT: 'ht',
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -269,6 +288,11 @@ const CONTENT_LANG = {
   ts: 'ts',
   su: 'su',
   ceb: 'ceb',
+  qu: 'qu',
+  bo: 'bo',
+  ug: 'ug',
+  ku: 'ku',
+  ht: 'ht',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -376,6 +400,11 @@ function pickLang(request) {
   if (first.startsWith('ts')) return 'ts';
   if (first.startsWith('su')) return 'su';
   if (first.startsWith('ceb')) return 'ceb';
+  if (first.startsWith('qu')) return 'qu';
+  if (first.startsWith('bo')) return 'bo';
+  if (first.startsWith('ug')) return 'ug';
+  if (first.startsWith('ku')) return 'ku';
+  if (first.startsWith('ht')) return 'ht';
   return DEFAULT_LANG;
 }
 

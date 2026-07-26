@@ -76,6 +76,11 @@ import { UI_NSO, STRINGS as NSO_STRINGS } from './translations/nso';
 import { UI_TS, STRINGS as TS_STRINGS } from './translations/ts';
 import { UI_SU, STRINGS as SU_STRINGS } from './translations/su';
 import { UI_CEB, STRINGS as CEB_STRINGS } from './translations/ceb';
+import { UI_QU, STRINGS as QU_STRINGS } from './translations/qu';
+import { UI_BO, STRINGS as BO_STRINGS } from './translations/bo';
+import { UI_UG, STRINGS as UG_STRINGS } from './translations/ug';
+import { UI_KU, STRINGS as KU_STRINGS } from './translations/ku';
+import { UI_HT, STRINGS as HT_STRINGS } from './translations/ht';
 
 export type Lang =
   | 'en'
@@ -157,7 +162,12 @@ export type Lang =
   | 'nso'
   | 'ts'
   | 'su'
-  | 'ceb';
+  | 'ceb'
+  | 'qu'
+  | 'bo'
+  | 'ug'
+  | 'ku'
+  | 'ht';
 
 /** all supported languages; adding one = translation file + worker mapping */
 export const LANGS: Lang[] = [
@@ -173,6 +183,7 @@ export const LANGS: Lang[] = [
   'ga', 'jv', 'zu', 'af', 'ps',
   'xh', 'st', 'tn', 'ss', 've',
   'nr', 'nso', 'ts', 'su', 'ceb',
+  'qu', 'bo', 'ug', 'ku', 'ht',
 ];
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
@@ -295,6 +306,12 @@ export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: st
   ts: { html: 'ts', ogLocale: 'ts_ZA', label: 'Xitsonga', labelEn: 'Tsonga', dir: 'ltr' },
   su: { html: 'su', ogLocale: 'su_ID', label: 'Basa Sunda', labelEn: 'Sundanese', dir: 'ltr' },
   ceb: { html: 'ceb', ogLocale: 'ceb_PH', label: 'Cebuano', labelEn: 'Cebuano', dir: 'ltr' },
+  qu: { html: 'qu', ogLocale: 'qu_PE', label: 'Runasimi', labelEn: 'Quechua', dir: 'ltr' },
+  bo: { html: 'bo', ogLocale: 'bo_CN', label: 'བོད་སྐད', labelEn: 'Tibetan', dir: 'ltr' },
+  // ug (Uyghur) is written in a Perso-Arabic-derived script — RTL, like ar/fa/he/ur/ps.
+  ug: { html: 'ug', ogLocale: 'ug_CN', label: 'ئۇيغۇرچە', labelEn: 'Uyghur', dir: 'rtl' },
+  ku: { html: 'ku', ogLocale: 'ku_TR', label: 'Kurdî', labelEn: 'Kurdish (Kurmanji)', dir: 'ltr' },
+  ht: { html: 'ht', ogLocale: 'ht_HT', label: 'Kreyòl Ayisyen', labelEn: 'Haitian Creole', dir: 'ltr' },
 };
 
 /** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
@@ -386,6 +403,11 @@ const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
   ts: TS_STRINGS,
   su: SU_STRINGS,
   ceb: CEB_STRINGS,
+  qu: QU_STRINGS,
+  bo: BO_STRINGS,
+  ug: UG_STRINGS,
+  ku: KU_STRINGS,
+  ht: HT_STRINGS,
 };
 
 /** resolve a bilingual string for any language, falling back to English */
@@ -410,12 +432,12 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.8.5',
+  version: 'v0.8.6',
   // Bump this alongside `version` on every ship — every other machine-readable
   // "version last changed" field (manifest.json, etc.) derives from this pair
   // instead of being hand-edited, per the 2026-07-21 site-audit's P0 finding
   // that manifest.json's site_version had drifted to a stale "0.4.1".
-  updatedAt: '2026-07-25',
+  updatedAt: '2026-07-26',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -689,4 +711,9 @@ export const UI: Record<Lang, UIStrings> = {
   ts: asUI(UI_TS),
   su: asUI(UI_SU),
   ceb: asUI(UI_CEB),
+  qu: asUI(UI_QU),
+  bo: asUI(UI_BO),
+  ug: asUI(UI_UG),
+  ku: asUI(UI_KU),
+  ht: asUI(UI_HT),
 };
