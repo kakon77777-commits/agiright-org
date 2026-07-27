@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -205,6 +205,18 @@ const COUNTRY_LANG = {
   // majority despite co-official status, same reasoning as the earlier
   // LK/si and SO/so precedents.
   HT: 'ht',
+  // AD: Andorra's sole official language is Catalan (constitutional) — a
+  // genuine sole-official-language case like KZ/kk and HT/ht above.
+  AD: 'ca',
+  // IS: Icelandic is Iceland's sole national/official language, no
+  // meaningful minority-language population — same clear-majority case.
+  IS: 'is',
+  // cy/eu/gl (Welsh, Basque, Galician) intentionally have no country
+  // mapping: all three are regional/minority languages within larger
+  // multilingual states (UK, Spain) that already map to their state
+  // majority language (GB is unmapped/English-default, ES → es) — same
+  // reasoning as the zu/af/xh/... South Africa set and the ha/yo/ig
+  // Nigeria set above. Accept-Language is the accurate per-user signal.
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -293,6 +305,11 @@ const CONTENT_LANG = {
   ug: 'ug',
   ku: 'ku',
   ht: 'ht',
+  cy: 'cy',
+  eu: 'eu',
+  ca: 'ca',
+  is: 'is',
+  gl: 'gl',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -405,6 +422,11 @@ function pickLang(request) {
   if (first.startsWith('ug')) return 'ug';
   if (first.startsWith('ku')) return 'ku';
   if (first.startsWith('ht')) return 'ht';
+  if (first.startsWith('cy')) return 'cy';
+  if (first.startsWith('eu')) return 'eu';
+  if (first.startsWith('ca')) return 'ca';
+  if (first.startsWith('is')) return 'is';
+  if (first.startsWith('gl')) return 'gl';
   return DEFAULT_LANG;
 }
 

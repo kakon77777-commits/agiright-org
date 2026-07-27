@@ -33,8 +33,10 @@ lang=af (Afrikaans), lang=ps (Pashto, RTL), lang=xh (Xhosa), lang=st
 lang=nr (Southern Ndebele), lang=nso (Northern Sotho), lang=ts
 (Tsonga), lang=su (Sundanese), lang=ceb (Cebuano), lang=qu (Quechua),
 lang=bo (Tibetan), lang=ug (Uyghur, RTL), lang=ku (Kurdish, Kurmanji),
-lang=ht (Haitian Creole) — 85 languages total and growing; new
-languages are added on an ongoing basis toward full global coverage.
+lang=ht (Haitian Creole), lang=cy (Welsh), lang=eu (Basque), lang=ca
+(Catalan), lang=is (Icelandic), lang=gl (Galician) — 90 languages total
+and growing; new languages are added on an ongoing basis toward full
+global coverage.
 Machine-readable files are language-neutral; untranslated strings
 fall back to English. The on-page language picker (header) is a searchable grid — type a language's
 native or English name to filter it.
