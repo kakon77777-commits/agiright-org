@@ -86,6 +86,11 @@ import { UI_EU, STRINGS as EU_STRINGS } from './translations/eu';
 import { UI_CA, STRINGS as CA_STRINGS } from './translations/ca';
 import { UI_IS, STRINGS as IS_STRINGS } from './translations/is';
 import { UI_GL, STRINGS as GL_STRINGS } from './translations/gl';
+import { UI_MG, STRINGS as MG_STRINGS } from './translations/mg';
+import { UI_WO, STRINGS as WO_STRINGS } from './translations/wo';
+import { UI_SN, STRINGS as SN_STRINGS } from './translations/sn';
+import { UI_MI, STRINGS as MI_STRINGS } from './translations/mi';
+import { UI_SM, STRINGS as SM_STRINGS } from './translations/sm';
 
 export type Lang =
   | 'en'
@@ -177,7 +182,12 @@ export type Lang =
   | 'eu'
   | 'ca'
   | 'is'
-  | 'gl';
+  | 'gl'
+  | 'mg'
+  | 'wo'
+  | 'sn'
+  | 'mi'
+  | 'sm';
 
 /** all supported languages; adding one = translation file + worker mapping */
 export const LANGS: Lang[] = [
@@ -195,6 +205,7 @@ export const LANGS: Lang[] = [
   'nr', 'nso', 'ts', 'su', 'ceb',
   'qu', 'bo', 'ug', 'ku', 'ht',
   'cy', 'eu', 'ca', 'is', 'gl',
+  'mg', 'wo', 'sn', 'mi', 'sm',
 ];
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
@@ -328,6 +339,11 @@ export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: st
   ca: { html: 'ca', ogLocale: 'ca_ES', label: 'Català', labelEn: 'Catalan', dir: 'ltr' },
   is: { html: 'is', ogLocale: 'is_IS', label: 'Íslenska', labelEn: 'Icelandic', dir: 'ltr' },
   gl: { html: 'gl', ogLocale: 'gl_ES', label: 'Galego', labelEn: 'Galician', dir: 'ltr' },
+  mg: { html: 'mg', ogLocale: 'mg_MG', label: 'Malagasy', labelEn: 'Malagasy', dir: 'ltr' },
+  wo: { html: 'wo', ogLocale: 'wo_SN', label: 'Wolof', labelEn: 'Wolof', dir: 'ltr' },
+  sn: { html: 'sn', ogLocale: 'sn_ZW', label: 'chiShona', labelEn: 'Shona', dir: 'ltr' },
+  mi: { html: 'mi', ogLocale: 'mi_NZ', label: 'Māori', labelEn: 'Maori', dir: 'ltr' },
+  sm: { html: 'sm', ogLocale: 'sm_WS', label: 'Gagana Sāmoa', labelEn: 'Samoan', dir: 'ltr' },
 };
 
 /** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
@@ -429,6 +445,11 @@ const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
   ca: CA_STRINGS,
   is: IS_STRINGS,
   gl: GL_STRINGS,
+  mg: MG_STRINGS,
+  wo: WO_STRINGS,
+  sn: SN_STRINGS,
+  mi: MI_STRINGS,
+  sm: SM_STRINGS,
 };
 
 /** resolve a bilingual string for any language, falling back to English */
@@ -453,12 +474,12 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.8.7',
+  version: 'v0.8.8',
   // Bump this alongside `version` on every ship — every other machine-readable
   // "version last changed" field (manifest.json, etc.) derives from this pair
   // instead of being hand-edited, per the 2026-07-21 site-audit's P0 finding
   // that manifest.json's site_version had drifted to a stale "0.4.1".
-  updatedAt: '2026-07-27',
+  updatedAt: '2026-07-28',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -742,4 +763,9 @@ export const UI: Record<Lang, UIStrings> = {
   ca: asUI(UI_CA),
   is: asUI(UI_IS),
   gl: asUI(UI_GL),
+  mg: asUI(UI_MG),
+  wo: asUI(UI_WO),
+  sn: asUI(UI_SN),
+  mi: asUI(UI_MI),
+  sm: asUI(UI_SM),
 };

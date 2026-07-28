@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -217,6 +217,35 @@ const COUNTRY_LANG = {
   // majority language (GB is unmapped/English-default, ES → es) — same
   // reasoning as the zu/af/xh/... South Africa set and the ha/yo/ig
   // Nigeria set above. Accept-Language is the accurate per-user signal.
+  // MG: Malagasy is spoken as a native/everyday language by the
+  // overwhelming majority of Madagascar's population — French is the
+  // other official language but a minority elite-use one — a genuine
+  // clear-majority case like the earlier HT/ht and LK/si precedents.
+  MG: 'mg',
+  // SN: Wolof is not Senegal's official language (French alone is), but
+  // it's the country's dominant everyday lingua franca, spoken as a
+  // first or second language by a large majority of the population —
+  // same "official language ≠ everyday majority language" pattern as
+  // the HT/ht precedent (Haitian Creole vs French).
+  SN: 'wo',
+  // ZW: Zimbabwe has 16 constitutionally recognized official languages
+  // (2013), which superficially resembles the South Africa case where
+  // no country mapping was added — but unlike South Africa's ~24%
+  // largest-single-language ceiling, Shona is spoken natively by a
+  // clear majority (roughly 70%+) of Zimbabweans, clearing the same
+  // "genuine majority despite co-official status" bar as LK/si and
+  // SO/so, not just "largest of many minorities" like the ZA set.
+  ZW: 'sn',
+  // WS: Samoan and English are both official in Samoa, but Samoan is
+  // the near-universal native/everyday language of the population —
+  // English serves government and international use, similar to the
+  // HT/ht French-vs-Creole split.
+  WS: 'sm',
+  // mi (Maori) intentionally has no country mapping: Maori is one of
+  // New Zealand's official languages, but English is the overwhelming
+  // everyday-use language there — same reasoning as the ga (Irish)
+  // precedent above (official/constitutional status without practical
+  // majority everyday use). Accept-Language is the accurate signal.
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -310,6 +339,11 @@ const CONTENT_LANG = {
   ca: 'ca',
   is: 'is',
   gl: 'gl',
+  mg: 'mg',
+  wo: 'wo',
+  sn: 'sn',
+  mi: 'mi',
+  sm: 'sm',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -427,6 +461,11 @@ function pickLang(request) {
   if (first.startsWith('ca')) return 'ca';
   if (first.startsWith('is')) return 'is';
   if (first.startsWith('gl')) return 'gl';
+  if (first.startsWith('mg')) return 'mg';
+  if (first.startsWith('wo')) return 'wo';
+  if (first.startsWith('sn')) return 'sn';
+  if (first.startsWith('mi')) return 'mi';
+  if (first.startsWith('sm')) return 'sm';
   return DEFAULT_LANG;
 }
 
