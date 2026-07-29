@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -246,6 +246,37 @@ const COUNTRY_LANG = {
   // everyday-use language there — same reasoning as the ga (Irish)
   // precedent above (official/constitutional status without practical
   // majority everyday use). Accept-Language is the accurate signal.
+  // RW: Kinyarwanda is Rwanda's sole indigenous national language,
+  // spoken as a native/everyday language by virtually the entire
+  // population — a genuine clear-majority case like MG/mg and HT/ht.
+  RW: 'rw',
+  // MW: Chichewa (Nyanja) is Malawi's national language, spoken as a
+  // first or second language by a large majority of the population,
+  // official alongside English — same "official language ≠ sole
+  // everyday-majority language" pattern as the HT/ht precedent.
+  MW: 'ny',
+  // fj (Fijian) intentionally has no country mapping: Fiji has three
+  // official languages (English, Fijian, Fiji Hindi), and while ethnic
+  // Fijians are a majority of the population (~57%), that falls short
+  // of the "overwhelming majority despite co-official status" bar the
+  // earlier LK/si, SO/so, HT/ht, MG/mg, and WS/sm mappings required —
+  // a sizeable Fiji Hindi-speaking population makes this closer to the
+  // South Africa/Nigeria "no clear majority" pattern than a genuine
+  // single-majority case. Accept-Language is the accurate signal.
+  // lb (Luxembourgish) intentionally has no country mapping: although
+  // Luxembourgish is constitutionally Luxembourg's sole "national
+  // language" (French/German are merely "administrative" languages),
+  // roughly half of Luxembourg's resident population are foreign
+  // nationals who may not speak it as an everyday language — unlike
+  // the IS/AD precedent (population and official status both clearly
+  // aligned), this country's population majority is genuinely unclear,
+  // so this leans toward the ga (Irish) "official status without
+  // confident everyday-majority backing" pattern instead.
+  // kn (Kannada) intentionally has no country mapping: Kannada is the
+  // official language of the Indian state of Karnataka, not of India
+  // as a whole — same reasoning as the existing ta/pa/te/mr/hi
+  // precedent (India is multilingual, Accept-Language is the accurate
+  // per-user signal for its state-level languages).
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -344,6 +375,11 @@ const CONTENT_LANG = {
   sn: 'sn',
   mi: 'mi',
   sm: 'sm',
+  rw: 'rw',
+  ny: 'ny',
+  fj: 'fj',
+  lb: 'lb',
+  kn: 'kn',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -466,6 +502,11 @@ function pickLang(request) {
   if (first.startsWith('sn')) return 'sn';
   if (first.startsWith('mi')) return 'mi';
   if (first.startsWith('sm')) return 'sm';
+  if (first.startsWith('rw')) return 'rw';
+  if (first.startsWith('ny')) return 'ny';
+  if (first.startsWith('fj')) return 'fj';
+  if (first.startsWith('lb')) return 'lb';
+  if (first.startsWith('kn')) return 'kn';
   return DEFAULT_LANG;
 }
 
