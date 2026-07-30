@@ -37,9 +37,10 @@ lang=ht (Haitian Creole), lang=cy (Welsh), lang=eu (Basque), lang=ca
 (Catalan), lang=is (Icelandic), lang=gl (Galician), lang=mg (Malagasy),
 lang=wo (Wolof), lang=sn (Shona), lang=mi (Māori), lang=sm (Samoan),
 lang=rw (Kinyarwanda), lang=ny (Chichewa), lang=fj (Fijian), lang=lb
-(Luxembourgish), lang=kn (Kannada) — 100 languages total and growing;
-new languages are added on an ongoing basis toward full global
-coverage.
+(Luxembourgish), lang=kn (Kannada), lang=ti (Tigrinya), lang=rn
+(Kirundi), lang=dv (Divehi, RTL), lang=sd (Sindhi, RTL), lang=fo
+(Faroese) — 105 languages total and growing; new languages are added
+on an ongoing basis toward full global coverage.
 Machine-readable files are language-neutral; untranslated strings
 fall back to English. The on-page language picker (header) is a searchable grid — type a language's
 native or English name to filter it.

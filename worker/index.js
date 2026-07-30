@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -277,6 +277,32 @@ const COUNTRY_LANG = {
   // as a whole — same reasoning as the existing ta/pa/te/mr/hi
   // precedent (India is multilingual, Accept-Language is the accurate
   // per-user signal for its state-level languages).
+  // ti (Tigrinya) intentionally has no country mapping: Eritrea has no
+  // constitutionally designated official language (all recognized
+  // languages hold equal legal status), and Tigrinya's ~50% first-
+  // language share is a plurality, not the kind of clear majority the
+  // MG/mg, HT/ht, RW/rw precedents required — closer to the ZA/NG
+  // "no single favored language" pattern than a genuine majority case.
+  // BI: Kirundi is Burundi's sole national language, spoken as a first
+  // language by virtually the entire population — a genuine clear-
+  // majority case like RW/rw (Rwanda is Burundi's linguistically
+  // closest neighbor, same pattern applies).
+  BI: 'rn',
+  // MV: Divehi is the Maldives' sole official and national language,
+  // spoken natively by virtually the entire population — a genuine
+  // clear-majority case like HT/ht and MG/mg.
+  MV: 'dv',
+  // sd (Sindhi) intentionally has no country mapping: Sindhi is a
+  // provincial language of Pakistan's Sindh province, not Pakistan's
+  // national majority language (Punjabi has more speakers nationally,
+  // and PK already maps to Urdu — the national lingua franca) — same
+  // reasoning as the kn/ta/pa/te/mr "state/provincial language within
+  // a larger multilingual country" precedent.
+  // FO: Faroese is the Faroe Islands' primary everyday language,
+  // spoken by the large majority of residents, official alongside
+  // Danish — a genuine clear-majority case like IS/is (its closest
+  // linguistic and cultural neighbor).
+  FO: 'fo',
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -380,6 +406,11 @@ const CONTENT_LANG = {
   fj: 'fj',
   lb: 'lb',
   kn: 'kn',
+  ti: 'ti',
+  rn: 'rn',
+  dv: 'dv',
+  sd: 'sd',
+  fo: 'fo',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -507,6 +538,11 @@ function pickLang(request) {
   if (first.startsWith('fj')) return 'fj';
   if (first.startsWith('lb')) return 'lb';
   if (first.startsWith('kn')) return 'kn';
+  if (first.startsWith('ti')) return 'ti';
+  if (first.startsWith('rn')) return 'rn';
+  if (first.startsWith('dv')) return 'dv';
+  if (first.startsWith('sd')) return 'sd';
+  if (first.startsWith('fo')) return 'fo';
   return DEFAULT_LANG;
 }
 

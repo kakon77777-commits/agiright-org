@@ -96,6 +96,11 @@ import { UI_NY, STRINGS as NY_STRINGS } from './translations/ny';
 import { UI_FJ, STRINGS as FJ_STRINGS } from './translations/fj';
 import { UI_LB, STRINGS as LB_STRINGS } from './translations/lb';
 import { UI_KN, STRINGS as KN_STRINGS } from './translations/kn';
+import { UI_TI, STRINGS as TI_STRINGS } from './translations/ti';
+import { UI_RN, STRINGS as RN_STRINGS } from './translations/rn';
+import { UI_DV, STRINGS as DV_STRINGS } from './translations/dv';
+import { UI_SD, STRINGS as SD_STRINGS } from './translations/sd';
+import { UI_FO, STRINGS as FO_STRINGS } from './translations/fo';
 
 export type Lang =
   | 'en'
@@ -197,7 +202,12 @@ export type Lang =
   | 'ny'
   | 'fj'
   | 'lb'
-  | 'kn';
+  | 'kn'
+  | 'ti'
+  | 'rn'
+  | 'dv'
+  | 'sd'
+  | 'fo';
 
 /** all supported languages; adding one = translation file + worker mapping */
 export const LANGS: Lang[] = [
@@ -217,6 +227,7 @@ export const LANGS: Lang[] = [
   'cy', 'eu', 'ca', 'is', 'gl',
   'mg', 'wo', 'sn', 'mi', 'sm',
   'rw', 'ny', 'fj', 'lb', 'kn',
+  'ti', 'rn', 'dv', 'sd', 'fo',
 ];
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
@@ -360,6 +371,11 @@ export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: st
   fj: { html: 'fj', ogLocale: 'fj_FJ', label: 'Na Vosa Vakaviti', labelEn: 'Fijian', dir: 'ltr' },
   lb: { html: 'lb', ogLocale: 'lb_LU', label: 'Lëtzebuergesch', labelEn: 'Luxembourgish', dir: 'ltr' },
   kn: { html: 'kn', ogLocale: 'kn_IN', label: 'ಕನ್ನಡ', labelEn: 'Kannada', dir: 'ltr' },
+  ti: { html: 'ti', ogLocale: 'ti_ER', label: 'ትግርኛ', labelEn: 'Tigrinya', dir: 'ltr' },
+  rn: { html: 'rn', ogLocale: 'rn_BI', label: 'Ikirundi', labelEn: 'Kirundi', dir: 'ltr' },
+  dv: { html: 'dv', ogLocale: 'dv_MV', label: 'ދިވެހި', labelEn: 'Divehi', dir: 'rtl' },
+  sd: { html: 'sd', ogLocale: 'sd_PK', label: 'سنڌي', labelEn: 'Sindhi', dir: 'rtl' },
+  fo: { html: 'fo', ogLocale: 'fo_FO', label: 'Føroyskt', labelEn: 'Faroese', dir: 'ltr' },
 };
 
 /** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
@@ -471,6 +487,11 @@ const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
   fj: FJ_STRINGS,
   lb: LB_STRINGS,
   kn: KN_STRINGS,
+  ti: TI_STRINGS,
+  rn: RN_STRINGS,
+  dv: DV_STRINGS,
+  sd: SD_STRINGS,
+  fo: FO_STRINGS,
 };
 
 /** resolve a bilingual string for any language, falling back to English */
@@ -495,12 +516,12 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.8.9',
+  version: 'v0.8.10',
   // Bump this alongside `version` on every ship — every other machine-readable
   // "version last changed" field (manifest.json, etc.) derives from this pair
   // instead of being hand-edited, per the 2026-07-21 site-audit's P0 finding
   // that manifest.json's site_version had drifted to a stale "0.4.1".
-  updatedAt: '2026-07-29',
+  updatedAt: '2026-07-30',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -794,4 +815,9 @@ export const UI: Record<Lang, UIStrings> = {
   fj: asUI(UI_FJ),
   lb: asUI(UI_LB),
   kn: asUI(UI_KN),
+  ti: asUI(UI_TI),
+  rn: asUI(UI_RN),
+  dv: asUI(UI_DV),
+  sd: asUI(UI_SD),
+  fo: asUI(UI_FO),
 };
