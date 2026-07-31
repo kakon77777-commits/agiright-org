@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -303,6 +303,38 @@ const COUNTRY_LANG = {
   // Danish — a genuine clear-majority case like IS/is (its closest
   // linguistic and cultural neighbor).
   FO: 'fo',
+  // TO: Tongan is Tonga's national language, official alongside
+  // English, and spoken natively by the overwhelming majority of the
+  // population — a genuine clear-majority case like WS/sm (its
+  // closest Polynesian neighbor).
+  TO: 'to',
+  // PY: Guarani is co-official with Spanish in Paraguay, but is
+  // actually the more widely spoken everyday language nationally
+  // (commonly cited near-universal bilingualism, with Guarani
+  // dominant in rural areas and used more broadly than Spanish in
+  // daily life) — a genuine clear-majority case despite co-official
+  // status, same reasoning as the HT/ht precedent.
+  PY: 'gn',
+  // lg (Luganda) intentionally has no country mapping: Luganda is
+  // Uganda's largest single indigenous language (Baganda people,
+  // roughly ~17% of the population), but Uganda's official languages
+  // are English and Swahili, and no single indigenous language holds
+  // anything close to a majority among Uganda's 40+ languages — same
+  // "largest of many minorities" pattern as the South Africa/Nigeria
+  // precedent, not a genuine majority case. (Note: the uppercase
+  // country code UG here is Uganda, unrelated to the lowercase
+  // language code 'ug' used elsewhere for Uyghur — same coincidental
+  // letter-overlap, no actual collision, as the earlier AM/am
+  // Armenia/Amharic precedent.)
+  // TM: Turkmen is Turkmenistan's sole official language and is
+  // spoken natively by the large majority of the population — a
+  // genuine clear-majority case like KZ/kk (Kazakhstan/Kazakh).
+  TM: 'tk',
+  // ml (Malayalam) intentionally has no country mapping: Malayalam is
+  // the official language of the Indian state of Kerala, not of India
+  // as a whole — same reasoning as the existing kn/ta/pa/te/mr
+  // precedent (India is multilingual, Accept-Language is the accurate
+  // per-user signal for its state-level languages).
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -411,6 +443,11 @@ const CONTENT_LANG = {
   dv: 'dv',
   sd: 'sd',
   fo: 'fo',
+  to: 'to',
+  gn: 'gn',
+  lg: 'lg',
+  tk: 'tk',
+  ml: 'ml',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -543,6 +580,11 @@ function pickLang(request) {
   if (first.startsWith('dv')) return 'dv';
   if (first.startsWith('sd')) return 'sd';
   if (first.startsWith('fo')) return 'fo';
+  if (first.startsWith('to')) return 'to';
+  if (first.startsWith('gn')) return 'gn';
+  if (first.startsWith('lg')) return 'lg';
+  if (first.startsWith('tk')) return 'tk';
+  if (first.startsWith('ml')) return 'ml';
   return DEFAULT_LANG;
 }
 
