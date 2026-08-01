@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -335,6 +335,31 @@ const COUNTRY_LANG = {
   // as a whole — same reasoning as the existing kn/ta/pa/te/mr
   // precedent (India is multilingual, Accept-Language is the accurate
   // per-user signal for its state-level languages).
+  // ay (Aymara) intentionally has no country mapping: Aymara is spoken
+  // across Bolivia, Peru, and Chile, co-official in Bolivia alongside
+  // Spanish and dozens of other indigenous languages, but Spanish is
+  // the everyday lingua franca in all three — no single country has a
+  // clear Aymara-speaking majority, same reasoning as the QU/qu
+  // (Quechua) precedent above.
+  // as (Assamese) intentionally has no country mapping: Assamese is
+  // the official language of the Indian state of Assam, not of India
+  // as a whole — same reasoning as the existing kn/ml/ta/pa/te/mr
+  // precedent.
+  // co (Corsican) intentionally has no country mapping: Corsican is a
+  // regional minority language within France, which already maps to
+  // its state majority language (fr) — same reasoning as the earlier
+  // cy/eu/gl regional-language set.
+  // cv (Chuvash) intentionally has no country mapping: Chuvash is a
+  // minority language within the Chuvash Republic, a federal subject
+  // of Russia (already RU → ru) — same reasoning as the bo/ug
+  // minority-language-within-a-larger-country precedent.
+  // VU: Bislama is one of Vanuatu's three official languages (with
+  // English and French), but functions as the genuine everyday lingua
+  // franca spoken by the large majority of the population across the
+  // country's 100+ indigenous languages — a real vernacular-majority
+  // case despite formal multilingualism, same reasoning as the HT/ht
+  // precedent.
+  VU: 'bi',
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -448,6 +473,11 @@ const CONTENT_LANG = {
   lg: 'lg',
   tk: 'tk',
   ml: 'ml',
+  ay: 'ay',
+  as: 'as',
+  co: 'co',
+  cv: 'cv',
+  bi: 'bi',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -585,6 +615,11 @@ function pickLang(request) {
   if (first.startsWith('lg')) return 'lg';
   if (first.startsWith('tk')) return 'tk';
   if (first.startsWith('ml')) return 'ml';
+  if (first.startsWith('ay')) return 'ay';
+  if (first.startsWith('as')) return 'as';
+  if (first.startsWith('co')) return 'co';
+  if (first.startsWith('cv')) return 'cv';
+  if (first.startsWith('bi')) return 'bi';
   return DEFAULT_LANG;
 }
 

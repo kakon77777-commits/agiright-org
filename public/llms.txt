@@ -40,9 +40,10 @@ lang=rw (Kinyarwanda), lang=ny (Chichewa), lang=fj (Fijian), lang=lb
 (Luxembourgish), lang=kn (Kannada), lang=ti (Tigrinya), lang=rn
 (Kirundi), lang=dv (Divehi, RTL), lang=sd (Sindhi, RTL), lang=fo
 (Faroese), lang=to (Tongan), lang=gn (Guarani), lang=lg (Luganda),
-lang=tk (Turkmen), lang=ml (Malayalam) — 110 languages total and
-growing; new languages are added on an ongoing basis toward full
-global coverage.
+lang=tk (Turkmen), lang=ml (Malayalam), lang=ay (Aymara), lang=as
+(Assamese), lang=co (Corsican), lang=cv (Chuvash), lang=bi (Bislama)
+— 115 languages total and growing; new languages are added on an
+ongoing basis toward full global coverage.
 Machine-readable files are language-neutral; untranslated strings
 fall back to English. The on-page language picker (header) is a searchable grid — type a language's
 native or English name to filter it.
