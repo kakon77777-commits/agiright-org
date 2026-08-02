@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi', 'ky', 'tg', 'mh', 'om', 'bm'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -360,6 +360,42 @@ const COUNTRY_LANG = {
   // case despite formal multilingualism, same reasoning as the HT/ht
   // precedent.
   VU: 'bi',
+  // KG: Kyrgyz is Kyrgyzstan's constitutional "state language" (Russian
+  // is the separate "official language" for administration), spoken
+  // natively by the large ethnic-Kyrgyz majority — same genuine
+  // majority-language pattern as the earlier KZ/kk correction.
+  KG: 'ky',
+  // TJ: Tajik is Tajikistan's sole state language, spoken natively by
+  // the large majority of the population — same pattern as TM/tk.
+  TJ: 'tg',
+  // MH: Marshallese is spoken as a first language by the large
+  // majority of the Marshall Islands' population, alongside English
+  // as the other official language — same genuine majority-vernacular
+  // pattern as WS/sm and TO/to. (The uppercase country code MH and the
+  // lowercase language code `mh` are coincidentally identical strings,
+  // same non-issue as the earlier AM/am and UG/ug precedents — they
+  // are keys in different-cased namespaces, no actual collision.)
+  MH: 'mh',
+  // om (Oromo) intentionally has no new country mapping: Oromo is
+  // Ethiopia's single largest first-language (~35% of the population,
+  // ahead of Amharic's ~29%), but Ethiopia already maps to ET→am from
+  // an earlier batch, and Amharic remains the federal government's
+  // official working language — revisiting an existing mapping needs
+  // the same bar the KZ/kk and BE/nl corrections required (a genuine
+  // prior over-simplification), and a ~35% plurality without an
+  // absolute majority doesn't clear that bar. Accept-Language serves
+  // Oromo speakers accurately without disturbing the existing ET→am
+  // mapping.
+  // ML: Bambara is not Mali's official language (French is), but
+  // functions as the country's dominant lingua franca, spoken as a
+  // first or second language by a large majority of the population —
+  // same "official language ≠ everyday majority vernacular" pattern
+  // as the HT/ht precedent. (The uppercase country code ML and the
+  // lowercase language code `ml` — Malayalam, already mapped elsewhere
+  // as an Indian state language with no country mapping — are
+  // coincidentally identical strings in different-cased namespaces,
+  // same non-issue as AM/am, UG/ug, and MH/mh above.)
+  ML: 'bm',
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -478,6 +514,11 @@ const CONTENT_LANG = {
   co: 'co',
   cv: 'cv',
   bi: 'bi',
+  ky: 'ky',
+  tg: 'tg',
+  mh: 'mh',
+  om: 'om',
+  bm: 'bm',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -620,6 +661,11 @@ function pickLang(request) {
   if (first.startsWith('co')) return 'co';
   if (first.startsWith('cv')) return 'cv';
   if (first.startsWith('bi')) return 'bi';
+  if (first.startsWith('ky')) return 'ky';
+  if (first.startsWith('tg')) return 'tg';
+  if (first.startsWith('mh')) return 'mh';
+  if (first.startsWith('om')) return 'om';
+  if (first.startsWith('bm')) return 'bm';
   return DEFAULT_LANG;
 }
 
