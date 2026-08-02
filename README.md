@@ -36,9 +36,10 @@ node scripts/import-papers.mjs
 The site is served by the `agiright-site` Worker ([wrangler.jsonc](wrangler.jsonc)): static assets from `dist/`, with [worker/index.js](worker/index.js) canonicalizing every non-`agiright.org` hostname (www, asiright.org) to a 301. `run_worker_first` is required — without it, asset hits bypass the redirect logic.
 
 ```bash
-npm run build
-npx wrangler deploy
+bash deploy.sh
 ```
+
+Runs `npm run build`, `npx wrangler deploy`, a smoke test against the live domain (`/`, `/zh`, `/llms.txt`), then notifies the Continuous Discovery Beacon (beacon.evemiss.com) — only after the smoke test confirms the deploy is actually live. Set `BEACON_SUBMIT_TOKEN_AGIRIGHT` locally to enable that last step; it's silently skipped otherwise.
 
 Custom domains (auto-managed DNS + certs): `agiright.org`, `www.agiright.org`, `asiright.org`, `www.asiright.org`.
 
