@@ -22,3 +22,7 @@ pnpm-debug.log*
 # macOS/Windows system files
 .DS_Store
 Thumbs.db
+
+# Python (scripts/notify_beacon.py)
+__pycache__/
+*.pyc
