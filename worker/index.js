@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi', 'ky', 'tg', 'mh', 'om', 'bm', 'gu', 'or', 'kl', 'sg', 'ln'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'tet', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi', 'ky', 'tg', 'mh', 'om', 'bm', 'gu', 'or', 'kl', 'sg', 'ln', 'sq', 'sr', 'mk', 'crs'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -426,6 +426,32 @@ const COUNTRY_LANG = {
   // majority" pattern as the lg/UG (Luganda/Uganda) precedent, not a
   // genuine majority case. Accept-Language serves Lingala speakers
   // accurately in both countries.
+  // AL: Albanian is spoken natively by roughly 98% of Albania's population,
+  // one of Europe's cleanest single-language majority cases, on par with
+  // IS/is and GL/kl.
+  AL: 'sq',
+  // RS: Serbian is Serbia's sole official language and native tongue of the
+  // large majority (~88% ethnic Serb per census) of the population — a
+  // genuine majority case.
+  RS: 'sr',
+  // MK: North Macedonia's 2021 census found 58.44% of the resident
+  // population ethnically Macedonian versus 24.30% Albanian — a genuine
+  // majority (not merely a plurality), clearing the same bar as LK/si and
+  // SO/so. (The uppercase country code MK and lowercase language code `mk`
+  // are the same letters in different-cased namespaces — same non-issue as
+  // AM/am, UG/ug, MH/mh, ML/ml, and GL/gl above.)
+  MK: 'mk',
+  // TL: Tetum is one of Timor-Leste's two official languages (with
+  // Portuguese) and functions as the country's dominant national lingua
+  // franca, spoken as a first or second language by the large majority of
+  // the population — same "official-alongside-a-minority-elite-language"
+  // pattern as HT/ht and CF/sg.
+  TL: 'tet',
+  // SC: Seychellois Creole (Seselwa) is official alongside English and
+  // French in Seychelles, and is the native/everyday language of the
+  // overwhelming majority (~95%) of the population — a genuine
+  // clear-majority case like MG/mg and HT/ht.
+  SC: 'crs',
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -554,6 +580,11 @@ const CONTENT_LANG = {
   kl: 'kl',
   sg: 'sg',
   ln: 'ln',
+  sq: 'sq',
+  sr: 'sr',
+  mk: 'mk',
+  tet: 'tet',
+  crs: 'crs',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -620,9 +651,10 @@ function pickLang(request) {
   if (first.startsWith('fil') || first.startsWith('tl')) return 'fil'; // 'tl' = ISO 639-1 Tagalog, still the more common Accept-Language tag for Filipino
   if (first.startsWith('kk')) return 'kk';
   if (first.startsWith('sw')) return 'sw';
-  if (first.startsWith('bs') || first.startsWith('sr')) return 'bs'; // this site ships one combined Bosnian/Serbian variant, not two
+  if (first.startsWith('bs')) return 'bs';
   if (first.startsWith('eo')) return 'eo';
   if (first.startsWith('pa')) return 'pa';
+  if (first.startsWith('tet')) return 'tet'; // must be checked before 'te' below — 'tet' (Tetum) would otherwise false-match the Telugu prefix check
   if (first.startsWith('te')) return 'te';
   if (first.startsWith('mr')) return 'mr';
   if (first.startsWith('am')) return 'am';
@@ -706,6 +738,10 @@ function pickLang(request) {
   if (first.startsWith('kl')) return 'kl';
   if (first.startsWith('sg')) return 'sg';
   if (first.startsWith('ln')) return 'ln';
+  if (first.startsWith('sq')) return 'sq';
+  if (first.startsWith('sr')) return 'sr'; // now a dedicated translation — see the bs/sr fix above
+  if (first.startsWith('mk')) return 'mk';
+  if (first.startsWith('crs')) return 'crs';
   return DEFAULT_LANG;
 }
 

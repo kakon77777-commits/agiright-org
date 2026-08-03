@@ -44,7 +44,9 @@ lang=tk (Turkmen), lang=ml (Malayalam), lang=ay (Aymara), lang=as
 (Assamese), lang=co (Corsican), lang=cv (Chuvash), lang=bi (Bislama),
 lang=ky (Kyrgyz), lang=tg (Tajik), lang=mh (Marshallese), lang=om
 (Oromo), lang=bm (Bambara), lang=gu (Gujarati), lang=or (Odia),
-lang=kl (Greenlandic), lang=sg (Sango), lang=ln (Lingala) — 125
+lang=kl (Greenlandic), lang=sg (Sango), lang=ln (Lingala), lang=sq
+(Albanian), lang=sr (Serbian), lang=mk (Macedonian), lang=tet
+(Tetum), lang=crs (Seychellois Creole) — 130
 languages total and growing; new
 languages are added on an ongoing basis toward full global coverage.
 Machine-readable files are language-neutral; untranslated strings
