@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi', 'ky', 'tg', 'mh', 'om', 'bm'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi', 'ky', 'tg', 'mh', 'om', 'bm', 'gu', 'or', 'kl', 'sg', 'ln'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -396,6 +396,36 @@ const COUNTRY_LANG = {
   // coincidentally identical strings in different-cased namespaces,
   // same non-issue as AM/am, UG/ug, and MH/mh above.)
   ML: 'bm',
+  // gu/or (Gujarati, Odia) intentionally have no country mapping: both are
+  // official languages of Indian states (Gujarat, Odisha), not of India as
+  // a whole — same reasoning as the existing kn/ml/ta/pa/te/mr/as
+  // "state-level language within a larger multilingual country" precedent.
+  // GL: Kalaallisut (Greenlandic) is Greenland's sole official language
+  // (since 2009) and the native/everyday language of the large majority of
+  // the population — Danish is a second language used mainly in
+  // administration and by a minority — a genuine clear-majority case like
+  // IS/is and FO/fo (its closest North Atlantic neighbors). (The uppercase
+  // country code GL for Greenland and the lowercase language code `gl` —
+  // Galician, already mapped elsewhere with no country mapping — are
+  // coincidentally identical strings in different-cased namespaces, same
+  // non-issue as AM/am, UG/ug, MH/mh, and ML/ml above.)
+  GL: 'kl',
+  // CF: Sango is the Central African Republic's national lingua franca,
+  // spoken as a first or second language by the large majority of the
+  // population, official alongside French — same "official language
+  // co-exists with a dominant everyday vernacular" pattern as HT/ht and
+  // SN/wo.
+  CF: 'sg',
+  // ln (Lingala) intentionally has no country mapping: Lingala is a major
+  // lingua franca across the DRC (CD) and Republic of the Congo (CG), but
+  // neither country has it as a sole/majority national language — the DRC
+  // recognizes four national languages (Lingala, Kikongo, Swahili,
+  // Tshiluba) alongside official French with no single majority, and
+  // Congo-Brazzaville similarly has Lingala and Kikongo as national
+  // languages alongside official French — same "largest of many, no clear
+  // majority" pattern as the lg/UG (Luganda/Uganda) precedent, not a
+  // genuine majority case. Accept-Language serves Lingala speakers
+  // accurately in both countries.
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -519,6 +549,11 @@ const CONTENT_LANG = {
   mh: 'mh',
   om: 'om',
   bm: 'bm',
+  gu: 'gu',
+  or: 'or',
+  kl: 'kl',
+  sg: 'sg',
+  ln: 'ln',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -666,6 +701,11 @@ function pickLang(request) {
   if (first.startsWith('mh')) return 'mh';
   if (first.startsWith('om')) return 'om';
   if (first.startsWith('bm')) return 'bm';
+  if (first.startsWith('gu')) return 'gu';
+  if (first.startsWith('or')) return 'or';
+  if (first.startsWith('kl')) return 'kl';
+  if (first.startsWith('sg')) return 'sg';
+  if (first.startsWith('ln')) return 'ln';
   return DEFAULT_LANG;
 }
 
