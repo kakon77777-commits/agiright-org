@@ -46,7 +46,9 @@ lang=ky (Kyrgyz), lang=tg (Tajik), lang=mh (Marshallese), lang=om
 (Oromo), lang=bm (Bambara), lang=gu (Gujarati), lang=or (Odia),
 lang=kl (Greenlandic), lang=sg (Sango), lang=ln (Lingala), lang=sq
 (Albanian), lang=sr (Serbian), lang=mk (Macedonian), lang=tet
-(Tetum), lang=crs (Seychellois Creole) — 130
+(Tetum), lang=crs (Seychellois Creole), lang=gil (Gilbertese),
+lang=tvl (Tuvaluan), lang=pau (Palauan), lang=iu (Inuktitut), lang=rm
+(Romansh) — 135
 languages total and growing; new
 languages are added on an ongoing basis toward full global coverage.
 Machine-readable files are language-neutral; untranslated strings

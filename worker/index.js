@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'tet', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi', 'ky', 'tg', 'mh', 'om', 'bm', 'gu', 'or', 'kl', 'sg', 'ln', 'sq', 'sr', 'mk', 'crs'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'tet', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi', 'ky', 'tg', 'mh', 'om', 'bm', 'gu', 'or', 'kl', 'sg', 'ln', 'sq', 'sr', 'mk', 'crs', 'gil', 'tvl', 'pau', 'iu', 'rm'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -452,6 +452,27 @@ const COUNTRY_LANG = {
   // overwhelming majority (~95%) of the population — a genuine
   // clear-majority case like MG/mg and HT/ht.
   SC: 'crs',
+  // KI: Gilbertese is the near-universal first language of Kiribati
+  // (~96%+ of the population), alongside English — same clear-majority
+  // pattern as TL/tet and SC/crs.
+  KI: 'gil',
+  // TV: Tuvaluan is the first language of the large majority of Tuvalu's
+  // population, alongside English — same micro-state clear-majority
+  // pattern as KI/gil.
+  TV: 'tvl',
+  // PW: Palauan is co-official with English in Palau and the first
+  // language of the large majority of the population — same micro-state
+  // clear-majority pattern as KI/gil and TV/tvl.
+  PW: 'pau',
+  // NOTE: `iu` (Inuktitut) and `rm` (Romansh) were added this batch but
+  // deliberately have NO country mapping here: Inuktitut is official only
+  // in Nunavut, a sub-national territory of Canada (Canada overall is
+  // en/fr, not iu-majority) — same "official in a region, not the whole
+  // country" case as LG/Luganda and LN/Lingala. Romansh is one of
+  // Switzerland's 4 national languages but spoken natively by well under
+  // 1% of the population (~0.5%) — nowhere near a majority, so it stays
+  // Accept-Language-only like Luxembourg's French/German never being
+  // mapped over LB/lb.
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -585,6 +606,11 @@ const CONTENT_LANG = {
   mk: 'mk',
   tet: 'tet',
   crs: 'crs',
+  gil: 'gil',
+  tvl: 'tvl',
+  pau: 'pau',
+  iu: 'iu',
+  rm: 'rm',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -653,6 +679,7 @@ function pickLang(request) {
   if (first.startsWith('sw')) return 'sw';
   if (first.startsWith('bs')) return 'bs';
   if (first.startsWith('eo')) return 'eo';
+  if (first.startsWith('pau')) return 'pau'; // must be checked before 'pa' below — 'pau' (Palauan) would otherwise false-match the Punjabi prefix check
   if (first.startsWith('pa')) return 'pa';
   if (first.startsWith('tet')) return 'tet'; // must be checked before 'te' below — 'tet' (Tetum) would otherwise false-match the Telugu prefix check
   if (first.startsWith('te')) return 'te';
@@ -742,6 +769,10 @@ function pickLang(request) {
   if (first.startsWith('sr')) return 'sr'; // now a dedicated translation — see the bs/sr fix above
   if (first.startsWith('mk')) return 'mk';
   if (first.startsWith('crs')) return 'crs';
+  if (first.startsWith('gil')) return 'gil';
+  if (first.startsWith('tvl')) return 'tvl';
+  if (first.startsWith('iu')) return 'iu';
+  if (first.startsWith('rm')) return 'rm';
   return DEFAULT_LANG;
 }
 
