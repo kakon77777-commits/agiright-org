@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'tet', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi', 'ky', 'tg', 'mh', 'om', 'bm', 'gu', 'or', 'kl', 'sg', 'ln', 'sq', 'sr', 'mk', 'crs', 'gil', 'tvl', 'pau', 'iu', 'rm'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'tet', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi', 'ky', 'tg', 'mh', 'om', 'bm', 'gu', 'or', 'kl', 'sg', 'ln', 'sq', 'sr', 'mk', 'crs', 'gil', 'tvl', 'pau', 'iu', 'rm', 'swb', 'kea', 'mfe', 'sa', 'ff'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -473,6 +473,32 @@ const COUNTRY_LANG = {
   // 1% of the population (~0.5%) — nowhere near a majority, so it stays
   // Accept-Language-only like Luxembourg's French/German never being
   // mapped over LB/lb.
+  // KM: Comorian (Shikomori) is the first language of the overwhelming
+  // majority of Comoros' population, alongside Arabic and French as
+  // co-official languages — same island-microstate clear-majority
+  // pattern as KI/gil, TV/tvl, PW/pau.
+  KM: 'swb',
+  // CV: Kabuverdianu (Cape Verdean Creole) is the near-universal home
+  // language of Cabo Verde's population; Portuguese is the sole official
+  // language but not what people actually speak at home — same pattern
+  // as HT/ht (Haitian Creole vs. French).
+  CV: 'kea',
+  // MU: Mauritian Creole (Morisyen) is the first/home language of the
+  // large majority of Mauritius' population, even though English is the
+  // sole official government language and French is also widely used —
+  // same pattern as HT/ht and SC/crs.
+  MU: 'mfe',
+  // NOTE: `sa` (Sanskrit) and `ff` (Fulah) were added this batch but
+  // deliberately have NO country mapping. Sanskrit has no country where
+  // it is the everyday majority language — it is a classical/liturgical
+  // language with a very small, contested number of L1 speakers in
+  // India, which itself has no single-language majority — same
+  // "significant but not tied to a country majority" case as BO/Tibetan
+  // and UG/Uyghur. Fulah/Fulfulde is spoken by tens of millions across
+  // many West/Central African countries (Senegal, Guinea, Mali, Niger,
+  // Nigeria, Cameroon, and others) but is not a majority language in any
+  // single one of them — same "large population, no country majority"
+  // case as Hausa/Yoruba/Igbo.
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -611,6 +637,11 @@ const CONTENT_LANG = {
   pau: 'pau',
   iu: 'iu',
   rm: 'rm',
+  swb: 'swb',
+  kea: 'kea',
+  mfe: 'mfe',
+  sa: 'sa',
+  ff: 'ff',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -676,6 +707,7 @@ function pickLang(request) {
   if (first.startsWith('sk')) return 'sk';
   if (first.startsWith('fil') || first.startsWith('tl')) return 'fil'; // 'tl' = ISO 639-1 Tagalog, still the more common Accept-Language tag for Filipino
   if (first.startsWith('kk')) return 'kk';
+  if (first.startsWith('swb')) return 'swb'; // must be checked before 'sw' below — 'swb' (Comorian) would otherwise false-match the Swahili prefix check
   if (first.startsWith('sw')) return 'sw';
   if (first.startsWith('bs')) return 'bs';
   if (first.startsWith('eo')) return 'eo';
@@ -773,6 +805,10 @@ function pickLang(request) {
   if (first.startsWith('tvl')) return 'tvl';
   if (first.startsWith('iu')) return 'iu';
   if (first.startsWith('rm')) return 'rm';
+  if (first.startsWith('kea')) return 'kea';
+  if (first.startsWith('mfe')) return 'mfe';
+  if (first.startsWith('sa')) return 'sa';
+  if (first.startsWith('ff')) return 'ff';
   return DEFAULT_LANG;
 }
 

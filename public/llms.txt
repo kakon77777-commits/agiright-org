@@ -48,7 +48,8 @@ lang=kl (Greenlandic), lang=sg (Sango), lang=ln (Lingala), lang=sq
 (Albanian), lang=sr (Serbian), lang=mk (Macedonian), lang=tet
 (Tetum), lang=crs (Seychellois Creole), lang=gil (Gilbertese),
 lang=tvl (Tuvaluan), lang=pau (Palauan), lang=iu (Inuktitut), lang=rm
-(Romansh) — 135
+(Romansh), lang=swb (Comorian), lang=kea (Cape Verdean Creole),
+lang=mfe (Mauritian Creole), lang=sa (Sanskrit), lang=ff (Fulah) — 140
 languages total and growing; new
 languages are added on an ongoing basis toward full global coverage.
 Machine-readable files are language-neutral; untranslated strings
