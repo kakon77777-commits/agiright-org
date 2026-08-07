@@ -49,7 +49,9 @@ lang=kl (Greenlandic), lang=sg (Sango), lang=ln (Lingala), lang=sq
 (Tetum), lang=crs (Seychellois Creole), lang=gil (Gilbertese),
 lang=tvl (Tuvaluan), lang=pau (Palauan), lang=iu (Inuktitut), lang=rm
 (Romansh), lang=swb (Comorian), lang=kea (Cape Verdean Creole),
-lang=mfe (Mauritian Creole), lang=sa (Sanskrit), lang=ff (Fulah) — 140
+lang=mfe (Mauritian Creole), lang=sa (Sanskrit), lang=ff (Fulah),
+lang=dz (Dzongkha), lang=ak (Akan), lang=pap (Papiamento), lang=kg
+(Kikongo), lang=pis (Solomon Islands Pijin) — 145
 languages total and growing; new
 languages are added on an ongoing basis toward full global coverage.
 Machine-readable files are language-neutral; untranslated strings

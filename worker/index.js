@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'tet', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi', 'ky', 'tg', 'mh', 'om', 'bm', 'gu', 'or', 'kl', 'sg', 'ln', 'sq', 'sr', 'mk', 'crs', 'gil', 'tvl', 'pau', 'iu', 'rm', 'swb', 'kea', 'mfe', 'sa', 'ff'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'tet', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi', 'ky', 'tg', 'mh', 'om', 'bm', 'gu', 'or', 'kl', 'sg', 'ln', 'sq', 'sr', 'mk', 'crs', 'gil', 'tvl', 'pau', 'iu', 'rm', 'swb', 'kea', 'mfe', 'sa', 'ff', 'dz', 'ak', 'pap', 'kg', 'pis'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -499,6 +499,28 @@ const COUNTRY_LANG = {
   // Nigeria, Cameroon, and others) but is not a majority language in any
   // single one of them — same "large population, no country majority"
   // case as Hausa/Yoruba/Igbo.
+  // AW: Papiamento is the majority home language of Aruba (also official
+  // alongside Dutch), spoken by the large majority of the population —
+  // same island clear-majority pattern as KI/gil, TV/tvl, PW/pau, KM/swb.
+  AW: 'pap',
+  // SB: Pijin is the de facto national lingua franca of the Solomon
+  // Islands, spoken by the large majority of the population alongside
+  // official English — same pattern as HT/ht, VU/bi (Bislama, its close
+  // Melanesian-pidgin relative already on this site).
+  SB: 'pis',
+  // NOTE: `dz` (Dzongkha), `ak` (Akan), and `kg` (Kikongo) were added
+  // this batch but deliberately have NO country mapping. Dzongkha is
+  // Bhutan's sole official language and national lingua franca, but is
+  // NOT the mother tongue of a census majority (Sharchhopka has a larger
+  // L1 count) — a genuinely borderline case handled the conservative way,
+  // same bar as OM/Oromo not being remapped over ET/am. Akan is Ghana's
+  // largest language cluster (~47.5% of the population per the 2010
+  // census) but stops short of a confirmed >50% majority, and Ghana's
+  // sole official language is English — same "large plurality, not a
+  // confirmed majority" case as Akan's West African neighbors HA/ha,
+  // YO/yo, IG/ig staying unmapped. Kikongo/Kongo has millions of speakers
+  // across the DRC, Republic of the Congo, and Angola but is a minority
+  // language in each — same case as Fulah/ff above.
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -642,6 +664,11 @@ const CONTENT_LANG = {
   mfe: 'mfe',
   sa: 'sa',
   ff: 'ff',
+  dz: 'dz',
+  ak: 'ak',
+  pap: 'pap',
+  kg: 'kg',
+  pis: 'pis',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -712,6 +739,7 @@ function pickLang(request) {
   if (first.startsWith('bs')) return 'bs';
   if (first.startsWith('eo')) return 'eo';
   if (first.startsWith('pau')) return 'pau'; // must be checked before 'pa' below — 'pau' (Palauan) would otherwise false-match the Punjabi prefix check
+  if (first.startsWith('pap')) return 'pap'; // must be checked before 'pa' below — 'pap' (Papiamento) would otherwise false-match the Punjabi prefix check
   if (first.startsWith('pa')) return 'pa';
   if (first.startsWith('tet')) return 'tet'; // must be checked before 'te' below — 'tet' (Tetum) would otherwise false-match the Telugu prefix check
   if (first.startsWith('te')) return 'te';
@@ -809,6 +837,10 @@ function pickLang(request) {
   if (first.startsWith('mfe')) return 'mfe';
   if (first.startsWith('sa')) return 'sa';
   if (first.startsWith('ff')) return 'ff';
+  if (first.startsWith('dz')) return 'dz';
+  if (first.startsWith('ak')) return 'ak';
+  if (first.startsWith('kg')) return 'kg';
+  if (first.startsWith('pis')) return 'pis';
   return DEFAULT_LANG;
 }
 

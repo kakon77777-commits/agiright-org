@@ -136,6 +136,11 @@ import { UI_KEA, STRINGS as KEA_STRINGS } from './translations/kea';
 import { UI_MFE, STRINGS as MFE_STRINGS } from './translations/mfe';
 import { UI_SA, STRINGS as SA_STRINGS } from './translations/sa';
 import { UI_FF, STRINGS as FF_STRINGS } from './translations/ff';
+import { UI_DZ, STRINGS as DZ_STRINGS } from './translations/dz';
+import { UI_AK, STRINGS as AK_STRINGS } from './translations/ak';
+import { UI_PAP, STRINGS as PAP_STRINGS } from './translations/pap';
+import { UI_KG, STRINGS as KG_STRINGS } from './translations/kg';
+import { UI_PIS, STRINGS as PIS_STRINGS } from './translations/pis';
 
 export type Lang =
   | 'en'
@@ -277,7 +282,12 @@ export type Lang =
   | 'kea'
   | 'mfe'
   | 'sa'
-  | 'ff';
+  | 'ff'
+  | 'dz'
+  | 'ak'
+  | 'pap'
+  | 'kg'
+  | 'pis';
 
 /** all supported languages; adding one = translation file + worker mapping */
 export const LANGS: Lang[] = [
@@ -305,6 +315,7 @@ export const LANGS: Lang[] = [
   'sq', 'sr', 'mk', 'tet', 'crs',
   'gil', 'tvl', 'pau', 'iu', 'rm',
   'swb', 'kea', 'mfe', 'sa', 'ff',
+  'dz', 'ak', 'pap', 'kg', 'pis',
 ];
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
@@ -488,6 +499,11 @@ export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: st
   mfe: { html: 'mfe', ogLocale: 'mfe_MU', label: 'Morisyen', labelEn: 'Mauritian Creole', dir: 'ltr' },
   sa: { html: 'sa', ogLocale: 'sa_IN', label: 'संस्कृतम्', labelEn: 'Sanskrit', dir: 'ltr' },
   ff: { html: 'ff', ogLocale: 'ff_SN', label: 'Fulfulde', labelEn: 'Fulah', dir: 'ltr' },
+  dz: { html: 'dz', ogLocale: 'dz_BT', label: 'རྫོང་ཁ', labelEn: 'Dzongkha', dir: 'ltr' },
+  ak: { html: 'ak', ogLocale: 'ak_GH', label: 'Akan', labelEn: 'Akan', dir: 'ltr' },
+  pap: { html: 'pap', ogLocale: 'pap_AW', label: 'Papiamentu', labelEn: 'Papiamento', dir: 'ltr' },
+  kg: { html: 'kg', ogLocale: 'kg_CD', label: 'Kikongo', labelEn: 'Kikongo', dir: 'ltr' },
+  pis: { html: 'pis', ogLocale: 'pis_SB', label: 'Pijin', labelEn: 'Solomon Islands Pijin', dir: 'ltr' },
 };
 
 /** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
@@ -639,6 +655,11 @@ const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
   mfe: MFE_STRINGS,
   sa: SA_STRINGS,
   ff: FF_STRINGS,
+  dz: DZ_STRINGS,
+  ak: AK_STRINGS,
+  pap: PAP_STRINGS,
+  kg: KG_STRINGS,
+  pis: PIS_STRINGS,
 };
 
 /** resolve a bilingual string for any language, falling back to English */
@@ -663,12 +684,12 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.8.17',
+  version: 'v0.8.18',
   // Bump this alongside `version` on every ship — every other machine-readable
   // "version last changed" field (manifest.json, etc.) derives from this pair
   // instead of being hand-edited, per the 2026-07-21 site-audit's P0 finding
   // that manifest.json's site_version had drifted to a stale "0.4.1".
-  updatedAt: '2026-08-06',
+  updatedAt: '2026-08-07',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -1002,4 +1023,9 @@ export const UI: Record<Lang, UIStrings> = {
   mfe: asUI(UI_MFE),
   sa: asUI(UI_SA),
   ff: asUI(UI_FF),
+  dz: asUI(UI_DZ),
+  ak: asUI(UI_AK),
+  pap: asUI(UI_PAP),
+  kg: asUI(UI_KG),
+  pis: asUI(UI_PIS),
 };
