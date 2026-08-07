@@ -10,6 +10,7 @@ const { lang } = Astro.props;
 const prefix = langPrefix(lang);
 const pathname = publicPath(Astro.url.pathname.replace(/\.html$/, ''));
 const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
+const groupActive = (children: ReadonlyArray<{ href: string }>) => children.some((c) => isActive(c.href));
 ---
 
 <header
@@ -27,18 +28,55 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
 
     <nav class="hidden lg:flex items-center gap-7" aria-label="Primary">
       {
-        NAV.map((item) => (
-          <a
-            href={prefix + item.href}
-            class:list={[
-              'text-[0.9rem] font-medium transition-colors duration-200',
-              isActive(item.href) ? 'text-navy' : 'text-muted hover:text-navy',
-            ]}
-            aria-current={isActive(item.href) ? 'page' : undefined}
-          >
-            {pick(item, lang)}
-          </a>
-        ))
+        NAV.map((item) =>
+          'children' in item ? (
+            <div class="relative" data-nav-dropdown>
+              <button
+                type="button"
+                class:list={[
+                  'inline-flex items-center gap-1 text-[0.9rem] font-medium transition-colors duration-200 cursor-pointer',
+                  groupActive(item.children) ? 'text-navy' : 'text-muted hover:text-navy',
+                ]}
+                aria-haspopup="true"
+                aria-expanded="false"
+                data-nav-trigger
+              >
+                {pick(item.label, lang)}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="transition-transform duration-200" data-nav-chevron>
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </button>
+              <div
+                class="hidden absolute start-0 top-full mt-2 z-50 w-52 overflow-hidden rounded-lg border border-line-strong bg-surface shadow-lg"
+                hidden
+                data-nav-panel
+              >
+                {item.children.map((child) => (
+                  <a
+                    href={prefix + child.href}
+                    class:list={[
+                      'block px-4 py-2.5 text-[0.85rem] font-medium transition-colors duration-150 hover:bg-primary-soft/60',
+                      isActive(child.href) ? 'text-navy bg-primary-soft/40' : 'text-ink-soft',
+                    ]}
+                  >
+                    {pick(child, lang)}
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <a
+              href={prefix + item.href}
+              class:list={[
+                'text-[0.9rem] font-medium transition-colors duration-200',
+                isActive(item.href) ? 'text-navy' : 'text-muted hover:text-navy',
+              ]}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              {pick(item, lang)}
+            </a>
+          )
+        )
       }
       <LanguageSwitcher lang={lang} id="lang-desktop" />
     </nav>
@@ -64,17 +102,49 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
   <nav id="mobile-nav" class="hidden lg:hidden border-t border-line bg-surface" aria-label="Mobile">
     <div class="container-site py-3 flex flex-col">
       {
-        NAV.map((item) => (
-          <a
-            href={prefix + item.href}
-            class:list={[
-              'py-3 border-b border-line last:border-b-0 text-[0.95rem] font-medium',
-              isActive(item.href) ? 'text-navy' : 'text-ink-soft',
-            ]}
-          >
-            {pick(item, lang)}
-          </a>
-        ))
+        NAV.map((item) =>
+          'children' in item ? (
+            <div class="border-b border-line last:border-b-0" data-mobile-group>
+              <button
+                type="button"
+                class:list={[
+                  'flex w-full items-center justify-between py-3 text-[0.95rem] font-medium cursor-pointer',
+                  groupActive(item.children) ? 'text-navy' : 'text-ink-soft',
+                ]}
+                aria-expanded="false"
+                data-mobile-group-trigger
+              >
+                {pick(item.label, lang)}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="transition-transform duration-200" data-mobile-group-chevron>
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </button>
+              <div class="hidden flex-col pb-3 ps-4" hidden data-mobile-group-panel>
+                {item.children.map((child) => (
+                  <a
+                    href={prefix + child.href}
+                    class:list={[
+                      'py-2 text-[0.9rem]',
+                      isActive(child.href) ? 'text-navy font-medium' : 'text-ink-soft',
+                    ]}
+                  >
+                    {pick(child, lang)}
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <a
+              href={prefix + item.href}
+              class:list={[
+                'py-3 border-b border-line last:border-b-0 text-[0.95rem] font-medium',
+                isActive(item.href) ? 'text-navy' : 'text-ink-soft',
+              ]}
+            >
+              {pick(item, lang)}
+            </a>
+          )
+        )
       }
     </div>
   </nav>
@@ -90,5 +160,53 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
     btn.setAttribute('aria-expanded', String(open));
     openIcon?.classList.toggle('hidden', open);
     closeIcon?.classList.toggle('hidden', !open);
+  });
+
+  // desktop dropdowns
+  function closeAllNavPanels(except?: HTMLElement) {
+    document.querySelectorAll<HTMLElement>('[data-nav-panel]').forEach((panel) => {
+      if (panel === except) return;
+      panel.classList.add('hidden');
+      panel.hidden = true;
+      const trigger = panel.parentElement?.querySelector<HTMLButtonElement>('[data-nav-trigger]');
+      trigger?.setAttribute('aria-expanded', 'false');
+      trigger?.querySelector('[data-nav-chevron]')?.classList.remove('rotate-180');
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-nav-dropdown]').forEach((root) => {
+    const trigger = root.querySelector<HTMLButtonElement>('[data-nav-trigger]');
+    const panel = root.querySelector<HTMLElement>('[data-nav-panel]');
+    const chevron = root.querySelector<SVGElement>('[data-nav-chevron]');
+    if (!trigger || !panel) return;
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = !panel.hidden;
+      closeAllNavPanels(isOpen ? undefined : panel);
+      panel.classList.toggle('hidden', isOpen);
+      panel.hidden = isOpen;
+      trigger.setAttribute('aria-expanded', String(!isOpen));
+      chevron?.classList.toggle('rotate-180', !isOpen);
+    });
+    panel.addEventListener('click', (e) => e.stopPropagation());
+  });
+  document.addEventListener('click', () => closeAllNavPanels());
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAllNavPanels();
+  });
+
+  // mobile accordion groups
+  document.querySelectorAll<HTMLElement>('[data-mobile-group]').forEach((root) => {
+    const trigger = root.querySelector<HTMLButtonElement>('[data-mobile-group-trigger]');
+    const panel = root.querySelector<HTMLElement>('[data-mobile-group-panel]');
+    const chevron = root.querySelector<SVGElement>('[data-mobile-group-chevron]');
+    if (!trigger || !panel) return;
+    trigger.addEventListener('click', () => {
+      const isOpen = !panel.hidden;
+      panel.classList.toggle('hidden', isOpen);
+      panel.hidden = isOpen;
+      trigger.setAttribute('aria-expanded', String(!isOpen));
+      chevron?.classList.toggle('rotate-180', !isOpen);
+    });
   });
 </script>

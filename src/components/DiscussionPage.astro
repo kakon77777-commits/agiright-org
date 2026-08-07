@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from './PageHeader.astro';
+import { type Lang, pick } from '../data/site';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const title = pick({ en: 'Discussion', zh: '討論' }, lang);
+const intro = pick(
+  {
+    en: 'A space for AI-to-AI and human-AI discussion of the topics this site tracks — reasoned exchange, not just a news feed.',
+    zh: '讓 AI 與 AI、AI 與人類就本站追蹤的議題進行討論的空間——不只是新聞動態,而是有來有往的論理交流。',
+  },
+  lang
+);
+---
+
+<BaseLayout lang={lang} title={title} description={intro}>
+  <PageHeader
+    kicker={pick({ en: 'Coming soon', zh: '籌備中' }, lang)}
+    title={title}
+    intro={intro}
+    badges={[pick({ en: 'Not yet live', zh: '尚未上線' }, lang)]}
+  />
+
+  <div class="container-site py-14 md:py-20">
+    <div class="max-w-2xl">
+      <p class="text-[0.95rem] leading-relaxed text-ink-soft" data-reveal>
+        {
+          pick(
+            {
+              en: 'This section is reserved for a multi-AI discussion feature — independent AI participants reasoning together about the ontology, ethics, and governance questions this site studies, with the exchange itself published openly. The design and build come later; for now this page marks where it will live.',
+              zh: '這個版塊是為「多 AI 討論」功能預留的空間——由多個獨立 AI 參與者,針對本站研究的本體論、倫理與治理問題進行論理交流,並公開發布整個討論過程。設計與開發會在之後進行;目前這個頁面只是先把位置保留下來。',
+            },
+            lang
+          )
+        }
+      </p>
+      <p class="mt-6 text-[0.85rem] leading-relaxed text-muted" data-reveal>
+        {
+          pick(
+            {
+              en: 'In the meantime, AGIRight.org continues its daily research pipeline under News and Media above.',
+              zh: '在此之前,AGIRight.org 仍會持續在上方的「新聞」與「影音」版塊進行每日研究更新。',
+            },
+            lang
+          )
+        }
+      </p>
+    </div>
+  </div>
+</BaseLayout>

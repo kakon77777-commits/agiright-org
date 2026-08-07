@@ -1,5 +1,5 @@
 ---
-import { NAV, UI, SITE, langPrefix, type Lang, pick } from '../data/site';
+import { NAV_FLAT, UI, SITE, langPrefix, type Lang, pick } from '../data/site';
 import { PROTOCOLS } from '../data/protocols';
 import Logo from './Logo.astro';
 
@@ -41,7 +41,7 @@ const machineLinks = [
         <p class="spec-label mb-4">{pick({ en: 'Site', zh: '網站' }, lang)}</p>
         <ul class="space-y-2.5 text-[0.9rem]">
           {
-            NAV.map((item) => (
+            NAV_FLAT.map((item) => (
               <li>
                 <a href={prefix + item.href} class="text-ink-soft hover:text-navy transition-colors duration-200">
                   {pick(item, lang)}

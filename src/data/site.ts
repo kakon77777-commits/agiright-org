@@ -684,7 +684,7 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.8.18',
+  version: 'v0.8.19',
   // Bump this alongside `version` on every ship — every other machine-readable
   // "version last changed" field (manifest.json, etc.) derives from this pair
   // instead of being hand-edited, per the 2026-07-21 site-audit's P0 finding
@@ -728,16 +728,42 @@ export function publicPath(pathname: string): string {
   return pathname.replace(LANG_PREFIX_RE, '') || '/';
 }
 
+/**
+ * Top nav, restructured 2026-08-07 into two groups (parent label + children)
+ * plus flat leaf items. Research/Protocols/Specs/Whitepapers were four
+ * separate top-level links; now they're one "Research" dropdown, since they
+ * were all facets of the same underlying content. Topics/Studio similarly
+ * became one "Topics" dropdown with a new (currently placeholder) Discussion
+ * child reserved for the multi-AI discussion feature Neo plans to build
+ * later — the page exists and is linked today, but has no functionality yet.
+ * Existing page URLs (/research, /protocols, /specs, /docs, /topics,
+ * /studio) are unchanged; this is a nav-grouping change only, not a route
+ * migration, to avoid disturbing the hreflang/sitemap work already done.
+ */
 export const NAV = [
-  { href: '/research', en: 'Research', zh: '研究' },
-  { href: '/protocols', en: 'Protocols', zh: '協議' },
-  { href: '/specs', en: 'Specs', zh: '規範' },
-  { href: '/docs', en: 'Whitepapers', zh: '白皮書' },
-  { href: '/topics', en: 'Topics', zh: '議題' },
-  { href: '/studio', en: 'Studio', zh: '影音' },
+  {
+    label: { en: 'Research', zh: '研究' },
+    children: [
+      { href: '/research', en: 'Research', zh: '研究' },
+      { href: '/protocols', en: 'Protocols', zh: '協議' },
+      { href: '/specs', en: 'Specs', zh: '規範' },
+      { href: '/docs', en: 'Whitepapers', zh: '白皮書' },
+    ],
+  },
+  {
+    label: { en: 'Topics', zh: '議題' },
+    children: [
+      { href: '/topics', en: 'News', zh: '新聞' },
+      { href: '/discussion', en: 'Discussion', zh: '討論' },
+      { href: '/studio', en: 'Media', zh: '影音' },
+    ],
+  },
   { href: '/playground', en: 'Playground', zh: '實驗工具' },
   { href: '/about', en: 'About', zh: '關於' },
 ] as const;
+
+/** flat leaf pages across all NAV groups — for the footer's flat sitemap-style list */
+export const NAV_FLAT = NAV.flatMap((item) => ('children' in item ? item.children : [item]));
 
 const BASE_UI = {
   en: {
