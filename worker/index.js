@@ -23,7 +23,7 @@
 const CANONICAL_HOST = 'agiright.org';
 const DEFAULT_LANG = 'en';
 /** language codes with a built tree under /<code>/ (longest first for prefix matching) */
-const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'tet', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi', 'ky', 'tg', 'mh', 'om', 'bm', 'gu', 'or', 'kl', 'sg', 'ln', 'sq', 'sr', 'mk', 'crs', 'gil', 'tvl', 'pau', 'iu', 'rm', 'swb', 'kea', 'mfe', 'sa', 'ff', 'dz', 'ak', 'pap', 'kg', 'pis'];
+const LANGS = ['zh-cn', 'zh', 'ja', 'ko', 'fr', 'de', 'es', 'pt', 'ru', 'ar', 'tr', 'fa', 'bn', 'hi', 'id', 'vi', 'el', 'it', 'nl', 'he', 'pl', 'sv', 'ur', 'th', 'ta', 'cs', 'uk', 'ms', 'fi', 'ro', 'hu', 'da', 'no', 'sk', 'fil', 'kk', 'sw', 'bs', 'eo', 'pa', 'tet', 'te', 'mr', 'am', 'my', 'ne', 'si', 'uz', 'ha', 'az', 'yo', 'km', 'mn', 'hy', 'bg', 'ig', 'ka', 'lo', 'so', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'ga', 'jv', 'zu', 'af', 'ps', 'xh', 'st', 'tn', 'ss', 've', 'nso', 'nr', 'ts', 'su', 'ceb', 'qu', 'bo', 'ug', 'ku', 'ht', 'cy', 'eu', 'ca', 'is', 'gl', 'mg', 'wo', 'sn', 'mi', 'sm', 'rw', 'ny', 'fj', 'lb', 'kn', 'ti', 'rn', 'dv', 'sd', 'fo', 'to', 'gn', 'lg', 'tk', 'ml', 'ay', 'as', 'co', 'cv', 'bi', 'ky', 'tg', 'mh', 'om', 'bm', 'gu', 'or', 'kl', 'sg', 'ln', 'sq', 'sr', 'mk', 'crs', 'gil', 'tvl', 'pau', 'iu', 'rm', 'swb', 'kea', 'mfe', 'sa', 'ff', 'dz', 'ak', 'pap', 'kg', 'pis', 'mai', 'kok', 'gd', 'ch', 'ee'];
 /** IP countries mapped to a non-default language */
 const COUNTRY_LANG = {
   TW: 'zh',
@@ -521,6 +521,26 @@ const COUNTRY_LANG = {
   // YO/yo, IG/ig staying unmapped. Kikongo/Kongo has millions of speakers
   // across the DRC, Republic of the Congo, and Angola but is a minority
   // language in each — same case as Fulah/ff above.
+  // FINAL BATCH (145→150, language expansion capped here per 2026-08-07
+  // policy): `mai` (Maithili) and `kok` (Konkani) intentionally have no
+  // country mapping — both are official languages of Indian states
+  // (Bihar, Goa) recognized in India's 8th Schedule, not of India as a
+  // whole — same reasoning as the existing kn/ml/ta/pa/te/mr/as/gu/or
+  // "state-level language within a larger multilingual country"
+  // precedent. `gd` (Scottish Gaelic) intentionally has no country
+  // mapping — a minority language within the UK (already unmapped/
+  // English-default) spoken natively by under 2% of Scotland's
+  // population — same reasoning as the cy/eu/gl regional-minority set.
+  // `ch` (Chamorro) intentionally has no country mapping — although
+  // historically the majority language of Guam and the Northern Mariana
+  // Islands, native speakers are now a minority there (English dominant)
+  // per recent census data — same conservative treatment as bo/ug
+  // (culturally significant, not a current demographic majority).
+  // `ee` (Ewe) intentionally has no country mapping — Ewe is a major
+  // language in both Ghana (~13% of the population) and Togo (~20-32%
+  // depending on source, a plurality not a confirmed majority) — same
+  // "large regional population, no country majority" case as its West
+  // African neighbors ha/yo/ig/ak.
 };
 /** Content-Language per lang code */
 const CONTENT_LANG = {
@@ -669,6 +689,11 @@ const CONTENT_LANG = {
   pap: 'pap',
   kg: 'kg',
   pis: 'pis',
+  mai: 'mai',
+  kok: 'kok',
+  gd: 'gd',
+  ch: 'ch',
+  ee: 'ee',
 };
 const LANG_COOKIE = 'lang';
 const COOKIE_ATTRS = 'Path=/; Max-Age=31536000; SameSite=Lax';
@@ -700,6 +725,7 @@ function pickLang(request) {
     return 'zh'; // zh-tw / zh-hant / zh-hk / bare zh → Traditional
   }
   if (first.startsWith('ja')) return 'ja';
+  if (first.startsWith('kok')) return 'kok'; // must be checked before 'ko' below — 'kok' (Konkani) would otherwise false-match the Korean prefix check
   if (first.startsWith('ko')) return 'ko';
   if (first.startsWith('fr')) return 'fr';
   if (first.startsWith('de')) return 'de';
@@ -841,6 +867,10 @@ function pickLang(request) {
   if (first.startsWith('ak')) return 'ak';
   if (first.startsWith('kg')) return 'kg';
   if (first.startsWith('pis')) return 'pis';
+  if (first.startsWith('mai')) return 'mai';
+  if (first.startsWith('gd')) return 'gd';
+  if (first.startsWith('ch')) return 'ch';
+  if (first.startsWith('ee')) return 'ee';
   return DEFAULT_LANG;
 }
 

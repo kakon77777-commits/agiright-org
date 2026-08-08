@@ -141,6 +141,11 @@ import { UI_AK, STRINGS as AK_STRINGS } from './translations/ak';
 import { UI_PAP, STRINGS as PAP_STRINGS } from './translations/pap';
 import { UI_KG, STRINGS as KG_STRINGS } from './translations/kg';
 import { UI_PIS, STRINGS as PIS_STRINGS } from './translations/pis';
+import { UI_MAI, STRINGS as MAI_STRINGS } from './translations/mai';
+import { UI_KOK, STRINGS as KOK_STRINGS } from './translations/kok';
+import { UI_GD, STRINGS as GD_STRINGS } from './translations/gd';
+import { UI_CH, STRINGS as CH_STRINGS } from './translations/ch';
+import { UI_EE, STRINGS as EE_STRINGS } from './translations/ee';
 
 export type Lang =
   | 'en'
@@ -287,7 +292,12 @@ export type Lang =
   | 'ak'
   | 'pap'
   | 'kg'
-  | 'pis';
+  | 'pis'
+  | 'mai'
+  | 'kok'
+  | 'gd'
+  | 'ch'
+  | 'ee';
 
 /** all supported languages; adding one = translation file + worker mapping */
 export const LANGS: Lang[] = [
@@ -316,6 +326,7 @@ export const LANGS: Lang[] = [
   'gil', 'tvl', 'pau', 'iu', 'rm',
   'swb', 'kea', 'mfe', 'sa', 'ff',
   'dz', 'ak', 'pap', 'kg', 'pis',
+  'mai', 'kok', 'gd', 'ch', 'ee',
 ];
 export const NON_DEFAULT_LANGS = LANGS.filter((l) => l !== 'en') as Exclude<Lang, 'en'>[];
 
@@ -504,6 +515,11 @@ export const LANG_META: Record<Lang, { html: string; ogLocale: string; label: st
   pap: { html: 'pap', ogLocale: 'pap_AW', label: 'Papiamentu', labelEn: 'Papiamento', dir: 'ltr' },
   kg: { html: 'kg', ogLocale: 'kg_CD', label: 'Kikongo', labelEn: 'Kikongo', dir: 'ltr' },
   pis: { html: 'pis', ogLocale: 'pis_SB', label: 'Pijin', labelEn: 'Solomon Islands Pijin', dir: 'ltr' },
+  mai: { html: 'mai', ogLocale: 'mai_IN', label: 'मैथिली', labelEn: 'Maithili', dir: 'ltr' },
+  kok: { html: 'kok', ogLocale: 'kok_IN', label: 'कोंकणी', labelEn: 'Konkani', dir: 'ltr' },
+  gd: { html: 'gd', ogLocale: 'gd_GB', label: 'Gàidhlig', labelEn: 'Scottish Gaelic', dir: 'ltr' },
+  ch: { html: 'ch', ogLocale: 'ch_GU', label: 'Chamoru', labelEn: 'Chamorro', dir: 'ltr' },
+  ee: { html: 'ee', ogLocale: 'ee_GH', label: 'Eʋegbe', labelEn: 'Ewe', dir: 'ltr' },
 };
 
 /** bilingual source string; languages beyond en/zh resolve via STRING_MAPS */
@@ -660,6 +676,11 @@ const STRING_MAPS: Partial<Record<Lang, Record<string, string>>> = {
   pap: PAP_STRINGS,
   kg: KG_STRINGS,
   pis: PIS_STRINGS,
+  mai: MAI_STRINGS,
+  kok: KOK_STRINGS,
+  gd: GD_STRINGS,
+  ch: CH_STRINGS,
+  ee: EE_STRINGS,
 };
 
 /** resolve a bilingual string for any language, falling back to English */
@@ -684,12 +705,12 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.8.19',
+  version: 'v0.8.20',
   // Bump this alongside `version` on every ship — every other machine-readable
   // "version last changed" field (manifest.json, etc.) derives from this pair
   // instead of being hand-edited, per the 2026-07-21 site-audit's P0 finding
   // that manifest.json's site_version had drifted to a stale "0.4.1".
-  updatedAt: '2026-08-07',
+  updatedAt: '2026-08-08',
   status: 'Draft',
   title: {
     en: 'AGIRight.org — AI Rights, Content Licensing & Machine-Readable Governance',
@@ -763,7 +784,12 @@ export const NAV = [
 ] as const;
 
 /** flat leaf pages across all NAV groups — for the footer's flat sitemap-style list */
-export const NAV_FLAT = NAV.flatMap((item) => ('children' in item ? item.children : [item]));
+export interface NavLeaf {
+  href: string;
+  en: string;
+  zh: string;
+}
+export const NAV_FLAT: NavLeaf[] = NAV.flatMap((item): NavLeaf[] => ('children' in item ? [...item.children] : [item]));
 
 const BASE_UI = {
   en: {
@@ -1054,4 +1080,9 @@ export const UI: Record<Lang, UIStrings> = {
   pap: asUI(UI_PAP),
   kg: asUI(UI_KG),
   pis: asUI(UI_PIS),
+  mai: asUI(UI_MAI),
+  kok: asUI(UI_KOK),
+  gd: asUI(UI_GD),
+  ch: asUI(UI_CH),
+  ee: asUI(UI_EE),
 };

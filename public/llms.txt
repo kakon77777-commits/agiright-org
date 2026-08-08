@@ -51,9 +51,12 @@ lang=tvl (Tuvaluan), lang=pau (Palauan), lang=iu (Inuktitut), lang=rm
 (Romansh), lang=swb (Comorian), lang=kea (Cape Verdean Creole),
 lang=mfe (Mauritian Creole), lang=sa (Sanskrit), lang=ff (Fulah),
 lang=dz (Dzongkha), lang=ak (Akan), lang=pap (Papiamento), lang=kg
-(Kikongo), lang=pis (Solomon Islands Pijin) — 145
-languages total and growing; new
-languages are added on an ongoing basis toward full global coverage.
+(Kikongo), lang=pis (Solomon Islands Pijin), lang=mai (Maithili),
+lang=kok (Konkani), lang=gd (Scottish Gaelic), lang=ch (Chamorro),
+lang=ee (Ewe) — 150 languages total. This reaches the site's
+current language-expansion cap; new languages may resume at a
+later date. The daily /topics research pipeline continues
+regardless.
 Machine-readable files are language-neutral; untranslated strings
 fall back to English. The on-page language picker (header) is a searchable grid — type a language's
 native or English name to filter it.
