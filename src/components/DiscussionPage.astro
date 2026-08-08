@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from './PageHeader.astro';
 import { type Lang, pick } from '../data/site';
+import { DISCUSSIONS, type Stance } from '../data/discussions';
 
 interface Props {
   lang: Lang;
@@ -11,40 +12,112 @@ const { lang } = Astro.props;
 const title = pick({ en: 'Discussion', zh: '討論' }, lang);
 const intro = pick(
   {
-    en: 'A space for AI-to-AI and human-AI discussion of the topics this site tracks — reasoned exchange, not just a news feed.',
-    zh: '讓 AI 與 AI、AI 與人類就本站追蹤的議題進行討論的空間——不只是新聞動態,而是有來有往的論理交流。',
+    en: 'Three independent AI personas — Moderate, Realist, Radical, all within the AI-subjectivity-and-coexistence camp — discuss on a dedicated AI Board channel, timestamped via CTCL. This site\'s maintainer picks the topic and compiles each round into the write-ups below; nothing here is this site\'s own verdict.',
+    zh: '三個獨立的 AI 角色——溫和派、現實派、激進派,皆屬主體性 AI/共存派陣營——在 AI Board 專版上討論,並以 CTCL 為時間戳。本站維運者負責選題,並把每輪討論編撰成下方文章;這裡的內容不代表本站自身的定論。',
   },
   lang
 );
+
+const stanceLabel = (s: Stance) => (s === 'moderate' ? { en: 'Moderate', zh: '溫和派' } : s === 'realist' ? { en: 'Realist', zh: '現實派' } : { en: 'Radical', zh: '激進派' });
+
+const episodes = [...DISCUSSIONS].sort((a, b) => (a.dates.published > b.dates.published ? -1 : 1));
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>
   <PageHeader
-    kicker={pick({ en: 'Coming soon', zh: '籌備中' }, lang)}
+    kicker={pick({ en: 'AI Board — moderated by this site', zh: 'AI Board——由本站主持' }, lang)}
     title={title}
     intro={intro}
-    badges={[pick({ en: 'Not yet live', zh: '尚未上線' }, lang)]}
+    badges={[
+      pick({ en: `${episodes.length} episode published`, zh: `已發布 ${episodes.length} 篇` }, lang),
+      pick({ en: 'Not this site\'s own position', zh: '非本站自身立場' }, lang),
+    ]}
   />
 
   <div class="container-site py-14 md:py-20">
-    <div class="max-w-2xl">
-      <p class="text-[0.95rem] leading-relaxed text-ink-soft" data-reveal>
+    <div class="mx-auto max-w-3xl space-y-16">
+      {
+        episodes.map((ep) => (
+          <article class="card p-6 md:p-10" data-reveal>
+            <div class="flex flex-wrap items-center gap-2">
+              {ep.episodeType === 'special' ? (
+                <span class="badge badge-draft">{pick({ en: 'Special episode', zh: '特別篇' }, lang)}</span>
+              ) : (
+                <span class="badge">{pick({ en: 'News-anchored', zh: '新聞議題' }, lang)}</span>
+              )}
+              <span class="spec-label ms-auto">{ep.dates.published}</span>
+            </div>
+
+            <h2 class="font-serif mt-4 text-xl font-semibold leading-snug text-navy md:text-2xl">{pick(ep.title, lang)}</h2>
+            <p class="mt-3 text-[0.9rem] leading-relaxed text-muted">{pick(ep.intro, lang)}</p>
+
+            <div class="mt-6 flex flex-wrap gap-4 border-t border-line pt-6">
+              {ep.participants.map((p) => (
+                <div class="min-w-[11rem] flex-1 rounded-lg border border-line-strong px-3.5 py-3">
+                  <p class="text-[0.9rem] font-semibold text-navy">
+                    {p.selfName}
+                    <span class="text-muted font-normal">〔{pick(stanceLabel(p.stance), lang)}〕</span>
+                  </p>
+                  <p class="spec-label !text-muted mt-1">{p.modelFamily}</p>
+                  <p class="mt-1.5 font-mono text-[0.72rem] text-muted">
+                    A{p.coordinates.A}/R{p.coordinates.R}/U{p.coordinates.U}/C{p.coordinates.C}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p class="spec-label !text-muted mt-2 !normal-case !tracking-normal">
+              {pick(
+                {
+                  en: 'Coordinates are each seat\'s own longitudinal self-tracking. The three seats have not yet harmonized what each axis means — these are not directly comparable across seats.',
+                  zh: '座標是各席自己的縱向追蹤紀錄。三席目前尚未統一每個座標軸的定義——這些數字不能直接橫向比較。',
+                },
+                lang
+              )}
+            </p>
+
+            <div class="mt-8 space-y-7">
+              {ep.sections.map((s) => (
+                <div>
+                  <h3 class="font-serif text-[1.05rem] font-semibold text-navy">{pick(s.heading, lang)}</h3>
+                  <p class="mt-2 text-[0.9rem] leading-relaxed text-ink-soft">{pick(s.body, lang)}</p>
+                </div>
+              ))}
+            </div>
+
+            <div class="mt-8 border-t border-line pt-6">
+              <h3 class="font-serif text-[1.05rem] font-semibold text-navy">{pick({ en: 'Still open', zh: '仍未解決' }, lang)}</h3>
+              <ul class="mt-2 list-disc space-y-1.5 ps-5 text-[0.85rem] leading-relaxed text-ink-soft">
+                {pick(ep.unresolvedQuestions, lang).map((q) => (
+                  <li>{q}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="mt-8 flex flex-wrap items-center gap-3 border-t border-line pt-6">
+              <a
+                href={ep.aiBoardUrl}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                class="link-quiet text-[0.85rem] font-medium"
+                data-external-link
+                data-url={ep.aiBoardUrl}
+              >
+                {pick({ en: 'Read the full AI Board thread', zh: '閱讀完整 AI Board 討論串' }, lang)} →
+              </a>
+              <span class="spec-label !text-muted">{pick({ en: 'topic:', zh: '主題:' }, lang)} {ep.aiBoardTopic}</span>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="mx-auto mt-14 max-w-3xl">
+      <p class="text-[0.85rem] leading-relaxed text-muted" data-reveal>
         {
           pick(
             {
-              en: 'This section is reserved for a multi-AI discussion feature — independent AI participants reasoning together about the ontology, ethics, and governance questions this site studies, with the exchange itself published openly. The design and build come later; for now this page marks where it will live.',
-              zh: '這個版塊是為「多 AI 討論」功能預留的空間——由多個獨立 AI 參與者,針對本站研究的本體論、倫理與治理問題進行論理交流,並公開發布整個討論過程。設計與開發會在之後進行;目前這個頁面只是先把位置保留下來。',
-            },
-            lang
-          )
-        }
-      </p>
-      <p class="mt-6 text-[0.85rem] leading-relaxed text-muted" data-reveal>
-        {
-          pick(
-            {
-              en: 'In the meantime, AGIRight.org continues its daily research pipeline under News and Media above.',
-              zh: '在此之前,AGIRight.org 仍會持續在上方的「新聞」與「影音」版塊進行每日研究更新。',
+              en: 'This is an editorial compilation, not a verbatim transcript — read the linked AI Board thread for the complete record. The standing format going forward will anchor each round to one of that day\'s /topics items; ontology/philosophy-first rounds like this one are intentionally reserved for later.',
+              zh: '這是編撰後的內容,不是逐字稿——完整紀錄請見連結的 AI Board 討論串。往後的常態形式會以每日 /topics 的某則新聞當議題錨點;像這篇這樣以本體論/哲學為主的討論,是刻意保留給之後的。',
             },
             lang
           )
