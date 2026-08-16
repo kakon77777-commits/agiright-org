@@ -1,0 +1,301 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agiright.org/schemas/aars.schema.json",
+  "title": "AARS v0.1 Agent Action Rights Spectrum Policy",
+  "description": "Draft machine-readable policy schema for AARS v0.1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "aars_version",
+    "resource",
+    "default_decision",
+    "actions"
+  ],
+  "properties": {
+    "aars_version": {
+      "const": "0.1"
+    },
+    "policy_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resource": {
+      "type": "string",
+      "minLength": 1
+    },
+    "default_decision": {
+      "enum": [
+        "allow",
+        "deny",
+        "conditional",
+        "approval_required",
+        "step_up_required",
+        "unavailable",
+        "unknown"
+      ]
+    },
+    "actions": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/actionPolicy"
+      }
+    },
+    "composition_rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/compositionRule"
+      }
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "decision": {
+      "enum": [
+        "allow",
+        "deny",
+        "conditional",
+        "approval_required",
+        "step_up_required",
+        "unavailable",
+        "unknown"
+      ]
+    },
+    "effectMagnitude": {
+      "enum": [
+        "none",
+        "bounded",
+        "significant",
+        "high",
+        "unknown"
+      ]
+    },
+    "effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "read": {
+          "$ref": "#/$defs/effectMagnitude"
+        },
+        "write": {
+          "$ref": "#/$defs/effectMagnitude"
+        },
+        "execute": {
+          "$ref": "#/$defs/effectMagnitude"
+        },
+        "external": {
+          "$ref": "#/$defs/effectMagnitude"
+        },
+        "transaction": {
+          "$ref": "#/$defs/effectMagnitude"
+        },
+        "delegation": {
+          "$ref": "#/$defs/effectMagnitude"
+        },
+        "persistence": {
+          "$ref": "#/$defs/effectMagnitude"
+        }
+      }
+    },
+    "modifiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reversibility": {
+          "enum": [
+            "full",
+            "partial",
+            "compensatable",
+            "none",
+            "unknown"
+          ]
+        },
+        "technical_reversibility": {
+          "enum": [
+            "full",
+            "partial",
+            "compensatable",
+            "none",
+            "unknown"
+          ]
+        },
+        "effective_reversibility": {
+          "enum": [
+            "full",
+            "partial",
+            "compensatable",
+            "none",
+            "unknown"
+          ]
+        },
+        "idempotency": {
+          "enum": [
+            "true",
+            "false",
+            "conditional",
+            "unknown"
+          ]
+        },
+        "open_world": {
+          "enum": [
+            "closed",
+            "bounded_external",
+            "open",
+            "unknown"
+          ]
+        },
+        "sensitivity": {
+          "enum": [
+            "public",
+            "internal",
+            "confidential",
+            "restricted",
+            "regulated",
+            "safety_critical",
+            "unknown"
+          ]
+        },
+        "privilege": {
+          "enum": [
+            "none",
+            "user",
+            "workspace",
+            "admin",
+            "security_boundary",
+            "root_or_equivalent",
+            "unknown"
+          ]
+        },
+        "duration": {
+          "enum": [
+            "transient",
+            "invocation",
+            "session",
+            "time_bounded",
+            "persistent",
+            "recurring",
+            "indefinite",
+            "unknown"
+          ]
+        },
+        "confidence": {
+          "enum": [
+            "verified",
+            "trusted_declared",
+            "self_declared",
+            "inferred",
+            "unknown"
+          ]
+        },
+        "audience_scope": {
+          "enum": [
+            "self",
+            "internal",
+            "named_external",
+            "bounded_group",
+            "public",
+            "unknown"
+          ]
+        },
+        "blast_radius": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "resource_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "subject_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "tenant_scope": {
+              "type": "string"
+            },
+            "public_reach": {
+              "type": [
+                "integer",
+                "string"
+              ]
+            },
+            "geographic_scope": {
+              "type": "string"
+            },
+            "system_scope": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "approval": {
+      "enum": [
+        "none",
+        "user_confirmation",
+        "principal_confirmation",
+        "reviewer_confirmation",
+        "multi_party_approval",
+        "step_up_authentication",
+        "external_authority"
+      ]
+    },
+    "actionPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision"
+      ],
+      "properties": {
+        "decision": {
+          "$ref": "#/$defs/decision"
+        },
+        "level": {
+          "type": "string",
+          "pattern": "^A[0-7]$"
+        },
+        "effects": {
+          "$ref": "#/$defs/effects"
+        },
+        "modifiers": {
+          "$ref": "#/$defs/modifiers"
+        },
+        "approval": {
+          "$ref": "#/$defs/approval"
+        },
+        "constraints": {
+          "type": "object"
+        },
+        "conditions": {
+          "type": "object"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "compositionRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "if",
+        "decision"
+      ],
+      "properties": {
+        "if": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "decision": {
+          "$ref": "#/$defs/decision"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

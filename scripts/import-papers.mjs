@@ -49,6 +49,26 @@ const PAPERS = [
     file: 'AI_Minimum_Ethical_Protection_Proposition_EN.md',
     title: 'The Minimum Ethical Protection Proposition for AI',
   },
+  {
+    slug: 'from-crawler-rights-to-agent-authority',
+    file: 'AGIRIGHT_From_Crawler_Rights_to_Agent_Authority_v0.1.md',
+    title: 'From Crawler Rights to Agent Authority: Extending AGIRIGHT from Content Governance to Protocol-Native AI Agents',
+  },
+  {
+    slug: 'aars-agent-action-rights-spectrum',
+    file: 'AARS_Agent_Action_Rights_Spectrum_v0.1.md',
+    title: 'AARS v0.1 — Agent Action Rights Spectrum',
+  },
+  {
+    slug: 'aadp-agent-authority-delegation-protocol',
+    file: 'AADP_Agent_Authority_Delegation_Protocol_v0.1.md',
+    title: 'AADP v0.1 — Agent Authority & Delegation Protocol',
+  },
+  {
+    slug: 'agiright-technical-whitepaper-v0-2',
+    file: 'AGIRight.org_技術白皮書_v0.2.md',
+    title: 'AGIRight.org Technical White Paper v0.2',
+  },
 ];
 
 mkdirSync(DEST, { recursive: true });

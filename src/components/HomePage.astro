@@ -6,7 +6,7 @@ import PaperCard from './PaperCard.astro';
 import JsonBlock from './JsonBlock.astro';
 import SpectrumViz from './SpectrumViz.astro';
 import { SITE, UI, langPrefix, type Lang, pick } from '../data/site';
-import { PROTOCOLS, AGENTIC_PAYMENT_NOTE } from '../data/protocols';
+import { PROTOCOLS, PROTOCOL_FAMILY_LABEL, AGENTIC_PAYMENT_NOTE, type Protocol } from '../data/protocols';
 import { RESEARCH_AREAS } from '../data/research';
 import { listedPapers } from '../data/papers';
 
@@ -95,16 +95,18 @@ const endpoints = [
     </div>
     <!-- protocol strip -->
     <div class="relative border-t border-line bg-paper">
-      <div class="container-site grid grid-cols-2 md:grid-cols-4">
+      <div class="container-site grid grid-cols-2 md:grid-cols-3">
         {
           PROTOCOLS.map((p, i) => (
             <a
               href={`${prefix}/protocols/${p.id}`}
               class:list={[
                 'group flex flex-col gap-0.5 border-line px-1 py-4 no-underline cursor-pointer md:px-5',
-                i > 0 && 'md:border-l',
-                i % 2 === 1 && 'border-l md:border-l',
-                i > 1 && 'border-t md:border-t-0',
+                i % 2 === 1 && 'border-l',
+                Math.floor(i / 2) > 0 && 'border-t',
+                i % 3 !== 0 && 'md:border-l',
+                Math.floor(i / 2) > 0 && Math.floor(i / 3) === 0 && 'md:border-t-0',
+                Math.floor(i / 3) > 0 && 'md:border-t',
               ]}
               data-hero-fade
             >
@@ -151,9 +153,16 @@ const endpoints = [
       <SectionHeading num="02" kicker={t.protocolsKicker} title={t.protocolsTitle} intro={t.protocolsIntro} />
       <a href={prefix + '/protocols'} class="link-quiet mb-1 text-[0.9rem] font-medium" data-reveal>{t.viewAll} →</a>
     </div>
-    <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-      {PROTOCOLS.map((p) => <ProtocolCard protocol={p} lang={lang} />)}
-    </div>
+    {
+      (['content', 'agent'] as Protocol['family'][]).map((family, i) => (
+        <div class:list={[i > 0 && 'mt-10']}>
+          <p class="spec-label !text-accent" data-reveal>{pick(PROTOCOL_FAMILY_LABEL[family], lang)}</p>
+          <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            {PROTOCOLS.filter((p) => p.family === family).map((p) => <ProtocolCard protocol={p} lang={lang} />)}
+          </div>
+        </div>
+      ))
+    }
     <p class="mt-6 max-w-3xl text-[0.85rem] leading-relaxed text-muted" data-reveal>
       {pick(AGENTIC_PAYMENT_NOTE, lang)}
     </p>

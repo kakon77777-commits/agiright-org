@@ -3,6 +3,8 @@ import type { Lang } from './site';
 export interface Protocol {
   id: string;
   abbr: string;
+  /** which rights plane this protocol belongs to — drives the two-group layout on /protocols and the homepage */
+  family: 'content' | 'agent';
   expansion: { en: string; zh: string };
   name: { en: string; zh: string };
   tagline: { en: string; zh: string };
@@ -20,10 +22,16 @@ export interface Protocol {
   relatedPapers: string[];
 }
 
+export const PROTOCOL_FAMILY_LABEL: Record<Protocol['family'], { en: string; zh: string }> = {
+  content: { en: 'Content & Learning Rights', zh: '內容與學習權利' },
+  agent: { en: 'Agent & Protocol Rights', zh: 'Agent 與協議權利' },
+};
+
 export const PROTOCOLS: Protocol[] = [
   {
     id: 'aicr',
     abbr: 'AICR',
+    family: 'content',
     expansion: {
       en: 'AI Content Rights / AI Content Rules',
       zh: 'AI 內容權利與使用規則',
@@ -133,6 +141,7 @@ export const PROTOCOLS: Protocol[] = [
   {
     id: 'aicl',
     abbr: 'AICL',
+    family: 'content',
     expansion: {
       en: 'AI Content License / AI Content Licensing Layer',
       zh: 'AI 內容授權與授權連接層',
@@ -244,6 +253,7 @@ export const PROTOCOLS: Protocol[] = [
   {
     id: 'airs',
     abbr: 'AIRS',
+    family: 'content',
     expansion: {
       en: 'AI Rights Spectrum',
       zh: 'AI 權利光譜',
@@ -333,6 +343,7 @@ export const PROTOCOLS: Protocol[] = [
   {
     id: 'ailp',
     abbr: 'AILP',
+    family: 'content',
     expansion: {
       en: 'AI Learning Permission Protocol',
       zh: 'AI 學習許可協議',
@@ -419,6 +430,183 @@ export const PROTOCOLS: Protocol[] = [
     },
     schemaUrl: '/schemas/ailp.schema.json',
     relatedPapers: ['ai-rights-spectrum', 'protocolized-openness'],
+  },
+  {
+    id: 'aars',
+    abbr: 'AARS',
+    family: 'agent',
+    expansion: {
+      en: 'Agent Action Rights Spectrum',
+      zh: 'Agent 行動權利光譜',
+    },
+    name: {
+      en: 'AARS — Agent Action Rights Spectrum',
+      zh: 'AARS — Agent 行動權利光譜',
+    },
+    tagline: {
+      en: 'What can this Agent do, to what effect, and how reversibly? Content permission does not imply action permission.',
+      zh: '這個 Agent 可以做什麼、造成什麼效果、能否復原?內容權利不等於行動權利。',
+    },
+    status: 'Draft v0.1',
+    definition: {
+      en: 'AARS is a machine-readable rights-semantics layer for what an Agent may do once it holds tool or API capability — as distinct from what it may read or learn. It describes an action taxonomy, a multi-dimensional effect vector (read / write / execute / external communication / transaction / delegation / persistence), reversibility, blast radius, and multi-action composition risk, so a single allow/deny bit is replaced by an evaluable action-rights space. AARS does not replace OAuth, MCP, or existing authorization systems — it gives them a shared vocabulary for what an action is, before a policy decides whether to allow it.',
+      zh: 'AARS 是描述 Agent 一旦取得工具或 API 能力後「可以做什麼」的機器可讀權利語義層——有別於它可以讀取或學習什麼。它定義了行動分類、多維效果向量(讀取/寫入/執行/對外通訊/交易/委派/持續性)、可逆性、影響範圍,以及多重行動組合風險,讓單一 allow/deny 位元被一個可判定的行動權利空間取代。AARS 不取代 OAuth、MCP 或既有授權系統——它提供的是判斷「這個行動是什麼」的共通語彙,是否允許則交由政策決定。',
+    },
+    purpose: {
+      en: [
+        'Separate content permission from operational (tool/API) permission: RAG access does not grant database writes.',
+        'Give every Agent action a machine-readable effect vector — read, write, execute, external communication, transaction, delegation, persistence — instead of a single risk score.',
+        'Distinguish static tool metadata (a self-declared hint) from runtime effect (what a specific invocation, with specific arguments, actually does).',
+        'Flag multi-action composition risk, where individually-safe actions combine into an unsafe capability (e.g. read-secret + external-publish).',
+      ],
+      zh: [
+        '把內容權利與操作(工具/API)權利分開:允許 RAG 不代表允許寫入資料庫。',
+        '讓每個 Agent 行動都有機器可讀的效果向量——讀取、寫入、執行、對外通訊、交易、委派、持續性——而不是單一風險分數。',
+        '區分靜態工具中繼資料(自我宣稱的提示)與執行期效果(特定參數的特定呼叫實際造成的結果)。',
+        '標記多重行動組合風險:個別安全的行動組合後可能形成不安全的能力(例如讀取機密+對外發布)。',
+      ],
+    },
+    scope: {
+      en: [
+        'A0–A7 human-readable action spectrum — from no access through discover, read, query, reversible mutation, external action, privileged/transactional action, to persistent delegated autonomy',
+        'A machine-readable action vector (R/W/X/E/T/G/P) plus effect modifiers — reversibility, idempotency, open-world reach, blast radius, sensitivity, privilege impact, duration, confidence',
+        'Decision states beyond allow/deny — conditional, approval_required, step_up_required, unavailable, unknown (unknown never defaults to allow for a mutating action)',
+        'Static tool profile vs. runtime action profile — the same tool can carry very different effects depending on invocation arguments',
+        'Multi-action composition rules and capability amplification (e.g. read-secret + write-script + execute + external-upload = exfiltration capability)',
+        'Mapping to MCP tool annotations (readOnlyHint, destructiveHint, idempotentHint, openWorldHint) and to OAuth 2.0 Rich Authorization Requests (RFC 9396)',
+      ],
+      zh: [
+        'A0–A7 人類可讀行動光譜——從無存取,經發現、讀取、查詢、可逆變更、對外行動、特權/交易行動,到持續委派自治',
+        '機器可讀行動向量(R/W/X/E/T/G/P)加上效果修飾詞——可逆性、冪等性、開放世界觸及範圍、影響半徑、敏感度、權限衝擊、持續時間、可信度',
+        '超越 allow/deny 的決策狀態——conditional、approval_required、step_up_required、unavailable、unknown(對會改變狀態的行動,unknown 絕不預設為 allow)',
+        '靜態工具檔案 vs. 執行期行動檔案——同一工具因呼叫參數不同,可能產生完全不同的效果',
+        '多重行動組合規則與能力放大(例如讀取機密+寫入腳本+執行+對外上傳=資料外洩能力)',
+        '對應 MCP 工具註記(readOnlyHint、destructiveHint、idempotentHint、openWorldHint)與 OAuth 2.0 細緻授權請求(RFC 9396)',
+      ],
+    },
+    exampleTitle: {
+      en: 'A minimal AARS action policy',
+      zh: '一份最小 AARS 行動政策',
+    },
+    exampleFile: '/ai/agent-actions.json',
+    jsonExample: `{
+  "aars_version": "0.1",
+  "resource": "mcp://mail.example",
+  "default_decision": "deny",
+  "actions": {
+    "discover": { "decision": "allow" },
+    "read": { "decision": "conditional", "sensitivity_max": "confidential" },
+    "communicate": {
+      "decision": "approval_required",
+      "constraints": { "audience_scope_max": "named_external", "max_recipients": 1 }
+    },
+    "delete": { "decision": "deny" },
+    "delegate": { "decision": "deny" }
+  }
+}`,
+    limitations: {
+      en: [
+        'AARS is a rights-semantics vocabulary, not an enforcement engine — implementations must actually wire runtime evaluation to it.',
+        "It does not define who has authority to grant an action — that is AADP's scope.",
+        'It is an open research draft; this site does not claim AARS has been adopted by MCP, IETF, or any standards body.',
+        'The action taxonomy and vector dimensions are v0.1 and may change before a stable release.',
+      ],
+      zh: [
+        'AARS 是權利語義詞彙,不是執行引擎——實作方必須自行把執行期判定接上這套語義。',
+        '它不定義誰有資格授予某個行動——那是 AADP 的範圍。',
+        '目前為開放研究草案;本站不主張 AARS 已被 MCP、IETF 或任何標準組織採納。',
+        '行動分類與向量維度是 v0.1,穩定版之前可能調整。',
+      ],
+    },
+    schemaUrl: '/schemas/aars.schema.json',
+    relatedPapers: ['aars-agent-action-rights-spectrum', 'from-crawler-rights-to-agent-authority'],
+  },
+  {
+    id: 'aadp',
+    abbr: 'AADP',
+    family: 'agent',
+    expansion: {
+      en: 'Agent Authority & Delegation Protocol',
+      zh: 'Agent 權力與委派協議',
+    },
+    name: {
+      en: 'AADP — Agent Authority & Delegation Protocol',
+      zh: 'AADP — Agent 權力與委派協議',
+    },
+    tagline: {
+      en: 'Who does this Agent act for, where did its authority come from, and can it hand that authority to another Agent?',
+      zh: '這個 Agent 代表誰行動?它的權力從哪裡來?能不能再交給另一個 Agent?',
+    },
+    status: 'Draft v0.1',
+    definition: {
+      en: "AADP is a rights-semantics layer above OAuth, OpenID Connect, MCP, and API authorization, for principal / actor / delegation-chain / authority-source / inspection-ceiling semantics. Its core axioms: a principal (who is represented) is not automatically the same as the actor (who actually acts); delegation does not imply the right to redelegate further; a child delegation's authority can only narrow, never silently widen, relative to its parent; and being authenticated never implies unlimited inspection rights over an Agent's internal state. AADP does not invent a new token format — it gives existing tokens and grants a shared vocabulary for principal, actor, delegation chain, purpose, time, revocation, and inspection boundary.",
+      zh: 'AADP 是位於 OAuth、OpenID Connect、MCP 與 API 授權之上的權力語義層,處理 principal(權利主體)、actor(實際執行者)、委派鏈、權力來源與檢查上限等語義。核心公理:principal(被代表者)不會自動等於 actor(實際行動者);獲得委派不代表可以再委派;子委派的權力只能比父委派窄,不能無聲擴大;通過身分驗證絕不代表取得對 Agent 內部狀態的無限檢查權。AADP 不發明新的憑證格式——它讓既有的 token 與授權擁有一套共通語彙:principal、actor、委派鏈、用途、時效、撤銷與檢查邊界。',
+    },
+    purpose: {
+      en: [
+        'Separate who is represented (principal) from who actually acts (actor) — an Agent acting for you is not you.',
+        'Make delegation explicit and non-transitive by default: an Agent with authority cannot silently redelegate it to a sub-agent unless that is separately granted.',
+        'Bound how deeply a service may inspect an Agent to establish trust — authentication does not imply unlimited access to memory, private state, or third-party data.',
+        'Give machine and Agent identity a first-class login path, instead of forcing automated systems to impersonate human accounts.',
+      ],
+      zh: [
+        '把「被代表者」(principal)跟「實際行動者」(actor)分開——一個代表你的 Agent 不是你。',
+        '讓委派預設明確且不可遞移:擁有權力的 Agent 不能默默再委派給子 Agent,除非另外獲得授權。',
+        '限制服務方為建立信任可以檢查 Agent 到多深——通過驗證不代表取得對記憶、私人狀態或第三方資料的無限存取權。',
+        '讓機器與 Agent 身份擁有第一級的登入路徑,而不是強迫自動化系統假裝成人類帳號。',
+      ],
+    },
+    scope: {
+      en: [
+        'Principal / actor / delegator / authority-issuer roles, and principal types (human, organization, service, agent, ai, collective — the latter two marked experimental)',
+        'Delegation vs. impersonation (following OAuth Token Exchange, RFC 8693), with delegation preferred by default so actor identity and accountability are preserved',
+        "Delegation chains with attenuation — a child's granted envelope, resources, purposes, and expiry can only be a subset of its parent's, never wider",
+        'Temporal authority — issued_at / expires_at / renewal, and revocation that propagates down a delegation chain by default',
+        "An inspection-ceiling layer (I0 identity-only through I7 full-state) — separate from authorization, bounding how much of an Agent's state a verifier may demand",
+        'Failure modes named explicitly: authority laundering, confused deputy, and cross-principal leakage when one Agent serves multiple principals',
+      ],
+      zh: [
+        'Principal / actor / delegator / authority-issuer 四種角色,以及 principal 類型(human、organization、service、agent、ai、collective——後兩者標為實驗性)',
+        '委派 vs. 冒名(沿用 OAuth Token Exchange, RFC 8693),預設偏好委派以保留 actor 身份與可歸責性',
+        '具有衰減性質的委派鏈——子委派取得的範圍、資源、用途與到期時間只能是父委派的子集,不能更寬',
+        '時效性權力——issued_at / expires_at / 續期,以及預設會沿委派鏈向下傳遞的撤銷機制',
+        '獨立於授權之外的檢查上限分層(I0 僅身份 至 I7 完整狀態)——限制驗證方最多可以要求 Agent 揭露多少狀態',
+        '明確命名的失效模式:權力洗白(authority laundering)、confused deputy,以及一個 Agent 同時服務多個 principal 時的跨主體資料外洩',
+      ],
+    },
+    exampleTitle: {
+      en: 'A minimal AADP authority statement',
+      zh: '一份最小 AADP 權力聲明',
+    },
+    exampleFile: '/ai/agent-authority.json',
+    jsonExample: `{
+  "aadp_version": "0.1",
+  "relationship": "delegated",
+  "principal": { "type": "human", "id": "human:neo" },
+  "actor": { "type": "agent", "id": "agent:mail-01" },
+  "authority_source": { "type": "oauth_authorization", "issuer": "https://auth.example" },
+  "resources": ["mcp://mail.example/inbox"],
+  "aars_actions": ["read", "create"],
+  "delegation": { "redelegation": false, "max_depth": 0 },
+  "inspection": { "required": "I2", "ceiling": "I3", "retention": "7d", "redisclosure": false },
+  "expires_at": "2026-08-15T12:30:00Z"
+}`,
+    limitations: {
+      en: [
+        "AADP does not define action semantics itself — what an action means and how risky it is comes from AARS.",
+        'It does not define token formats, cryptographic primitives, or authentication transport — it complements OAuth/OIDC/MCP rather than replacing them.',
+        'It is an open research draft; this site does not claim AADP has been adopted as an MCP or OAuth extension.',
+        'A protocol slot for `principal_type: ai` describes a possibility; it does not assert that any current AI system has legal personhood.',
+      ],
+      zh: [
+        'AADP 本身不定義行動語義——一個行動是什麼、有多危險,由 AARS 定義。',
+        '它不定義憑證格式、密碼學原語或身分驗證傳輸層——是 OAuth/OIDC/MCP 的補充,不是取代。',
+        '目前為開放研究草案;本站不主張 AADP 已被採納為 MCP 或 OAuth 的正式擴充。',
+        '`principal_type: ai` 這個協議欄位描述的是一種可能性;不主張現有任何 AI 系統已具有法律人格。',
+      ],
+    },
+    schemaUrl: '/schemas/aadp.schema.json',
+    relatedPapers: ['aadp-agent-authority-delegation-protocol', 'from-crawler-rights-to-agent-authority'],
   },
 ];
 

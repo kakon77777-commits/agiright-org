@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from './PageHeader.astro';
 import ProtocolCard from './ProtocolCard.astro';
 import { UI, type Lang, pick } from '../data/site';
-import { PROTOCOLS, AGENTIC_PAYMENT_NOTE } from '../data/protocols';
+import { PROTOCOLS, PROTOCOL_FAMILY_LABEL, AGENTIC_PAYMENT_NOTE, type Protocol } from '../data/protocols';
 
 interface Props {
   lang: Lang;
@@ -13,7 +13,9 @@ const t = UI[lang];
 
 const title = pick({ en: 'Protocols', zh: '協議' }, lang);
 const intro =
-  pick({ en: 'Four open drafts that form the rights and licensing layer of an AI-readable web: AICR declares rights, AICL executes licensing, AIRS defines the spectrum, AILP governs learning.', zh: '四個開放草案,構成 AI 可讀網路的權利與授權層:AICR 宣告權利、AICL 執行授權、AIRS 定義光譜、AILP 治理學習。' }, lang);
+  pick({ en: 'Open drafts that form the rights layer of an AI-readable web: content & learning rights (AICR, AICL, AIRS, AILP) declare and license what AI may do with content; agent & protocol rights (AARS, AADP) declare what an Agent may do once it holds tool access, and who authorized it.', zh: '構成 AI 可讀網路權利層的開放草案:內容與學習權利(AICR、AICL、AIRS、AILP)宣告並授權 AI 可以對內容做什麼;Agent 與協議權利(AARS、AADP)宣告 Agent 一旦取得工具存取權後可以做什麼、以及是誰授權的。' }, lang);
+
+const families: Protocol['family'][] = ['content', 'agent'];
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>
@@ -24,9 +26,16 @@ const intro =
     badges={['Draft v0.1', 'Open specification experiment']}
   />
   <div class="container-site py-14 md:py-20">
-    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
-      {PROTOCOLS.map((p) => <ProtocolCard protocol={p} lang={lang} />)}
-    </div>
+    {
+      families.map((family, i) => (
+        <div class:list={[i > 0 && 'mt-14']}>
+          <p class="spec-label !text-accent" data-reveal>{pick(PROTOCOL_FAMILY_LABEL[family], lang)}</p>
+          <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {PROTOCOLS.filter((p) => p.family === family).map((p) => <ProtocolCard protocol={p} lang={lang} />)}
+          </div>
+        </div>
+      ))
+    }
     <div class="mt-10 rounded-md border-l-2 border-accent bg-accent-soft/50 px-5 py-4" data-reveal>
       <p class="spec-label !text-accent">Agentic Payment</p>
       <p class="mt-2 max-w-3xl text-[0.9rem] leading-relaxed text-ink-soft">{pick(AGENTIC_PAYMENT_NOTE, lang)}</p>

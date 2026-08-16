@@ -1,0 +1,485 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agiright.org/schemas/aadp.schema.json",
+  "title": "AADP v0.1 Agent Authority & Delegation Protocol",
+  "description": "Draft machine-readable authority-statement schema for AADP v0.1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "aadp_version",
+    "authority_id",
+    "relationship",
+    "principal",
+    "actor",
+    "authority_source",
+    "resources",
+    "aars_actions",
+    "delegation",
+    "inspection",
+    "issued_at",
+    "expires_at"
+  ],
+  "properties": {
+    "aadp_version": {
+      "const": "0.1"
+    },
+    "authority_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority_context_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "relationship": {
+      "enum": [
+        "direct",
+        "delegated",
+        "impersonated"
+      ]
+    },
+    "principal": {
+      "$ref": "#/$defs/entity"
+    },
+    "actor": {
+      "$ref": "#/$defs/entity"
+    },
+    "authority_source": {
+      "$ref": "#/$defs/authoritySource"
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "aars_actions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "purposes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "limits": {
+      "type": "object"
+    },
+    "delegation": {
+      "$ref": "#/$defs/delegation"
+    },
+    "inspection": {
+      "$ref": "#/$defs/inspection"
+    },
+    "assurance": {
+      "$ref": "#/$defs/assurance"
+    },
+    "approval": {
+      "$ref": "#/$defs/approval"
+    },
+    "proof_references": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/proofReference"
+      }
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "not_before": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "renewal": {
+      "$ref": "#/$defs/renewal"
+    },
+    "revocation": {
+      "$ref": "#/$defs/revocation"
+    },
+    "parent_authority_id": {
+      "type": "string"
+    },
+    "delegation_chain": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/delegationHop"
+      }
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "principalType": {
+      "enum": [
+        "human",
+        "organization",
+        "service",
+        "agent",
+        "ai",
+        "collective",
+        "anonymous"
+      ]
+    },
+    "actorType": {
+      "enum": [
+        "human",
+        "service",
+        "agent",
+        "subagent",
+        "application",
+        "device",
+        "ai"
+      ]
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "id"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "human",
+            "organization",
+            "service",
+            "agent",
+            "subagent",
+            "application",
+            "device",
+            "ai",
+            "collective",
+            "anonymous"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "active",
+            "experimental",
+            "unknown"
+          ]
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        }
+      }
+    },
+    "authoritySource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "principal_consent",
+            "organization_policy",
+            "service_policy",
+            "oauth_authorization",
+            "oauth_token_exchange",
+            "client_credentials",
+            "enterprise_managed",
+            "signed_delegation",
+            "local_runtime_policy",
+            "external_authority",
+            "public_policy",
+            "experimental_ai_principal"
+          ]
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "profile": {
+          "type": "string"
+        }
+      }
+    },
+    "delegation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "redelegation",
+        "max_depth"
+      ],
+      "properties": {
+        "redelegation": {
+          "type": "boolean"
+        },
+        "max_depth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "current_depth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "attenuation_required": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "inspectionLevel": {
+      "enum": [
+        "I0",
+        "I1",
+        "I2",
+        "I3",
+        "I4",
+        "I5",
+        "I6",
+        "I7"
+      ]
+    },
+    "inspection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "ceiling",
+        "redisclosure",
+        "training_use"
+      ],
+      "properties": {
+        "required": {
+          "$ref": "#/$defs/inspectionLevel"
+        },
+        "ceiling": {
+          "$ref": "#/$defs/inspectionLevel"
+        },
+        "retention": {
+          "type": "string"
+        },
+        "redisclosure": {
+          "type": "boolean"
+        },
+        "training_use": {
+          "type": "boolean"
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "third_party_isolation": {
+          "type": "boolean"
+        }
+      }
+    },
+    "assurance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "authentication_profile": {
+          "enum": [
+            "public",
+            "human_interactive",
+            "machine_to_machine",
+            "enterprise_managed",
+            "delegated_token_exchange",
+            "independent_ai_experimental",
+            "other"
+          ]
+        },
+        "step_up_required": {
+          "type": "boolean"
+        },
+        "freshness_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "alternative_assurance": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "signed_receipt",
+              "remote_attestation",
+              "third_party_audit",
+              "zero_knowledge_proof",
+              "trusted_execution_evidence",
+              "policy_certificate",
+              "human_confirmation",
+              "organization_attestation"
+            ]
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "type": {
+          "enum": [
+            "none",
+            "principal",
+            "user",
+            "organization",
+            "reviewer",
+            "multi_party",
+            "external_authority"
+          ]
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "proofReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "reference"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "oauth_token",
+            "dpop_token",
+            "service_credential",
+            "signed_delegation",
+            "enterprise_assertion",
+            "workload_identity",
+            "local_runtime_identity",
+            "authority_receipt",
+            "other"
+          ]
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "issuer": {
+          "type": "string"
+        }
+      }
+    },
+    "renewal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "interval": {
+          "type": "string"
+        },
+        "max_continuous_duration": {
+          "type": "string"
+        },
+        "on_failure": {
+          "enum": [
+            "stop",
+            "pause",
+            "finish_atomic_step",
+            "request_new_authority"
+          ]
+        }
+      }
+    },
+    "revocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "active",
+            "suspended",
+            "revoked",
+            "expired",
+            "superseded"
+          ]
+        },
+        "propagate_to_descendants": {
+          "type": "boolean"
+        },
+        "reference": {
+          "type": "string"
+        }
+      }
+    },
+    "delegationHop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "delegator",
+        "delegate",
+        "authority_id",
+        "issued_at",
+        "expires_at"
+      ],
+      "properties": {
+        "delegator": {
+          "$ref": "#/$defs/entity"
+        },
+        "delegate": {
+          "$ref": "#/$defs/entity"
+        },
+        "authority_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aars_actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "redelegation": {
+          "type": "boolean"
+        },
+        "issued_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

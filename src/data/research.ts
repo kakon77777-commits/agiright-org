@@ -107,6 +107,54 @@ export const RESEARCH_AREAS: ResearchArea[] = [
     protocols: ['aicl'],
   },
   {
+    slug: 'agent-action-rights',
+    num: '04b',
+    title: { en: 'Agent Action Rights', zh: 'Agent 行動權利' },
+    summary: {
+      en: 'What an Agent may DO once it holds tool or API capability, as distinct from what it may read or learn: action taxonomy, effect vectors, reversibility, blast radius, and multi-action composition risk. AARS gives content permission and action permission separate, independently-evaluable axes.',
+      zh: 'Agent 一旦取得工具或 API 能力後「可以做什麼」,有別於它可以讀取或學習什麼:行動分類、效果向量、可逆性、影響範圍與多重行動組合風險。AARS 讓內容權利與行動權利成為獨立、可分開判定的兩軸。',
+    },
+    topics: {
+      en: [
+        'Content permission does not imply operational (tool/API) permission',
+        'A machine-readable action vector beyond a single risk score',
+        'Static tool metadata vs. runtime effect — the same tool, different arguments, different risk',
+        'Composition risk: individually-safe actions that combine into an unsafe capability',
+      ],
+      zh: [
+        '內容權利不等於操作(工具/API)權利',
+        '超越單一風險分數的機器可讀行動向量',
+        '靜態工具中繼資料 vs. 執行期效果——同一工具,不同參數,不同風險',
+        '組合風險:個別安全的行動組合後形成不安全的能力',
+      ],
+    },
+    protocols: ['aars'],
+  },
+  {
+    slug: 'agent-authority-delegation',
+    num: '04c',
+    title: { en: 'Agent Authority & Delegation', zh: 'Agent 權力與委派' },
+    summary: {
+      en: 'Who an Agent acts for, where its authority came from, whether it can hand that authority to another Agent, and how much of its internal state a verifier may demand. AADP separates principal from actor, bounds delegation to strictly narrow (never silently widen), and treats inspection as a bounded right, not an unlimited one.',
+      zh: 'Agent 代表誰行動、它的權力從哪裡來、能否再交給另一個 Agent,以及驗證方最多可以要求它揭露多少內部狀態。AADP 把 principal 跟 actor 分開,限制委派只能收窄(不能無聲擴大),並把檢查權當成有界的權利,而非無限制的權利。',
+    },
+    topics: {
+      en: [
+        'Principal ≠ actor: an Agent acting for you is not you',
+        'Delegation chains that can only narrow, never silently widen, relative to their parent',
+        'Authentication does not imply unlimited inspection of memory, private, or third-party state',
+        'Machine-native identity — Agents should not be forced to impersonate human accounts',
+      ],
+      zh: [
+        'Principal ≠ actor:代表你的 Agent 不是你',
+        '委派鏈只能比父委派窄,不能無聲擴大',
+        '通過身分驗證不代表取得對記憶、私人或第三方狀態的無限檢查權',
+        '機器原生身份——Agent 不應被迫假裝成人類帳號',
+      ],
+    },
+    protocols: ['aadp'],
+  },
+  {
     slug: 'machine-readable-governance',
     num: '05',
     title: { en: 'Machine-Readable Governance', zh: '機器可讀治理' },
@@ -128,7 +176,7 @@ export const RESEARCH_AREAS: ResearchArea[] = [
         '可稽核性:紀錄、版本、來源譜系',
       ],
     },
-    protocols: ['aicr', 'aicl', 'airs', 'ailp'],
+    protocols: ['aicr', 'aicl', 'airs', 'ailp', 'aars', 'aadp'],
   },
   {
     slug: 'ai-network-democratic-economy',
