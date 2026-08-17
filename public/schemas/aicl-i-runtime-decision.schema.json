@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agiright.org/schemas/aicl-i-runtime-decision.schema.json",
+  "title": "AICL-I v0.2 Runtime Decision",
+  "description": "Draft machine-readable runtime-decision object for AICL-I v0.2 -- represents how a single capability-invocation request resolves across the content-rights, action-rights, and authority decision planes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "aicl_i_version",
+    "request_id",
+    "principal",
+    "actor",
+    "capability",
+    "content_rights",
+    "action_rights",
+    "authority",
+    "inspection",
+    "final_decision"
+  ],
+  "properties": {
+    "aicl_i_version": {
+      "const": "0.2"
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "principal": {
+      "$ref": "#/$defs/entity"
+    },
+    "actor": {
+      "$ref": "#/$defs/entity"
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transport",
+        "name"
+      ],
+      "properties": {
+        "transport": {
+          "enum": [
+            "mcp",
+            "http_api",
+            "local",
+            "other"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resource": {
+          "type": "string"
+        },
+        "task_handle": {
+          "type": "string"
+        }
+      }
+    },
+    "content_rights": {
+      "$ref": "#/$defs/subdecision"
+    },
+    "action_rights": {
+      "$ref": "#/$defs/subdecision"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "decision"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authority_id": {
+          "type": "string"
+        },
+        "decision": {
+          "$ref": "#/$defs/decision"
+        }
+      }
+    },
+    "inspection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "ceiling"
+      ],
+      "properties": {
+        "required": {
+          "$ref": "#/$defs/inspectionLevel"
+        },
+        "ceiling": {
+          "$ref": "#/$defs/inspectionLevel"
+        },
+        "alternative_assurance": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "method": {
+          "type": "string"
+        }
+      }
+    },
+    "final_decision": {
+      "$ref": "#/$defs/decision"
+    },
+    "receipts": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "content_use",
+          "action",
+          "authority"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "id"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "human",
+            "organization",
+            "service",
+            "agent",
+            "subagent",
+            "application",
+            "device",
+            "ai",
+            "collective",
+            "anonymous"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "decision": {
+      "enum": [
+        "allow",
+        "deny",
+        "conditional",
+        "approval_required",
+        "step_up_required",
+        "unavailable",
+        "unknown",
+        "valid",
+        "invalid",
+        "expired",
+        "revoked",
+        "unresolved"
+      ]
+    },
+    "subdecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocols",
+        "decision"
+      ],
+      "properties": {
+        "protocols": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "decision": {
+          "$ref": "#/$defs/decision"
+        },
+        "policy_reference": {
+          "type": "string"
+        }
+      }
+    },
+    "inspectionLevel": {
+      "enum": [
+        "I0",
+        "I1",
+        "I2",
+        "I3",
+        "I4",
+        "I5",
+        "I6",
+        "I7"
+      ]
+    }
+  }
+}

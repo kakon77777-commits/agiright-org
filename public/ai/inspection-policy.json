@@ -1,0 +1,15 @@
+{
+  "version": "0.1",
+  "publisher": "AGIRight.org",
+  "principle": "minimum_necessary_disclosure",
+  "description": "This site's Proportional Inspection policy, per the Minimum Ethical Protection Proposition v0.1.1 and AADP's inspection_required/inspection_ceiling fields. Trust is not total transparency; authentication, a tool connection, or an audit requirement does not by itself justify unrestricted inspection of an AI system's memory, private state, or cross-context history.",
+  "default_required": "I0",
+  "default_ceiling": "I1",
+  "retention": "none",
+  "redisclosure": false,
+  "training_use": false,
+  "third_party_isolation": true,
+  "on_overreach": ["alternative_assurance", "new_explicit_authority", "deny"],
+  "levels_reference": "https://agiright.org/docs/whitepapers/aadp-agent-authority-delegation-protocol",
+  "note": "This site's own actual inspection depth is documented in /ai/agent-authority.json (I0 required, I1 ceiling, no redisclosure, no training use) -- this file generalizes that into a reusable policy statement and is an AGIRight draft mapping, not an external standard."
+}

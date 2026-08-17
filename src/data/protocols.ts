@@ -249,8 +249,8 @@ export const PROTOCOLS: Protocol[] = [
       ],
     },
     namingNote: {
-      en: 'In earlier EveMissLab research, the acronym AICL also names the “AI Ingestion & Capability Layer” — an architectural layer for how AI systems read and invoke websites (manifest, corpus, capability, governance sublayers). On this site, AICL refers to the AI Content Licensing Layer unless explicitly stated otherwise; the ingestion-layer work is published as a separate whitepaper.',
-      zh: '在 EveMissLab 較早的研究中,AICL 縮寫也曾指「AI Ingestion & Capability Layer(AI 攝取與能力層)」——描述 AI 如何讀取與調用網站的架構層(清單、語料、能力、治理四子層)。在本站中,除非另有說明,AICL 一律指 AI 內容授權連接層;攝取層研究以獨立白皮書發布。',
+      en: 'In earlier EveMissLab research, the acronym AICL also names the “AI Ingestion & Capability Layer” — an architectural layer for how AI systems read and invoke websites (manifest, corpus, capability, runtime control, governance sublayers). As of v0.2 of that paper (2026-08-15), the two meanings are formally disambiguated with suffixes: this protocol is now referenced as AICL-C (AI Content License / AI Content Licensing Layer) in cross-references and machine-readable metadata, while the ingestion architecture is AICL-I. This page keeps the plain "AICL" id and URL for continuity — no existing link breaks — but the AICL-C suffix is the disambiguated name going forward. See the AICL-I v0.2 whitepaper for the full ingestion/capability/runtime-control architecture, which is a separate integration layer, not a seventh rights protocol.',
+      zh: '在 EveMissLab 較早的研究中,AICL 縮寫也曾指「AI Ingestion & Capability Layer(AI 攝取與能力層)」——描述 AI 如何讀取與調用網站的架構層(清單、語料、能力、runtime 控制、治理五子層)。自該論文 v0.2(2026-08-15)起,兩個意涵正式以後綴消歧義:本協議在交叉引用與機器可讀 metadata 中改稱 AICL-C(AI Content License / AI 內容授權連接層),攝取架構則為 AICL-I。本頁維持原本的 AICL id 與網址以保持連結不中斷,但往後的消歧義名稱是 AICL-C。攝取/能力/runtime 控制的完整架構請見 AICL-I v0.2 白皮書——它是獨立的整合層,不是第七個權利協議。',
     },
     schemaUrl: '/schemas/aicl.schema.json',
     wellKnownUrl: '/.well-known/aicl.json',

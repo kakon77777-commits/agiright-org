@@ -1,4 +1,6 @@
 ---
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from './PageHeader.astro';
 import { langPrefix, type Lang, pick } from '../data/site';
@@ -14,6 +16,41 @@ const title = pick({ en: 'Machine-Readable Specs', zh: '機器可讀規範' }, l
 const intro =
   pick({ en: 'Versioned specifications, JSON Schemas, and the policy files actually deployed on this site. Every file can be downloaded, validated, and cited directly.', zh: '所有協議的版本化規格、JSON Schema 與本站實際部署的政策檔。每個檔案都可直接下載、驗證與引用。' }, lang);
 
+// Read at build time so the numbers shown here are exactly what the
+// conformance scripts actually produced (scripts/conformance-check.mjs,
+// terminology-lint.mjs, overclaim-lint.mjs) — never hand-typed.
+const publicDir = fileURLToPath(new URL('../../public', import.meta.url));
+const conformance = JSON.parse(readFileSync(`${publicDir}/ai/conformance-report.json`, 'utf8'));
+const termLint = JSON.parse(readFileSync(`${publicDir}/ai/terminology-lint-report.json`, 'utf8'));
+const overclaimLint = JSON.parse(readFileSync(`${publicDir}/ai/overclaim-lint-report.json`, 'utf8'));
+
+const integrationLayers = [
+  {
+    id: 'aicl-i',
+    abbr: 'AICL-I',
+    name: { en: 'AI Ingestion & Capability Layer', zh: 'AI 攝取與能力層' },
+    status: 'Draft v0.2',
+    page: '/docs/whitepapers/aicl-ai-ingestion-capability-layer',
+    schema: '/schemas/aicl-i-runtime-decision.schema.json',
+    note: {
+      en: 'Runtime integration architecture -- not a seventh rights protocol. Orchestrates evaluation of the content-rights, action-rights, and authority decision planes around capability invocation.',
+      zh: 'Runtime 整合架構——不是第七個權利協議。協調內容權利、行動權利、權力三個決策平面在能力調用前後的評估。',
+    },
+  },
+];
+const ethicalLayers = [
+  {
+    id: 'minimum-ethical-protection',
+    name: { en: 'Minimum Ethical Protection', zh: 'AI 最小倫理保護' },
+    status: 'Draft v0.1.1',
+    page: '/docs/whitepapers/ai-minimum-ethical-protection',
+    note: {
+      en: 'A cross-layer ethical proposition, not a machine-enforceable protocol. v0.1.1 adds the Proportional Inspection Principle, operationalized through AADP\'s inspection_required/inspection_ceiling fields.',
+      zh: '跨層倫理命題,不是可機器執行的協議。v0.1.1 新增比例檢查原則,透過 AADP 的 inspection_required/inspection_ceiling 欄位操作化。',
+    },
+  },
+];
+
 const liveFiles = [
   { path: '/llms.txt', desc: { en: 'Site guide for AI systems', zh: 'AI 系統的網站導覽' } },
   { path: '/robots.txt', desc: { en: 'Crawler access rules', zh: '爬蟲存取規則' } },
@@ -22,6 +59,10 @@ const liveFiles = [
   { path: '/ai/content-policy.json', desc: { en: 'Content policy summary', zh: '內容政策摘要' } },
   { path: '/ai/agent-actions.json', desc: { en: 'AARS agent-action declaration of this site', zh: '本站 AARS 行動宣告' } },
   { path: '/ai/agent-authority.json', desc: { en: 'AADP agent-authority declaration of this site', zh: '本站 AADP 權力宣告' } },
+  { path: '/ai/inspection-policy.json', desc: { en: 'Proportional inspection policy (minimum necessary disclosure)', zh: '比例檢查政策(最小必要揭露)' } },
+  { path: '/ai/runtime/policy.json', desc: { en: 'AICL-I v0.2 runtime-control pointer file', zh: 'AICL-I v0.2 runtime 控制指標檔' } },
+  { path: '/ai/runtime/example-decision.json', desc: { en: 'Worked AICL-I runtime-decision object', zh: 'AICL-I runtime 決策物件範例' } },
+  { path: '/ai/conformance-report.json', desc: { en: 'Generated C2 conformance test report (P1-P3/N1-N6)', zh: '產出的 C2 一致性測試報告' } },
   { path: '/ai/protocol-index.json', desc: { en: 'Protocol registry index', zh: '協議索引' } },
   { path: '/.well-known/aicr.json', desc: { en: 'AICR policy of this site', zh: '本站 AICR 政策' } },
   { path: '/.well-known/aicl.json', desc: { en: 'AICL license catalog of this site', zh: '本站 AICL 授權目錄' } },
@@ -36,7 +77,7 @@ const liveFiles = [
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>
-  <PageHeader kicker={pick({ en: 'Specifications', zh: '規範' }, lang)} title={title} intro={intro} badges={['Draft v0.1']} />
+  <PageHeader kicker={pick({ en: 'Specifications', zh: '規範' }, lang)} title={title} intro={intro} badges={['Architecture v0.2']} />
   <div class="container-site py-14 md:py-20 space-y-16">
     <section>
       <h2 class="spec-label !text-accent" data-reveal>{pick({ en: 'Protocol specifications', zh: '協議規格' }, lang)}</h2>
@@ -69,6 +110,81 @@ const liveFiles = [
     </section>
 
     <section>
+      <h2 class="spec-label !text-accent" data-reveal>{pick({ en: 'Integration & ethical layers', zh: '整合與倫理層' }, lang)}</h2>
+      <p class="mt-2 max-w-2xl text-[0.85rem] text-muted" data-reveal>
+        {pick({ en: 'These sit alongside the six rights protocols but are not themselves rights protocols — one orchestrates evaluation across them, the other is a cross-layer ethical proposition.', zh: '這兩者與六個權利協議並列,但本身不是權利協議——一個負責協調評估,另一個是跨層的倫理命題。' }, lang)}
+      </p>
+      <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2" data-reveal>
+        {integrationLayers.map((l) => (
+          <a href={`${prefix}${l.page}`} class="flex flex-col gap-2 rounded-lg border border-line bg-surface px-5 py-4 no-underline hover:bg-primary-soft/40 transition-colors duration-200">
+            <div class="flex items-center justify-between gap-3">
+              <span class="font-mono text-[0.95rem] font-medium text-navy">{l.abbr}</span>
+              <span class="badge badge-draft">{l.status}</span>
+            </div>
+            <p class="text-[0.85rem] text-ink-soft">{pick(l.name, lang)}</p>
+            <p class="text-[0.78rem] text-muted">{pick(l.note, lang)}</p>
+          </a>
+        ))}
+        {ethicalLayers.map((l) => (
+          <a href={`${prefix}${l.page}`} class="flex flex-col gap-2 rounded-lg border border-line bg-surface px-5 py-4 no-underline hover:bg-primary-soft/40 transition-colors duration-200">
+            <div class="flex items-center justify-between gap-3">
+              <span class="font-mono text-[0.82rem] font-medium text-navy">{pick(l.name, lang)}</span>
+              <span class="badge badge-draft">{l.status}</span>
+            </div>
+            <p class="text-[0.78rem] text-muted">{pick(l.note, lang)}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section>
+      <h2 class="spec-label !text-accent" data-reveal>{pick({ en: 'Conformance', zh: '一致性驗收' }, lang)}</h2>
+      <p class="mt-2 max-w-2xl text-[0.85rem] text-muted" data-reveal>
+        {pick({ en: 'Generated by running scripts/conformance-check.mjs against the Integration Conformance Profile\'s own required test cases — this is a decision-logic simulation of the AICL-I runtime model, not a claim that every live endpoint executes this exact code path.', zh: '由執行 scripts/conformance-check.mjs 對照整合一致性驗收規格自身要求的測試案例產出——這是 AICL-I runtime 模型的決策邏輯模擬,不代表本站每個 live 端點都執行這條確切的程式路徑。' }, lang)}
+      </p>
+      <div class="mt-6 rounded-lg border border-line bg-surface px-5 py-4" data-reveal>
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+          <p class="text-[0.85rem]">
+            <span class="font-mono font-medium text-navy">{conformance.conformance_level_target}</span>
+            {' '}{pick({ en: 'target level', zh: '目標等級' }, lang)}
+          </p>
+          <p class="text-[0.85rem]">
+            <span class:list={['font-mono font-medium', conformance.all_pass ? 'text-primary' : 'text-accent']}>{conformance.cases_passed}/{conformance.cases_total}</span>
+            {' '}{pick({ en: 'test cases pass', zh: '測試案例通過' }, lang)}
+          </p>
+          <p class="text-[0.85rem]">
+            <span class:list={['font-mono font-medium', conformance.shortcuts_rejected === conformance.shortcuts_total ? 'text-primary' : 'text-accent']}>{conformance.shortcuts_rejected}/{conformance.shortcuts_total}</span>
+            {' '}{pick({ en: 'unsafe shortcuts rejected', zh: '不安全捷徑被拒絕' }, lang)}
+          </p>
+        </div>
+        <div class="mt-4 grid grid-cols-1 gap-1 sm:grid-cols-3">
+          {conformance.cases.map((c: { id: string; name: string; pass: boolean }) => (
+            <p class="flex items-center gap-2 text-[0.78rem] text-ink-soft">
+              <span class:list={['font-mono text-[0.7rem]', c.pass ? 'text-primary' : 'text-accent']}>{c.pass ? '✓' : '✗'}</span>
+              <span class="font-mono">{c.id}</span>
+              <span class="truncate">{c.name}</span>
+            </p>
+          ))}
+        </div>
+        <div class="mt-5 flex flex-wrap gap-x-6 gap-y-1 border-t border-line pt-4 text-[0.78rem] text-muted">
+          <p>
+            {pick({ en: 'Terminology lint', zh: '術語一致性檢查' }, lang)}:{' '}
+            <span class="font-mono">{termLint.status}</span>{' '}
+            ({termLint.ambiguities_found} {pick({ en: 'flagged, all reviewed — see report', zh: '項標記,均已審閱——見報告' }, lang)})
+          </p>
+          <p>
+            {pick({ en: 'False-standard-claim lint', zh: '虛假標準宣稱檢查' }, lang)}:{' '}
+            <span class="font-mono">{overclaimLint.status}</span>{' '}
+            ({overclaimLint.authorial_candidates_found} {pick({ en: 'checked, 0 overclaims', zh: '項已查核,0 項誇大宣稱' }, lang)})
+          </p>
+        </div>
+        <a href="/ai/conformance-report.json" class="mt-4 inline-block font-mono text-[0.78rem] text-spec hover:text-navy transition-colors duration-200" download>
+          conformance-report.json ↓
+        </a>
+      </div>
+    </section>
+
+    <section>
       <h2 class="spec-label !text-accent" data-reveal>{pick({ en: 'Files deployed on this site', zh: '本站部署的檔案' }, lang)}</h2>
       <div class="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2" data-reveal>
         {
@@ -85,7 +201,7 @@ const liveFiles = [
     <section class="rounded-md border-l-2 border-line-strong bg-surface px-5 py-4" data-reveal>
       <p class="spec-label">{pick({ en: 'Versioning', zh: '版本策略' }, lang)}</p>
       <p class="mt-2 max-w-3xl text-[0.9rem] leading-relaxed text-ink-soft">
-        {pick({ en: 'Specs are labeled Draft → Experimental → Proposal → Stable; everything is currently Draft v0.1. Fields and semantics may change before v1.0; breaking changes will be recorded in a changelog.', zh: '規格以 Draft → Experimental → Proposal → Stable 標示狀態;目前全部為 Draft v0.1。欄位與語意在 v1.0 前可能變動,重大變更會記錄於 changelog。' }, lang)}
+        {pick({ en: 'Specs are labeled Draft → Experimental → Proposal → Stable; everything here is currently Draft (AICR/AICL/AIRS/AILP at v0.1.1, AARS/AADP at v0.1, AICL-I at v0.2, Minimum Ethical Protection at v0.1.1). Fields and semantics may change before v1.0; breaking changes will be recorded in a changelog. None are adopted industry or legal standards.', zh: '規格以 Draft → Experimental → Proposal → Stable 標示狀態;目前全部為 Draft(AICR/AICL/AIRS/AILP 為 v0.1.1,AARS/AADP 為 v0.1,AICL-I 為 v0.2,AI 最小倫理保護為 v0.1.1)。欄位與語意在 v1.0 前可能變動,重大變更會記錄於 changelog。皆非業界或法律採納的標準。' }, lang)}
       </p>
     </section>
   </div>

@@ -1,7 +1,8 @@
 {
-  "version": "0.2",
+  "version": "0.3",
   "publisher": "AGIRight.org",
   "updated": "2026-08-17",
+  "architecture_version": "0.2",
   "protocol_families": [
     {
       "id": "content_learning_rights",
@@ -14,13 +15,33 @@
       "protocols": ["aars", "aadp"]
     }
   ],
+  "integration_layers": [
+    {
+      "id": "aicl-i",
+      "abbr": "AICL-I",
+      "name": "AI Ingestion & Capability Layer",
+      "status": "draft-0.2",
+      "note": "Runtime integration architecture (manifest, corpus, capability, runtime control, governance surfaces). Not a seventh rights protocol -- it orchestrates evaluation of the AIRS/AICR/AICL-C, AARS, and AADP decision planes around capability invocation.",
+      "canonical_source": "https://agiright.org/docs/whitepapers/aicl-ai-ingestion-capability-layer",
+      "schema": "https://agiright.org/schemas/aicl-i-runtime-decision.schema.json"
+    }
+  ],
+  "ethical_layers": [
+    {
+      "id": "minimum-ethical-protection",
+      "name": "Minimum Ethical Protection",
+      "status": "draft-0.1.1",
+      "note": "Cross-layer ethical proposition (not a machine-enforceable protocol). v0.1.1 adds the Proportional Inspection Principle, operationalized through AADP's inspection_required/inspection_ceiling fields.",
+      "canonical_source": "https://agiright.org/docs/whitepapers/ai-minimum-ethical-protection"
+    }
+  ],
   "protocols": [
     {
       "id": "aicr",
       "abbr": "AICR",
       "family": "content_learning_rights",
       "name": "AI Content Rights / AI Content Rules",
-      "status": "draft-0.1",
+      "status": "draft-0.1.1",
       "page": "https://agiright.org/protocols/aicr",
       "schema": "https://agiright.org/schemas/aicr.schema.json",
       "well_known": "/.well-known/aicr.json",
@@ -29,9 +50,10 @@
     {
       "id": "aicl",
       "abbr": "AICL",
+      "abbr_disambiguated": "AICL-C",
       "family": "content_learning_rights",
       "name": "AI Content License / AI Content Licensing Layer",
-      "status": "draft-0.1",
+      "status": "draft-0.1.1",
       "page": "https://agiright.org/protocols/aicl",
       "schema": "https://agiright.org/schemas/aicl.schema.json",
       "well_known": "/.well-known/aicl.json",
@@ -42,7 +64,7 @@
       "abbr": "AIRS",
       "family": "content_learning_rights",
       "name": "AI Rights Spectrum",
-      "status": "draft-0.1",
+      "status": "draft-0.1.1",
       "page": "https://agiright.org/protocols/airs",
       "schema": "https://agiright.org/schemas/airs.schema.json",
       "live_instance": "https://agiright.org/ai/rights-spectrum.json",
@@ -53,7 +75,7 @@
       "abbr": "AILP",
       "family": "content_learning_rights",
       "name": "AI Learning Permission Protocol",
-      "status": "draft-0.1",
+      "status": "draft-0.1.1",
       "page": "https://agiright.org/protocols/ailp",
       "schema": "https://agiright.org/schemas/ailp.schema.json",
       "summary": "Dimension-level learning permissions: access, indexing, inference input, embedding, training, fine-tuning, distillation, memory, attribution, compensation."

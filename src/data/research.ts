@@ -39,8 +39,8 @@ export const RESEARCH_AREAS: ResearchArea[] = [
     num: '02',
     title: { en: 'AI Content Rights', zh: 'AI 內容權利' },
     summary: {
-      en: 'What AI systems may do with content: read, summarize, transform, retrieve, train, commercialize, redistribute. The AICR ruleset and the AICL licensing layer make these rights declarable and transactable.',
-      zh: 'AI 系統可以對內容做什麼:讀取、摘要、轉換、檢索、訓練、商用、再分發。AICR 規則集與 AICL 授權層讓這些權利可宣告、可交易。',
+      en: 'What AI systems may do with content: read, summarize, transform, retrieve, train, commercialize, redistribute. The AICR ruleset and the AICL-C content-licensing layer make these rights declarable and transactable.',
+      zh: 'AI 系統可以對內容做什麼:讀取、摘要、轉換、檢索、訓練、商用、再分發。AICR 規則集與 AICL-C 內容授權層讓這些權利可宣告、可交易。',
     },
     topics: {
       en: [

@@ -1,0 +1,22 @@
+{
+  "runtime_version": "0.2",
+  "publisher": "AGIRight.org",
+  "protocol": "AICL-I",
+  "description": "AICL-I v0.2 runtime-control pointer file. This site is a static, read-only research hub with no privileged tool surface, so its own runtime evaluation is intentionally trivial -- see /ai/agent-actions.json for the actual decision. This file exists to (a) document where each decision plane's policy lives for any implementer following the AICL-I architecture, and (b) provide the schema and a worked example for the combined runtime-decision object.",
+  "content_rights": {
+    "protocols": ["AIRS", "AICR", "AICL-C"],
+    "policy_reference": "/ai/rights-spectrum.json"
+  },
+  "action_rights": {
+    "protocol": "AARS",
+    "policy_reference": "/ai/agent-actions.json"
+  },
+  "authority": {
+    "protocol": "AADP",
+    "policy_reference": "/ai/agent-authority.json"
+  },
+  "inspection_policy": "/ai/inspection-policy.json",
+  "runtime_decision_schema": "https://agiright.org/schemas/aicl-i-runtime-decision.schema.json",
+  "example_decision": "/ai/runtime/example-decision.json",
+  "note": "This is an AGIRight draft integration object, not an MCP or OAuth standard object. See the AICL-I v0.2 whitepaper for the full Runtime Control Surface architecture this file summarizes."
+}

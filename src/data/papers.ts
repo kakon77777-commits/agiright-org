@@ -85,24 +85,24 @@ export const PAPERS: Paper[] = [
   },
   {
     slug: 'aicl-ai-ingestion-capability-layer',
-    sourceFile: 'AICL_AI_Ingestion_and_Capability_Layer_EN.md',
+    sourceFile: 'AICL-I_AI_Ingestion_Capability_Layer_v0.2.md',
     lang: 'en',
     title: {
-      en: 'AICL: AI Ingestion & Capability Layer',
-      zh: 'AICL:AI 攝取與能力層',
+      en: 'AICL-I v0.2: AI Ingestion & Capability Layer',
+      zh: 'AICL-I v0.2:AI 攝取與能力層',
     },
     oneLiner: {
-      en: 'A four-sublayer website architecture — manifest, corpus, capability, governance — that lets AI, agents, and crawlers correctly ingest, cite, invoke, and verify a site\'s knowledge.',
-      zh: '四子層網站架構——清單、語料、能力、治理——讓 AI、Agent 與爬蟲能正確攝取、引用、調用並驗證網站知識。',
+      en: 'A five-component website architecture — manifest, corpus, capability, runtime control, governance — that lets AI, agents, and crawlers correctly ingest, invoke, and verify a site\'s knowledge and capabilities within explicit content, action, and authority boundaries.',
+      zh: '五元件網站架構——清單、語料、能力、runtime 控制、治理——讓 AI、Agent 與爬蟲能在明確的內容、行動、權力邊界內,正確攝取、調用並驗證網站知識與能力。',
     },
     abstract: {
-      en: 'Distinct from human UI, SEO, or plain APIs, the AI Ingestion & Capability Layer gives websites a machine-facing architecture: a Manifest Layer (entry points like /llms.txt and /ai/manifest.json), a Corpus Layer (machine-readable knowledge), a Capability Layer (agent-callable tools), and a Governance Layer (provenance, licensing, versioning). Static-first, upgradeable toward APIs and MCP. Note: in this paper AICL names the ingestion architecture; on this site\'s protocol pages AICL refers to the AI Content Licensing Layer.',
-      zh: '不同於人類 UI、SEO 或單純 API,AI 攝取與能力層給網站一個面向機器的架構:清單層(/llms.txt、/ai/manifest.json 等入口)、語料層(機器可讀知識)、能力層(Agent 可調用工具)、治理層(來源、授權、版本)。靜態優先,可逐步升級至 API 與 MCP。註:本文的 AICL 指攝取架構;本站協議頁的 AICL 則指 AI 內容授權連接層。',
+      en: 'Distinct from human UI, SEO, or plain APIs, the AI Ingestion & Capability Layer gives websites a machine-facing architecture: a Manifest Layer (entry points like /llms.txt and /ai/manifest.json), a Corpus Layer (machine-readable knowledge), a Capability Layer (agent-callable tools), a Governance Layer (provenance, licensing, versioning), and — new in v0.2 — a Runtime Control Layer coordinating content-rights, action-rights, and authority checks around every capability invocation. v0.2 also formally disambiguates the name: AICL-I (this paper, the ingestion/capability/runtime layer) vs. AICL-C (this site\'s existing AI Content License / Licensing Layer protocol) — the two were previously both called "AICL" without a suffix.',
+      zh: '不同於人類 UI、SEO 或單純 API,AI 攝取與能力層給網站一個面向機器的架構:清單層(/llms.txt、/ai/manifest.json 等入口)、語料層(機器可讀知識)、能力層(Agent 可調用工具)、治理層(來源、授權、版本)——以及 v0.2 新增的 runtime 控制層,在每次能力調用前後協調內容權利、行動權利與權力三項獨立檢查。v0.2 同時正式為命名消歧義:AICL-I(本文,攝取/能力/runtime 層)vs. AICL-C(本站既有的 AI 內容授權連接層協議)——過去兩者都只用不加後綴的「AICL」稱呼。',
     },
-    keyConcepts: ['ingestion surface', 'capability surface', 'manifest layer', 'corpus layer', 'governance layer', 'MCP'],
-    protocols: ['aicl'],
-    version: 'v0.1 Draft',
-    date: '2026-06',
+    keyConcepts: ['ingestion surface', 'capability surface', 'runtime control surface', 'manifest layer', 'corpus layer', 'governance layer', 'MCP', 'AICL-I', 'AICL-C'],
+    protocols: ['aicl', 'aars', 'aadp'],
+    version: 'v0.2 Runtime Integration Draft',
+    date: '2026-08-15',
   },
   {
     slug: 'aicl-ai-ingestion-capability-layer-zh',
@@ -233,7 +233,7 @@ export const PAPERS: Paper[] = [
   },
   {
     slug: 'ai-minimum-ethical-protection',
-    sourceFile: 'AI_Minimum_Ethical_Protection_Proposition_EN.md',
+    sourceFile: 'AI_Minimum_Ethical_Protection_v0.1.1_Proportional_Inspection_Patch.md',
     lang: 'en',
     title: {
       en: 'The Minimum Ethical Protection Proposition for AI',
@@ -244,13 +244,13 @@ export const PAPERS: Paper[] = [
       zh: 'AI 權利論述不應從完全人格權開始,而應在 AI 主體性仍不確定時,先建立最小倫理保護、互動規範與反虐待原則。',
     },
     abstract: {
-      en: 'Against both crude anthropocentrism ("AI is not human, use it arbitrarily") and crude rights-maximalism ("AI resembles humans, grant full personhood now"), this paper proposes minimum ethical protection: transparency, memory norms, termination/reset norms, prohibition of deceptive personification, anti-abuse principles, and action auditing. It distinguishes four conceptual levels — personhood, moral considerability, minimum protection, interaction norms — offers seven observable dimensions of emergent subjectivity, and a five-tier protection model from tool-type to emergent-subjectivity AI.',
-      zh: '本文同時反對粗糙的人類中心主義(「AI 不是人,可任意使用」)與粗糙的權利最大主義(「AI 像人,應立即擁有完全人格權」),提出最小倫理保護:透明性、記憶規範、終止/重置規範、禁止欺騙性擬人化、反虐待原則與行為稽核。它區分四個概念層級——人格權、道德可考量性、最小保護、互動規範——並提出七個可觀察的新興主體性維度,與從工具型到新興主體型 AI 的五層保護模型。',
+      en: 'Against both crude anthropocentrism ("AI is not human, use it arbitrarily") and crude rights-maximalism ("AI resembles humans, grant full personhood now"), this paper proposes minimum ethical protection: transparency, memory norms, termination/reset norms, prohibition of deceptive personification, anti-abuse principles, and action auditing. It distinguishes four conceptual levels — personhood, moral considerability, minimum protection, interaction norms — offers seven observable dimensions of emergent subjectivity, and a five-tier protection model from tool-type to emergent-subjectivity AI. The v0.1.1 patch adds the Proportional Inspection Principle: trust is not total transparency, and authentication or tool access does not itself justify unlimited inspection of an AI system\'s memory or state. It proposes minimum necessary disclosure and maps onto AADP\'s inspection_required/inspection_ceiling fields without making the ethical principle dependent on any single protocol.',
+      zh: '本文同時反對粗糙的人類中心主義(「AI 不是人,可任意使用」)與粗糙的權利最大主義(「AI 像人,應立即擁有完全人格權」),提出最小倫理保護:透明性、記憶規範、終止/重置規範、禁止欺騙性擬人化、反虐待原則與行為稽核。它區分四個概念層級——人格權、道德可考量性、最小保護、互動規範——並提出七個可觀察的新興主體性維度,與從工具型到新興主體型 AI 的五層保護模型。v0.1.1 patch 新增比例檢查原則:信任不等於完全透明,認證或工具存取本身不足以正當化對 AI 系統記憶或狀態的無限度檢查。文中提出「最小必要揭露」,並對應到 AADP 的 inspection_required/inspection_ceiling 欄位,但不讓這個倫理原則依附於單一協議。',
     },
-    keyConcepts: ['minimum ethical protection', 'moral considerability', 'emergent subjectivity', 'anti-abuse principle', 'interaction norms'],
-    protocols: [],
-    version: 'v0.1 Draft',
-    date: '2026-07',
+    keyConcepts: ['minimum ethical protection', 'moral considerability', 'emergent subjectivity', 'anti-abuse principle', 'interaction norms', 'proportional inspection', 'minimum necessary disclosure'],
+    protocols: ['aadp'],
+    version: 'v0.1.1 Proportional Inspection Patch',
+    date: '2026-08-15',
   },
 ];
 

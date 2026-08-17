@@ -1,15 +1,55 @@
 ---
-title: "AICL: AI Ingestion & Capability Layer"
+title: "AICL-I v0.2: AI Ingestion & Capability Layer"
 ---
 
-# AICL: AI Ingestion & Capability Layer
+---
+title: "AICL-I v0.2: AI Ingestion & Capability Layer"
+---
+
+# AICL-I v0.2: AI Ingestion & Capability Layer
 
 ## A Next-Generation Website Publication Layer for AI, Agents, and Machine Readers
 
 **Author**: Neo.K / EVEMISSLAB  
-**Version**: v0.1 Draft  
-**Type**: Technical White Paper / General-Purpose Markdown Paper / Agent Implementation Guidance  
-**Positioning**: A converged naming framework and implementable specification for AI-native publication and execution architecture
+**Version**: v0.2 Runtime Integration Draft  
+**Original Version**: v0.1 Draft  
+**Updated**: 2026-08-15  
+**Type**: Technical White Paper / Runtime Integration Architecture / Agent Implementation Guidance  
+**Current Identifier**: `AICL-I` (AI Ingestion & Capability Layer)  
+**Historical Identifier**: `AICL`  
+**Positioning**: AI-native publication, ingestion, capability, rights, and authority integration layer
+
+***
+
+## v0.2 Naming and Namespace Note
+
+The original v0.1 paper used:
+
+```text
+AICL-I = AI Ingestion & Capability Layer
+```
+
+AGIRIGHT later adopted the same unqualified acronym for a separate protocol:
+
+```text
+AICL = AI Content License / AI Content Licensing Layer
+```
+
+These meanings must not remain ambiguous in machine-readable governance.
+
+Version v0.2 therefore uses:
+
+```text
+AICL-I
+= AI Ingestion & Capability Layer
+
+AICL-C
+= AI Content License / AI Content Licensing Layer
+```
+
+The historical v0.1 name is preserved for provenance. This suffix convention is a disambiguation mechanism, not a claim that either identifier is an external standard.
+
+Where context is unambiguous, human-facing prose MAY still say “Ingestion & Capability Layer” or “Content Licensing Layer” without the suffix.
 
 ***
 
@@ -38,6 +78,37 @@ Governance / Provenance Layer
 
 The **Machine Ingestion Layer** enables AI systems to consume data. The **Agent Capability Layer** enables agents to invoke tools. The **Governance / Provenance Layer** manages source information, licensing, versions, boundaries, and auditability.
 
+Version v0.2 adds the missing runtime control plane. A capability is no longer considered safely invocable merely because it appears in a tool catalog.
+
+The core runtime relation becomes:
+
+$$
+\boxed{
+\text{Capability Discovery}
+\neq
+\text{Action Permission}
+\neq
+\text{Authority Validity}
+}
+$$
+
+AICL-I v0.2 integrates the AGIRIGHT rights families:
+
+```text
+AIRS / AICR / AICL-C
+= content and learning rights
+
+AARS
+= Agent action rights
+
+AADP
+= principal / actor / delegation authority
+```
+
+with runtime transports such as MCP and ordinary APIs.
+
+The resulting layer does not replace OAuth, MCP, OpenAPI, or application security. It coordinates their outputs into a machine-readable decision path before and after capability invocation.
+
 ***
 
 ## 1. The Naming Problem: Why Not Simply Call It “AI-Native Publication and Execution Architecture”?
@@ -57,10 +128,10 @@ The phrase **AI-native publication and execution architecture** is accurate, but
 
 This phrase is suitable as an umbrella term, but not as the formal name of an initial implementable specification. Engineering requires a more precise unit.
 
-This paper therefore proposes:
+This paper therefore preserves the historical concept while using the unambiguous current identifier:
 
 ```text
-AICL = AI Ingestion & Capability Layer
+AICL-I = AI Ingestion & Capability Layer
 ```
 
 This term is narrower than “AI-native publication and execution architecture” and easier to implement.
@@ -69,13 +140,17 @@ This term is narrower than “AI-native publication and execution architecture�
 
 ## 2. Core Definition of AICL
 
-**AICL is the data-ingestion and capability-invocation layer within a website or digital system that is specifically designed for AI systems, agents, crawlers, and machine reasoning processes.**
+**AICL-I is the data-ingestion, capability-discovery, and runtime-integration layer within a website or digital system that is specifically designed for AI systems, agents, crawlers, and machine reasoning processes.**
 
-It exposes two primary surfaces:
+In v0.2, “capability invocation” is explicitly bounded by content-right, action-right, and authority checks. AICL-I does not itself grant those rights; it orchestrates their evaluation around the invocation path.
+
+It exposes three primary surfaces and one cross-cutting governance layer:
 
 ```text
 Ingestion Surface
 Capability Surface
+Runtime Control Surface
+Governance / Provenance Layer
 ```
 
 ### 2.1 Ingestion Surface
@@ -127,11 +202,79 @@ What are the permission boundaries?
 How can invocation results be verified?
 ```
 
+### 2.3 Runtime Control Surface
+
+The Runtime Control Surface answers a question that v0.1 left mostly implicit:
+
+> A tool exists. Under what conditions may this actor invoke it now?
+
+AICL-I v0.2 does not answer this with a single `authorized: true` flag.
+
+Instead, it coordinates independent checks:
+
+```text
+content rights
+action rights
+principal / actor authority
+purpose
+time
+risk
+inspection / assurance
+runtime arguments
+```
+
+The normative decomposition is:
+
+$$
+ContentCompatible
+=
+F_C(Resource,Use,ContentPolicy)
+$$
+
+$$
+ActionCompatible
+=
+F_A(Action,Effect,Context,AARSPolicy)
+$$
+
+$$
+AuthorityValid
+=
+F_D(Principal,Actor,Delegation,Time,Purpose,AADPPolicy)
+$$
+
+and:
+
+$$
+\boxed{
+Allow
+=
+ContentCompatible
+\land
+ActionCompatible
+\land
+AuthorityValid
+}
+$$
+
+When no governed third-party content is involved, `ContentCompatible` may be a trivial pass.
+
+The Runtime Control Surface SHOULD support:
+
+- coarse tool-level preflight;
+- argument-sensitive action evaluation;
+- authority-context resolution;
+- approval / step-up;
+- bounded inspection or alternative assurance;
+- invocation result validation;
+- receipts and provenance;
+- persistent-task authority renewal.
+
 ***
 
-## 3. How AICL Differs from Existing Concepts
+## 3. How AICL-I Differs from Existing Concepts
 
-### 3.1 AICL Is Not `robots.txt`
+### 3.1 AICL-I Is Not `robots.txt`
 
 `robots.txt` belongs to the Robots Exclusion Protocol and is used to express crawler access rules for URIs. RFC 9309 also makes clear that these rules are not an access-authorization mechanism.
 
@@ -151,9 +294,9 @@ How should outputs be verified?
 How should concept genealogy be preserved?
 ```
 
-Therefore, `robots.txt` is useful and often necessary, but it is not AICL.
+Therefore, `robots.txt` is useful and often necessary, but it is not AICL-I.
 
-### 3.2 AICL Is Not Merely `/llms.txt`
+### 3.2 AICL-I Is Not Merely `/llms.txt`
 
 `/llms.txt` is a proposal for providing website information to LLMs, especially to help them use site information at inference time. It uses Markdown to expose summaries and important links.
 
@@ -165,7 +308,7 @@ It is suitable for telling AI:
 Where should you go to read?
 ```
 
-AICL goes further:
+AICL-I goes further:
 
 ```text
 What may you read?
@@ -176,9 +319,9 @@ What may you not do?
 How should results be verified?
 ```
 
-Thus, `/llms.txt` can serve as an entry point into AICL, but it is not the whole of AICL.
+Thus, `/llms.txt` can serve as an entry point into AICL-I, but it is not the whole of AICL-I.
 
-### 3.3 AICL Is Not AIO / GEO
+### 3.3 AICL-I Is Not AIO / GEO
 
 AIO / GEO primarily asks:
 
@@ -186,7 +329,7 @@ AIO / GEO primarily asks:
 How can AI search, AI summaries, or generative search results mention me?
 ```
 
-AICL asks:
+AICL-I asks:
 
 ```text
 How can AI correctly understand me, cite me, invoke me, verify me, and continue from me?
@@ -194,15 +337,15 @@ How can AI correctly understand me, cite me, invoke me, verify me, and continue 
 
 AIO / GEO primarily concerns visibility.
 
-AICL concerns structure, readability, invocability, and governability.
+AICL-I concerns structure, readability, invocability, and governability.
 
-### 3.4 AICL Is Not Merely an API
+### 3.4 AICL-I Is Not Merely an API
 
 The OpenAPI Specification defines a language-agnostic way to describe HTTP APIs so that humans and computers can understand service capabilities without reading source code, additional documentation, or network traffic.
 
 But an API solves only the problem of **capability invocation**.
 
-AICL also addresses:
+AICL-I also addresses:
 
 - corpus ingestion;
 - concept genealogy;
@@ -210,35 +353,83 @@ AICL also addresses:
 - version governance;
 - AI reading paths.
 
-Therefore, OpenAPI can be part of AICL, but AICL is not equivalent to OpenAPI.
+Therefore, OpenAPI can be part of AICL-I, but AICL-I is not equivalent to OpenAPI.
 
-### 3.5 Relationship Between AICL and MCP
+### 3.5 Relationship Between AICL-I and MCP
 
-Model Context Protocol servers can expose capabilities including Resources, Prompts, and Tools. Resources allow a server to share contextual data such as files, database schemas, or application information. Tools allow models to interact with external systems, such as querying databases, calling APIs, or executing computations.
+MCP provides a protocol substrate for exposing machine-consumable resources and capabilities. AICL-I provides the publication, rights-binding, and runtime-integration architecture around those capabilities.
 
-AICL and MCP can complement one another:
+The relationship is:
 
 ```text
-AICL:
-the AI-native publication layer of a website or system
+AICL-I
+= AI-native ingestion + capability + runtime integration architecture
 
-MCP:
-the protocol layer connecting AI applications to external data and tools
+MCP
+= capability / context transport and interoperability protocol
 ```
 
-AICL can begin with static documents, JSON, and OpenAPI. As the system matures, the Ingestion Surface can be mapped to MCP Resources, while the Capability Surface can be mapped to MCP Tools.
+AICL-I can begin with static documents, JSON, OpenAPI, and ordinary HTTP APIs. Where MCP is used:
+
+```text
+Ingestion Surface
+-> MCP Resources or other machine-readable resources
+
+Capability Surface
+-> MCP Tools or other callable APIs
+
+Runtime Control Surface
+-> AARS / AADP / content-right checks around the MCP request
+```
+
+The MCP `2026-07-28` revision strengthens this mapping because requests are self-describing and stateless at the protocol core. Method and tool names can be carried in HTTP headers, enabling a gateway to perform a first-stage preflight before parsing the full request body.
+
+AICL-I SHOULD therefore support a two-stage runtime decision:
+
+$$
+Preflight(tool)
+\rightarrow
+RuntimeDecision(tool,args,context)
+$$
+
+The first stage can reject obviously unavailable or forbidden capabilities.
+
+The second stage evaluates actual arguments, affected resources, blast radius, content rights, delegated authority, and approval requirements.
+
+MCP availability does not itself create permission:
+
+$$
+\boxed{
+ToolAvailable
+\not\Rightarrow
+ToolAuthorized
+}
+$$
+
+and:
+
+$$
+\boxed{
+ToolAuthorized
+\not\Rightarrow
+ContentUseAuthorized
+}
+$$
+
+MCP Multi Round-Trip Requests MAY be used for missing input or approval interactions. Long-running work MAY map to the MCP Tasks extension, but authority for persistent tasks must remain time-bounded and revocable at the application layer.
 
 ***
 
-## 4. The Four Sublayers of AICL
+## 4. The Five Components of AICL-I
 
-AICL can be decomposed into four sublayers:
+AICL-I v0.2 can be decomposed into five components:
 
 ```text
 1. Manifest Layer
 2. Corpus Layer
 3. Capability Layer
-4. Governance Layer
+4. Runtime Control Layer
+5. Governance / Provenance Layer
 ```
 
 ***
@@ -467,11 +658,234 @@ They should include structures such as:
 
 ***
 
-## 8. Governance Layer: Governance, Provenance, and Boundaries
+## 8. Runtime Control Layer: From Tool Discovery to Governed Invocation
+
+The v0.1 architecture stopped at bounded tool endpoints. Version v0.2 adds the control path that determines whether a discovered capability may actually run.
+
+A recommended pipeline is:
+
+```text
+Capability Discovery
+        ↓
+Request Classification
+        ↓
+Authentication Requirement
+        ↓
+Principal / Actor Resolution
+        ↓
+Content-Rights Check
+        ↓
+AADP Delegation / Authority Verification
+        ↓
+AARS Tool-Level Preflight
+        ↓
+Argument-Sensitive Runtime Effect Evaluation
+        ↓
+Inspection / Alternative-Assurance Gate
+        ↓
+Approval / Step-Up if Required
+        ↓
+Tool Invocation
+        ↓
+Result / Side-Effect Validation
+        ↓
+Action Receipt
+        ↓
+Authority Receipt
+        ↓
+Content-Use Receipt when applicable
+```
+
+The order of independent policy checks MAY be optimized by an implementation, but the implementation MUST NOT silently collapse them into one credential.
+
+### 8.1 Request Classification
+
+The runtime SHOULD first determine whether the request is primarily:
+
+```text
+read-only ingestion
+content transformation
+local reversible mutation
+external communication
+transaction
+privileged execution
+delegation
+persistent autonomous task
+```
+
+This classification informs which rights planes are applicable.
+
+### 8.2 Principal / Actor Resolution
+
+AICL-I SHOULD preserve:
+
+$$
+Principal
+\neq
+Actor
+$$
+
+when an Agent is acting on behalf of another entity.
+
+A request context MAY include:
+
+```json
+{
+  "principal": {
+    "type": "human",
+    "id": "human:example"
+  },
+  "actor": {
+    "type": "agent",
+    "id": "agent:research-01"
+  },
+  "authority_reference": {
+    "protocol": "AADP",
+    "authority_id": "auth_001"
+  }
+}
+```
+
+### 8.3 Content-Rights Binding
+
+If a capability reads, retains, transforms, trains on, or redistributes governed content, the runtime SHOULD evaluate AIRS / AICR / AICL-C.
+
+A valid tool authority does not override content rights:
+
+$$
+AgentAuthority
+\not\Rightarrow
+ContentLicense
+$$
+
+### 8.4 Action-Rights Binding
+
+The actual external action SHOULD be evaluated under AARS.
+
+Static tool metadata MAY be used as a hint, but runtime arguments can change the effect.
+
+Therefore:
+
+$$
+StaticToolProfile
+\neq
+RuntimeEffect
+$$
+
+### 8.5 Authority Binding
+
+AADP SHOULD resolve:
+
+- principal;
+- actor;
+- authority source;
+- delegation chain;
+- purpose;
+- resource binding;
+- expiration;
+- revocation;
+- redelegation;
+- inspection ceiling.
+
+A valid OAuth or MCP credential can be an authority proof reference, but:
+
+$$
+CredentialValid
+\not\Rightarrow
+AuthorityValid
+$$
+
+### 8.6 Inspection / Assurance Gate
+
+If the service requires evidence before execution, it SHOULD compare:
+
+```text
+inspection_required
+inspection_ceiling
+```
+
+If:
+
+$$
+I_{required}>I_{ceiling}
+$$
+
+the system SHOULD use:
+
+$$
+AlternativeAssurance
+\vee
+NewAuthority
+\vee
+Deny
+$$
+
+rather than silently requesting broader internal state.
+
+### 8.7 Approval and Step-Up
+
+High-risk actions MAY require:
+
+```text
+principal confirmation
+organization approval
+multi-party approval
+fresh authentication
+stronger authentication
+```
+
+MCP MRTR or an application-specific approval flow MAY carry the interaction, while AADP expresses the authority semantics.
+
+### 8.8 Result Validation and Receipts
+
+The runtime SHOULD distinguish:
+
+```text
+Content-Use Receipt
+Action Receipt
+Authority Receipt
+```
+
+Receipts SHOULD contain sufficient audit metadata without requiring full prompt, full memory, or private chain-of-thought.
+
+$$
+Auditability
+\neq
+TotalInternalDisclosure
+$$
+
+### 8.9 Persistent Tasks
+
+A long-running task MAY outlive the credential or authority under which it began.
+
+Therefore:
+
+$$
+TaskLifetime
+>
+AuthorityLifetime
+$$
+
+must be treated as a possible normal condition.
+
+Persistent tasks SHOULD support:
+
+- explicit task handle;
+- authority renewal;
+- revocation checks;
+- bounded action envelope;
+- cancellation;
+- behavior on renewal failure.
+
+If MCP Tasks are used, AICL-I SHOULD bind the task handle to the relevant authority context rather than assuming the initial invocation permanently authorizes the task.
+
+***
+
+## 10. Governance Layer: Governance, Provenance, Rights, and Boundaries
 
 AI-era websites need not only data, but also boundaries.
 
-The Governance Layer should include:
+The Governance / Provenance Layer should include:
 
 ```text
 /ai/governance/license.md
@@ -480,6 +894,9 @@ The Governance Layer should include:
 /ai/governance/citation-policy.md
 /ai/governance/crawler-policy.md
 /ai/governance/versioning-policy.md
+/ai/governance/agent-action-policy.md
+/ai/governance/agent-authority-policy.md
+/ai/governance/inspection-policy.md
 ```
 
 This layer answers:
@@ -488,6 +905,9 @@ This layer answers:
 How may AI cite the material?
 How may AI summarize it?
 How may capabilities be invoked?
+Which action rights apply?
+Which principal authorized the actor?
+What inspection depth is permitted?
 Is training allowed?
 Is commercial use allowed?
 Which documents are canonical?
@@ -501,7 +921,7 @@ AICL does not mean simply “letting AI consume everything.” It means enabling
 
 ***
 
-## 9. General Routing Recommendations
+## 10. General Routing Recommendations
 
 A website supporting AICL may adopt the following route structure:
 
@@ -539,8 +959,11 @@ A website supporting AICL may adopt the following route structure:
 /ai/tools/
   Agent-callable capabilities
 
+/ai/runtime/
+  Runtime policy, action and authority integration
+
 /ai/governance/
-  License, provenance, citation, usage boundary
+  License, provenance, citation, content rights, action rights, authority, inspection boundaries
 
 /ai/snapshots/
   Versioned snapshots
@@ -548,7 +971,7 @@ A website supporting AICL may adopt the following route structure:
 
 ***
 
-## 10. Minimum Viable AICL
+## 11. Minimum Viable AICL
 
 The first version does not need a complete API.
 
@@ -564,6 +987,7 @@ A minimal version can consist entirely of static layers:
 /ai/specs/spec-v1.md
 /ai/examples/basic.md
 /ai/tools/catalog.json
+/ai/runtime/policy.json
 /ai/governance/usage-policy.md
 ```
 
@@ -576,7 +1000,7 @@ without having to parse the human-facing UI.
 
 ***
 
-## 11. Intermediate AICL
+## 12. Intermediate AICL
 
 An intermediate version adds:
 
@@ -585,6 +1009,8 @@ An intermediate version adds:
 /ai/specs/schema.json
 /ai/specs/grammar.ebnf
 /ai/tools/openapi.json
+/ai/runtime/action-policy.json
+/ai/runtime/authority-policy.json
 /ai/snapshots/latest.md
 /ai/snapshots/latest.jsonl
 ```
@@ -599,7 +1025,7 @@ At this stage, AICL begins to support:
 
 ***
 
-## 12. Advanced AICL
+## 13. Advanced AICL
 
 An advanced version adds:
 
@@ -607,8 +1033,15 @@ An advanced version adds:
 POST /ai/tools/*
 MCP Resources
 MCP Tools
-token / permission layer
-audit log
+AARS action policy
+AADP authority policy
+content-right binding
+approval / step-up
+inspection / assurance gate
+action receipt
+authority receipt
+content-use receipt
+persistent-task authority renewal
 rate limiting
 citation API
 version comparison API
@@ -619,9 +1052,9 @@ At this stage, AICL evolves from a **machine-readable layer** into an **agent-op
 
 ***
 
-## 13. Implementation Recommendations
+## 14. Implementation Recommendations
 
-### 13.1 Do Not Make the First Version Too Heavy
+### 14.1 Do Not Make the First Version Too Heavy
 
 The first stage should use static documents only.
 
@@ -634,7 +1067,7 @@ Static documents are easier for crawlers to read.
 Static documents are less likely to disrupt the existing website.
 ```
 
-### 13.2 Organize Canonical Sources Before Organizing Tools
+### 14.2 Organize Canonical Sources Before Organizing Tools
 
 Recommended order:
 
@@ -645,16 +1078,18 @@ canonical docs
 → specs
 → examples
 → tool catalog
-→ openapi
+→ rights metadata
+→ openapi / MCP mapping
+→ AARS / AADP policy binding
 → runtime tools
-→ MCP adapter
+→ receipts / conformance
 ```
 
 Do not connect APIs first.
 
 If the corpus layer is not organized, the capability layer becomes a collection of isolated endpoints.
 
-### 13.3 Do Not Turn `/ai/` into a UI
+### 14.3 Do Not Turn `/ai/` into a UI
 
 `/ai/` does not need to be visually attractive.
 
@@ -671,7 +1106,7 @@ protocol docs
 
 rather than a homepage.
 
-### 13.4 Do Not Use Hidden Cloaking
+### 14.4 Do Not Use Hidden Cloaking
 
 Do not secretly show AI systems completely different content.
 
@@ -682,9 +1117,10 @@ Human entry: /
 AI entry: /ai/
 LLM index: /llms.txt
 Agent tools: /ai/tools/
+Runtime control: /ai/runtime/
 ```
 
-### 13.5 Every Document Should Declare Status
+### 14.5 Every Document Should Declare Status
 
 For example:
 
@@ -696,7 +1132,7 @@ audience: ai-agent
 last_updated: 2026-06-30
 ```
 
-### 13.6 Give AI Systems the History as Well
+### 14.6 Give AI Systems the History as Well
 
 AI systems often read only the current version and then misunderstand design intent.
 
@@ -715,7 +1151,7 @@ This is something human-facing websites often omit, but AI reasoning frequently 
 
 ***
 
-## 14. Applicable Scenarios
+## 15. Applicable Scenarios
 
 AICL is not limited to EML. It can also apply to:
 
@@ -750,7 +1186,7 @@ not merely summarized by search.
 
 ***
 
-## 15. Core Value of AICL
+## 16. Core Value of AICL
 
 The value of AICL is not primarily increased traffic. It is improved AI understanding quality.
 
@@ -775,7 +1211,7 @@ These are different classes of problems.
 
 ***
 
-## 16. Relationship to the Future Web
+## 17. Relationship to the Future Web
 
 Future websites may gradually evolve from a two-layer structure:
 
@@ -791,6 +1227,7 @@ Human UI
 Search metadata
 AI ingestion layer
 Agent capability layer
+Runtime rights / authority control layer
 Governance / provenance layer
 ```
 
@@ -800,9 +1237,9 @@ It is not the entirety of future web architecture, but it can serve as a basic m
 
 ***
 
-## 17. Recommended Naming System
+## 18. Recommended Naming System
 
-### 17.1 Umbrella Concept
+### 18.1 Umbrella Concept
 
 ```text
 AI-native publication and execution architecture
@@ -810,16 +1247,18 @@ AI-native publication and execution architecture
 
 This is the broadest concept and is suitable for papers, presentations, and strategic descriptions.
 
-### 17.2 Implementation-Layer Name
+### 18.2 Implementation-Layer Name
 
 ```text
-AICL
+AICL-I
 AI Ingestion & Capability Layer
 ```
 
+`AICL-I` is used in AGIRIGHT contexts to avoid collision with `AICL-C`, the AI Content Licensing Layer.
+
 This is the formal specification name recommended by this paper.
 
-### 17.3 Sublayer Names
+### 18.3 Sublayer Names
 
 ```text
 AIL: AI Ingestion Layer
@@ -829,9 +1268,11 @@ ACL: Agent Capability Layer
 AGL: AI Governance Layer
 
 AML: AI Manifest Layer
+
+RCL: Runtime Control Layer
 ```
 
-### 17.4 Chinese Short Form
+### 18.4 Chinese Short Form
 
 A shorter Chinese term may be used internally, but the formal Chinese name should remain:
 
@@ -843,33 +1284,33 @@ because abbreviated forms may be less intuitive for external audiences.
 
 ***
 
-## 18. Recommended Standard Statements
+## 19. Recommended Standard Statements
 
-### 18.1 One-Sentence Version
-
-```text
-AICL is the machine-readable data layer and bounded tool-invocation layer of a website for AI systems and agents.
-```
-
-### 18.2 Standard English One-Sentence Version
+### 19.1 One-Sentence Version
 
 ```text
-AICL is a machine-readable ingestion and bounded capability layer for AI agents, crawlers, and model-facing systems.
+AICL-I is the machine-readable ingestion, bounded capability, and runtime-control layer of a website for AI systems and agents.
 ```
 
-### 18.3 Engineering Version
+### 19.2 Standard English One-Sentence Version
 
 ```text
-AICL exposes canonical documents, structured corpora, schemas, manifests, examples, governance metadata, and bounded tool endpoints for AI systems.
+AICL-I is a machine-readable ingestion, bounded capability, and runtime-control layer for AI agents, crawlers, and model-facing systems.
 ```
 
-### 18.4 External-Facing Version
+### 19.3 Engineering Version
 
 ```text
-AICL helps AI systems understand, cite, and interact with a website correctly.
+AICL-I exposes canonical documents, structured corpora, schemas, manifests, examples, governance metadata, bounded tool endpoints, and rights-aware runtime control for AI systems.
 ```
 
-### 18.5 Agent Implementation Version
+### 19.4 External-Facing Version
+
+```text
+AICL-I helps AI systems understand, cite, and interact with a website correctly while keeping capability and authority boundaries explicit.
+```
+
+### 19.5 Agent Implementation Version
 
 ```text
 Build /ai/ as a non-visual, static-first, machine-readable layer containing manifest, corpus, specs, examples, governance metadata, and future tool declarations.
@@ -877,18 +1318,21 @@ Build /ai/ as a non-visual, static-first, machine-readable layer containing mani
 
 ***
 
-## 19. Agent Implementation Instruction Template
+## 20. Agent Implementation Instruction Template
 
 ```text
-Implement AICL v0.1 for this website.
+Implement AICL-I v0.2 for this website.
 
-AICL means AI Ingestion & Capability Layer.
+AICL-I means AI Ingestion & Capability Layer.
+Do not confuse it with AICL-C, the AI Content Licensing Layer.
 
 Do not redesign the human UI.
-Do not create a visual interface for /ai/.
-Do not implement runtime execution yet unless explicitly requested.
+Do not use User-Agent cloaking.
+Do not treat tool discovery as permission.
+Do not expose arbitrary code execution.
+Do not collect credentials merely because the runtime layer exists.
 
-Create the following static routes:
+Static-first routes:
 
 /llms.txt
 /ai/index.md
@@ -901,45 +1345,171 @@ Create the following static routes:
 /ai/examples/basic.md
 /ai/tools/catalog.json
 /ai/governance/usage-policy.md
-/ai/snapshots/latest.md
 
-Requirements:
-- All Markdown files must be readable as plain text.
-- All JSON files must validate.
-- /llms.txt must point to /ai/index.md and /ai/manifest.json.
-- /ai/manifest.json must declare reading_order.
-- /ai/tools/catalog.json must declare future tools even if runtime is not implemented.
-- Do not use User-Agent cloaking.
-- Do not expose arbitrary code execution.
-- Keep the human homepage unchanged.
+Runtime integration routes / metadata:
+
+/ai/runtime/policy.json
+/ai/runtime/action-policy.json
+/ai/runtime/authority-policy.json
+/ai/runtime/inspection-policy.json
+
+Runtime requirements:
+
+1. Classify whether a request is ingestion-only or an external action.
+2. Resolve principal and actor separately.
+3. Evaluate AIRS / AICR / AICL-C when governed content is used.
+4. Evaluate AARS for external action semantics.
+5. Evaluate AADP for authority, delegation, time, purpose, and revocation.
+6. Compare inspection_required with inspection_ceiling.
+7. Use approval / step-up when required.
+8. Invoke the tool only after applicable checks pass.
+9. Validate the result / side effect.
+10. Emit minimal Content-Use, Action, and Authority receipts where applicable.
+11. Do not store full Agent memory or private reasoning as a default audit artifact.
+12. For persistent tasks, bind the task handle to an authority context and re-check authority before renewal or high-risk continuation.
+
+If MCP 2026-07-28 is used:
+- support stateless request semantics;
+- use tool/method metadata for coarse preflight where appropriate;
+- perform argument-sensitive runtime evaluation before execution;
+- use MRTR or another explicit flow for approval / missing input;
+- treat Tasks as long-running work that requires continuing authority rather than permanent initial authorization.
 ```
 
 ***
 
-## 20. Conclusion
+## 21. Conclusion
 
 **AI-native publication and execution architecture** is a valid but overly broad umbrella concept.
 
 For practical implementation, it should be converged into a clear engineering layer.
 
-This paper recommends:
+This paper recommends the disambiguated current identifier:
 
 ```text
-AICL: AI Ingestion & Capability Layer
+AICL-I: AI Ingestion & Capability Layer
 ```
 
-The role of AICL is not to replace websites, but to give websites an AI-native surface:
+The role of AICL-I is not to replace websites, but to give websites an AI-native surface:
 
 ```text
 Humans view the UI.
 Search engines read metadata.
 AI systems ingest the corpus.
-Agents invoke capabilities.
-The governance layer declares provenance, license, version, and boundaries.
+Agents discover capabilities.
+The runtime control layer checks content rights, action rights, and authority.
+Agents invoke bounded capabilities.
+The governance layer declares provenance, license, version, inspection, and boundaries.
 ```
 
-AICL can therefore be understood as a new foundational layer in AI-era website architecture.
+AICL-I can therefore be understood as a new foundational layer in AI-era website architecture.
 
 It is neither AIO nor GEO.
 
-It is an engineering structure for enabling AI systems to ingest correctly and act correctly.
+It is an engineering structure for enabling AI systems to ingest correctly and act correctly without treating capability discovery, credential validity, content licensing, and delegated authority as the same thing.
+
+The v0.2 core invariant is:
+
+$$
+oxed{
+	ext{Discover}
+
+eq
+	ext{Permit}
+
+eq
+	ext{Authorize}
+
+eq
+	ext{Execute}
+}
+$$
+
+A mature AI-native website should make each transition explicit.
+
+***
+
+## Appendix A: Runtime Decision Object — Illustrative Draft
+
+```json
+{
+  "aicl_i_version": "0.2",
+  "request_id": "req_001",
+  "principal": {
+    "type": "human",
+    "id": "human:example"
+  },
+  "actor": {
+    "type": "agent",
+    "id": "agent:research-01"
+  },
+  "capability": {
+    "transport": "mcp",
+    "name": "publish_summary"
+  },
+  "content_rights": {
+    "protocols": ["AIRS", "AICR", "AICL-C"],
+    "decision": "allow"
+  },
+  "action_rights": {
+    "protocol": "AARS",
+    "decision": "approval_required"
+  },
+  "authority": {
+    "protocol": "AADP",
+    "authority_id": "auth_001",
+    "decision": "valid"
+  },
+  "inspection": {
+    "required": "I2",
+    "ceiling": "I3"
+  },
+  "final_decision": "approval_required"
+}
+```
+
+This is an AGIRIGHT / AICL-I draft integration object. It is not an MCP or OAuth standard object.
+
+***
+
+## Appendix B: Compatibility Context
+
+AICL-I v0.2 is designed to reuse existing standards where possible:
+
+```text
+OpenAPI
+= HTTP API capability description
+
+MCP
+= Agent-facing resource / capability interoperability
+
+AIRS / AICR / AICL-C
+= content and learning rights
+
+AARS
+= action-right semantics
+
+AADP
+= principal / actor / delegation authority semantics
+```
+
+The 2026-07-28 MCP specification provides useful integration points including stateless request semantics, self-describing requests, header-based method/tool routing, MRTR for additional input or confirmation, and an extension model that includes long-running Tasks.
+
+AICL-I does not claim that AARS, AADP, or AGIRIGHT metadata are part of the MCP specification.
+
+***
+
+## References / Standards Context
+
+1. RFC 9309 — Robots Exclusion Protocol.
+2. OpenAPI Specification.
+3. Model Context Protocol Specification — 2026-07-28.
+4. MCP Tasks extension.
+5. RFC 8693 — OAuth 2.0 Token Exchange.
+6. RFC 9396 — OAuth 2.0 Rich Authorization Requests.
+7. RFC 9470 — OAuth 2.0 Step Up Authentication Challenge Protocol.
+8. RFC 9728 — OAuth 2.0 Protected Resource Metadata.
+9. AGIRIGHT — AIRS / AILP v0.1.1.
+10. AGIRIGHT — AICR / AICL-C v0.1.1.
+11. AGIRIGHT — AARS v0.1.
+12. AGIRIGHT — AADP v0.1.

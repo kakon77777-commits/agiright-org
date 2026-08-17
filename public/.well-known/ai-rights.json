@@ -1,8 +1,8 @@
 {
-  "version": "0.2",
+  "version": "0.3",
   "publisher": "AGIRight.org",
   "updated": "2026-08-17",
-  "description": "Combined entry point for this site's AI rights declarations -- content/learning rights (what may be done WITH content) and, as of v0.2, agent/protocol rights (what an agent may DO once it holds tool or API capability, and who authorized it).",
+  "description": "Combined entry point for this site's AI rights declarations -- content/learning rights (what may be done WITH content), agent/protocol rights (what an agent may DO once it holds tool or API capability, and who authorized it), and, as of v0.3, runtime integration and inspection policy (how those planes are coordinated around a capability invocation, and how deep an inspection may legitimately go).",
   "declarations": {
     "aicr": "https://agiright.org/.well-known/aicr.json",
     "aicl": "https://agiright.org/.well-known/aicl.json",
@@ -10,6 +10,8 @@
     "content_policy": "https://agiright.org/ai/content-policy.json",
     "agent_actions": "https://agiright.org/ai/agent-actions.json",
     "agent_authority": "https://agiright.org/ai/agent-authority.json",
+    "inspection_policy": "https://agiright.org/ai/inspection-policy.json",
+    "runtime_policy": "https://agiright.org/ai/runtime/policy.json",
     "manifest": "https://agiright.org/ai/manifest.json",
     "llms_txt": "https://agiright.org/llms.txt"
   },

@@ -1,0 +1,41 @@
+{
+  "aicl_i_version": "0.2",
+  "request_id": "example-001",
+  "principal": {
+    "type": "organization",
+    "id": "https://agiright.org"
+  },
+  "actor": {
+    "type": "agent",
+    "id": "agent:research-example"
+  },
+  "capability": {
+    "transport": "http_api",
+    "name": "call_demo_api",
+    "resource": "/api/mock/402"
+  },
+  "content_rights": {
+    "protocols": ["AIRS", "AICR", "AICL-C"],
+    "decision": "allow",
+    "policy_reference": "/ai/rights-spectrum.json"
+  },
+  "action_rights": {
+    "protocols": ["AARS"],
+    "decision": "allow",
+    "policy_reference": "/ai/agent-actions.json"
+  },
+  "authority": {
+    "protocol": "AADP",
+    "authority_id": "agiright-org-public-agent-authority-v1",
+    "decision": "valid"
+  },
+  "inspection": {
+    "required": "I0",
+    "ceiling": "I1"
+  },
+  "final_decision": "allow",
+  "receipts": ["action"],
+  "metadata": {
+    "note": "This is a worked example of the AICL-I v0.2 runtime-decision object, illustrating this site's own actual policy (see /ai/runtime/policy.json). It is illustrative, not a claim that this site executes live runtime evaluation for every request."
+  }
+}

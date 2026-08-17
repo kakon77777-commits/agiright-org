@@ -31,8 +31,8 @@ const PAPERS = [
   },
   {
     slug: 'aicl-ai-ingestion-capability-layer',
-    file: 'AICL_AI_Ingestion_and_Capability_Layer_EN.md',
-    title: 'AICL: AI Ingestion & Capability Layer',
+    file: 'AICL-I_AI_Ingestion_Capability_Layer_v0.2.md',
+    title: 'AICL-I v0.2: AI Ingestion & Capability Layer',
   },
   {
     slug: 'aicl-ai-ingestion-capability-layer-zh',
@@ -46,8 +46,8 @@ const PAPERS = [
   },
   {
     slug: 'ai-minimum-ethical-protection',
-    file: 'AI_Minimum_Ethical_Protection_Proposition_EN.md',
-    title: 'The Minimum Ethical Protection Proposition for AI',
+    file: 'AI_Minimum_Ethical_Protection_v0.1.1_Proportional_Inspection_Patch.md',
+    title: 'The Minimum Ethical Protection Proposition for AI (v0.1.1)',
   },
   {
     slug: 'from-crawler-rights-to-agent-authority',

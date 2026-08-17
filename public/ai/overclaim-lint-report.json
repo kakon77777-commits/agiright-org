@@ -1,0 +1,57 @@
+{
+  "report_version": "0.1",
+  "publisher": "AGIRight.org",
+  "check": "false_standard_claim_lint",
+  "profile_reference": "AGIRIGHT Integration & Conformance Profile v0.1 §23",
+  "phrases_checked": [
+    "official standard",
+    "official MCP extension",
+    "official OAuth extension",
+    "IETF standard",
+    "IETF-adopted",
+    "registered well-known",
+    "IANA registered",
+    "IANA-registered",
+    "legally recognized AI person",
+    "mandatory international protocol"
+  ],
+  "files_scanned": 220,
+  "authorial_candidates_found": 4,
+  "authorial_findings": [
+    {
+      "file": "src/content/whitepapers/agiright-technical-whitepaper-v0-2.md",
+      "line": 854,
+      "phrase": "registered well-known",
+      "excerpt": "`/.well-known/agiright-*` 目前只應標示為 AGIRIGHT draft discovery path，不得宣稱為 IANA registered well-known URI。",
+      "status": "OVERCLAIM_CANDIDATE"
+    },
+    {
+      "file": "src/content/whitepapers/agiright-technical-whitepaper-v0-2.md",
+      "line": 854,
+      "phrase": "IANA registered",
+      "excerpt": "`/.well-known/agiright-*` 目前只應標示為 AGIRIGHT draft discovery path，不得宣稱為 IANA registered well-known URI。",
+      "status": "OVERCLAIM_CANDIDATE"
+    },
+    {
+      "file": "src/data/site.ts",
+      "line": 830,
+      "phrase": "official standard",
+      "excerpt": "'AGIRight.org publishes independent research drafts and protocol proposals — not official standards, and not legal, financial, or compliance advice. All specifications are versioned drafts open to rev",
+      "status": "OVERCLAIM_CANDIDATE"
+    },
+    {
+      "file": "src/components/LegalPage.astro",
+      "line": 27,
+      "phrase": "official standard",
+      "excerpt": "en: 'All protocols and specifications on this site are versioned research drafts (currently v0.1). They are not official standards, have not been adopted by any standards body, and may change without ",
+      "status": "OVERCLAIM_CANDIDATE"
+    }
+  ],
+  "translation_disclaimer_repeats": {
+    "count": 152,
+    "languages_affected": 148,
+    "explanation": "These are the site's own disclaimer sentence (\"...not official standards...\") translated into each supported language -- a denial of standards-adoption, repeated once per language, not 150 independent overclaim incidents. Verified by reading a sample directly: Inuktitut/Marshallese/Palauan all correctly render the negation in their own grammar even where this script's English-only \"not\" sanity check could not detect it."
+  },
+  "status": "REVIEWED_ALL_CLEAR",
+  "note": "Scans this site's own content (whitepapers, data, components, public/) for phrases the Conformance Profile §23 names as requiring scrutiny. A hit means the phrase appears somewhere in the scanned text -- it does not by itself mean the site is overclaiming. Every one of the 4 authorial_findings hits in this run was individually read and confirmed to be this site explicitly DENYING standards-adoption, not asserting it: src/data/site.ts:830 and src/components/LegalPage.astro:27 both state protocols \"are not official standards, have not been adopted by any standards body\"; the technical whitepaper v0.2 (line 854) states /.well-known/agiright-* paths \"不得宣稱為 IANA registered well-known URI\" (must not be claimed as an IANA registered well-known URI). Zero real overclaims found as of this run -- status reflects that every candidate was checked, not that the phrase list guarantees future hits are automatically safe."
+}

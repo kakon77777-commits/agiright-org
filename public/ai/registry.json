@@ -1,5 +1,5 @@
 {
-  "registry_version": "0.2",
+  "registry_version": "0.3",
   "publisher": "AGIRight.org",
   "updated": "2026-08-17",
   "description": "Protocol registry: every protocol draft published by AGIRight.org, with version history, status, schemas, and live instances. Status values: draft | experimental | proposal | stable | deprecated.",
@@ -8,7 +8,7 @@
       "id": "aicr",
       "abbr": "AICR",
       "name": "AI Content Rights / AI Content Rules",
-      "current_version": "0.1",
+      "current_version": "0.1.1",
       "status": "draft",
       "since": "2026-07-04",
       "spec_page": "https://agiright.org/protocols/aicr",
@@ -19,14 +19,20 @@
           "version": "0.1",
           "date": "2026-07-04",
           "changes": "Initial public draft: default_policy rights vocabulary (read_access, summarization, quotation, rag_use, transformation, training, commercial_use, redistribution), rightRule fields, resource_overrides."
+        },
+        {
+          "version": "0.1.1",
+          "date": "2026-08-15",
+          "changes": "Non-breaking scope boundary patch: ContentPermission does not imply AgentActionPermission -- an AICR grant does not by itself authorize an Agent to write, execute, publish, or transact. See AARS/AADP."
         }
       ]
     },
     {
       "id": "aicl",
       "abbr": "AICL",
+      "abbr_disambiguated": "AICL-C",
       "name": "AI Content License / AI Content Licensing Layer",
-      "current_version": "0.1",
+      "current_version": "0.1.1",
       "status": "draft",
       "since": "2026-07-04",
       "spec_page": "https://agiright.org/protocols/aicl",
@@ -38,6 +44,11 @@
           "version": "0.1",
           "date": "2026-07-04",
           "changes": "Initial public draft: license catalog (id, rights, price, conditions, requires_contact), payment_endpoints placeholders (quote/pay/verify/revoke), HTTP 402 interoperability."
+        },
+        {
+          "version": "0.1.1",
+          "date": "2026-08-15",
+          "changes": "Non-breaking scope boundary patch: ContentLicense does not imply AgentActionAuthority, and the reverse also holds -- valid AADP Agent authority does not imply a content license. Adds optional principal/actor/authority_reference/aadp_authority_id fields. Disambiguated as AICL-C alongside AICL-I (AI Ingestion & Capability Layer, a separate integration layer, not a rights protocol) as of that paper's v0.2."
         }
       ]
     },
@@ -45,7 +56,7 @@
       "id": "airs",
       "abbr": "AIRS",
       "name": "AI Rights Spectrum",
-      "current_version": "0.1",
+      "current_version": "0.1.1",
       "status": "draft",
       "since": "2026-07-04",
       "spec_page": "https://agiright.org/protocols/airs",
@@ -56,6 +67,11 @@
           "version": "0.1",
           "date": "2026-07-04",
           "changes": "Initial public draft: eight-level spectrum from No AI Access (L0) to Commercial Redistribution (L7), each level independently licensable and auditable."
+        },
+        {
+          "version": "0.1.1",
+          "date": "2026-08-15",
+          "changes": "Non-breaking scope boundary patch: AIRS governs the content-and-learning rights plane only; it does not extend into Agent action rights (AARS) or delegated authority (AADP), even at spectrum Level 7."
         }
       ]
     },
@@ -63,7 +79,7 @@
       "id": "ailp",
       "abbr": "AILP",
       "name": "AI Learning Permission Protocol",
-      "current_version": "0.1",
+      "current_version": "0.1.1",
       "status": "draft",
       "since": "2026-07-04",
       "spec_page": "https://agiright.org/protocols/ailp",
@@ -73,6 +89,11 @@
           "version": "0.1",
           "date": "2026-07-04",
           "changes": "Initial public draft: dimension-level learning permissions (access, indexing, inference_input, embedding, training, fine_tuning, distillation, verbatim_memory, attribution, compensation) with allowed | denied | license_required | proportional values."
+        },
+        {
+          "version": "0.1.1",
+          "date": "2026-08-15",
+          "changes": "Non-breaking scope boundary patch: AILP(Resource,ContentUse)=Allow does not imply AARS(Actor,Action)=Allow or AADP(Principal,Actor,Authority)=Valid -- content and tool exposure must be evaluated separately."
         }
       ]
     },
@@ -109,6 +130,32 @@
           "version": "0.1",
           "date": "2026-08-16",
           "changes": "Initial public draft: principal vs. actor, delegation chains with attenuation (child authority can only narrow), an 8-level Inspection Depth Spectrum (I0-I7) with separate required/ceiling fields, and named failure modes (authority laundering, confused deputy, cross-principal leakage)."
+        }
+      ]
+    }
+  ],
+  "integration_layers": [
+    {
+      "id": "aicl-i",
+      "abbr": "AICL-I",
+      "name": "AI Ingestion & Capability Layer",
+      "current_version": "0.2",
+      "status": "draft",
+      "since": "2026-06",
+      "spec_page": "https://agiright.org/docs/whitepapers/aicl-ai-ingestion-capability-layer",
+      "schema": "https://agiright.org/schemas/aicl-i-runtime-decision.schema.json",
+      "live_instance": "https://agiright.org/ai/runtime/policy.json",
+      "note": "Runtime integration architecture, not a seventh rights protocol -- orchestrates evaluation of the content-rights, action-rights, and authority decision planes around capability invocation.",
+      "versions": [
+        {
+          "version": "0.1",
+          "date": "2026-06",
+          "changes": "Initial draft: four-sublayer architecture (manifest, corpus, capability, governance) for AI-native website ingestion and bounded tool invocation."
+        },
+        {
+          "version": "0.2",
+          "date": "2026-08-15",
+          "changes": "Adds the Runtime Control Surface: Allow = ContentCompatible AND ActionCompatible AND AuthorityValid. Formally disambiguates the name (AICL-I vs. this site's existing AICL-C protocol). Adds a runtime-decision schema, MCP 2026-07-28 integration guidance, and named runtime shortcuts that MUST be rejected (tool exists -> allow; OAuth valid -> all rights valid; etc.)."
         }
       ]
     }
