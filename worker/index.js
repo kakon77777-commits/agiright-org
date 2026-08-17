@@ -882,10 +882,20 @@ function isPagePath(pathname) {
   return true;
 }
 
-function withLangHeaders(res, lang) {
+function withLangHeaders(res, lang, { personalized = false } = {}) {
   const out = new Response(res.body, res);
   out.headers.append('Vary', 'Cookie');
   out.headers.set('Content-Language', CONTENT_LANG[lang] || lang);
+  if (personalized) {
+    // This response was chosen per-visitor from cookie/IP-country/Accept-Language,
+    // none of which a shared HTTP cache can key on via Vary (Vary only matches
+    // literal request headers, and country isn't one). Caching it at the shared
+    // edge would freeze whichever language the FIRST visitor negotiated and serve
+    // that to everyone else at the bare URL, regardless of their own signals —
+    // this exact bug shipped silently until the 2026-08-17 site audit caught a
+    // Taiwan-negotiated response being served as zh-Hant to en-US requests.
+    out.headers.set('Cache-Control', 'private, no-store');
+  }
   return out;
 }
 
@@ -938,11 +948,11 @@ export default {
         if (res.status === 404) {
           // page not translated yet — fall back to the default language
           res = await env.ASSETS.fetch(request);
-          return withLangHeaders(res, DEFAULT_LANG);
+          return withLangHeaders(res, DEFAULT_LANG, { personalized: true });
         }
-        return withLangHeaders(res, lang);
+        return withLangHeaders(res, lang, { personalized: true });
       }
-      return withLangHeaders(await env.ASSETS.fetch(request), DEFAULT_LANG);
+      return withLangHeaders(await env.ASSETS.fetch(request), DEFAULT_LANG, { personalized: true });
     }
 
     return env.ASSETS.fetch(request);

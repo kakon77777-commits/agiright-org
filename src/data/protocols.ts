@@ -616,7 +616,7 @@ export const PROTOCOLS: Protocol[] = [
       ],
     },
     schemaUrl: '/schemas/aadp.schema.json',
-    relatedPapers: ['aadp-agent-authority-delegation-protocol', 'from-crawler-rights-to-agent-authority'],
+    relatedPapers: ['aadp-agent-authority-delegation-protocol', 'from-crawler-rights-to-agent-authority', 'ai-minimum-ethical-protection'],
   },
 ];
 

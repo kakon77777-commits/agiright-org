@@ -14,6 +14,25 @@ const intro =
 
 const ENTRIES = [
   {
+    version: "v0.8.41",
+    date: "2026-08-17",
+    tag: { en: "Site-wide audit: edge-cache language bug fixed", zh: "全站稽核:修復邊緣快取語言錯置問題" },
+    items: {
+      en: [
+        "Fixed a real, live bug: the bare (unprefixed) URL is supposed to language-negotiate per visitor (cookie > IP country > Accept-Language > English), but Cloudflare's shared edge cache was caching that negotiated response keyed only by path -- with no way to Vary on IP country (not a real request header) and no Vary on Accept-Language either. Whichever language a request happened to negotiate first got cached and served to every subsequent visitor to that URL regardless of their own signals. Confirmed independently (not just taking a report at face value): the bare URL was serving zh-Hant with a canonical link to /zh/... to requests carrying an explicit `Accept-Language: en-US,en` header, with CF-Cache-Status: HIT on every retry. Fixed in worker/index.js by marking these personalized, per-visitor responses Cache-Control: private, no-store, so they are never shared-cached; the deterministic per-language URLs (e.g. /zh/protocols/aicl) are unaffected and remain cacheable, since their content is the same for every visitor.",
+        "Added scripts/version-consistency-check.mjs: cross-checks every protocol version stated outside protocols.ts (registry.json, protocol-index.json, manifest.json.ts, papers.ts) against protocols.ts itself, the page a visitor actually sees. This is the same bug class caught manually three times during the Phase C-F integration -- now a repeatable check instead of an accidental catch.",
+        "Fixed a real cross-reference gap: the Minimum Ethical Protection paper's own abstract states it maps onto AADP's inspection_required/inspection_ceiling fields, but AADP's protocol page had no link back to it. Added.",
+        "Verified clean with no changes needed: all 5 JSON-Schema/example pairs (AICR, AICL, AARS, AADP, AICL-I runtime decision) validate; all 11 whitepaper source files still resolve with zero drift from a re-run of the importer; the terminology and overclaim lints match their previously-documented baselines; a full production build produces all 6,151 pages with no errors.",
+      ],
+      zh: [
+        "修復一個真實存在的線上問題:裸網址(無語言前綴)原本設計成依訪客協商語言(cookie > IP 國別 > Accept-Language > 英文預設),但 Cloudflare 的共享邊緣快取卻只用路徑當快取鍵把協商後的回應快取下來——無法針對 IP 國別(不是真正的請求標頭)設定 Vary,也沒有對 Accept-Language 設定 Vary。結果是:不論哪個請求最先協商出某個語言,那個回應就被快取下來,之後所有訪客不論自己的訊號是什麼,都會拿到同一份快取內容。獨立複驗確認(沒有只憑單一報告就採信):裸網址即使帶著明確的 `Accept-Language: en-US,en` 標頭,仍回傳繁體中文內容、canonical 連結指向 /zh/...,且每次重試 CF-Cache-Status 都是 HIT。已在 worker/index.js 修復:把這類「因訪客而異」的協商回應標記為 Cache-Control: private, no-store,永遠不會被共享快取;明確的語言前綴網址(如 /zh/protocols/aicl)不受影響,維持可快取,因為那些網址對每位訪客的內容本來就相同。",
+        "新增 scripts/version-consistency-check.mjs:把 protocols.ts 以外所有宣告協議版本的地方(registry.json、protocol-index.json、manifest.json.ts、papers.ts)拿去對照 protocols.ts 本身(訪客實際看到的頁面)。這正是 Phase C-F 整合期間手動抓到三次的同一類錯誤——現在變成可重複執行的檢查,不再只能靠意外發現。",
+        "修復一個真實的交叉引用缺口:Minimum Ethical Protection 論文自己的摘要就寫明對應到 AADP 的 inspection_required/inspection_ceiling 欄位,但 AADP 協議頁卻沒有連回這篇論文。已補上。",
+        "驗證乾淨、無需修改的部分:5 組 JSON Schema/範例配對(AICR、AICL、AARS、AADP、AICL-I runtime decision)全部驗證通過;11 篇白皮書來源檔案重新匯入後零漂移;terminology 與 overclaim 兩支 lint 腳本結果與先前記錄的基準一致;完整 production build 產出全部 6,151 頁,無錯誤。",
+      ],
+    },
+  },
+  {
     version: "v0.8.40",
     date: "2026-08-17",
     tag: { en: "Agent & Protocol Rights — Phase E+F (complete)", zh: "Agent 與協議權利——E+F 階段(完成)" },

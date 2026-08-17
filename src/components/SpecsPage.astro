@@ -23,6 +23,7 @@ const publicDir = fileURLToPath(new URL('../../public', import.meta.url));
 const conformance = JSON.parse(readFileSync(`${publicDir}/ai/conformance-report.json`, 'utf8'));
 const termLint = JSON.parse(readFileSync(`${publicDir}/ai/terminology-lint-report.json`, 'utf8'));
 const overclaimLint = JSON.parse(readFileSync(`${publicDir}/ai/overclaim-lint-report.json`, 'utf8'));
+const versionConsistency = JSON.parse(readFileSync(`${publicDir}/ai/version-consistency-report.json`, 'utf8'));
 
 const integrationLayers = [
   {
@@ -63,6 +64,7 @@ const liveFiles = [
   { path: '/ai/runtime/policy.json', desc: { en: 'AICL-I v0.2 runtime-control pointer file', zh: 'AICL-I v0.2 runtime 控制指標檔' } },
   { path: '/ai/runtime/example-decision.json', desc: { en: 'Worked AICL-I runtime-decision object', zh: 'AICL-I runtime 決策物件範例' } },
   { path: '/ai/conformance-report.json', desc: { en: 'Generated C2 conformance test report (P1-P3/N1-N6)', zh: '產出的 C2 一致性測試報告' } },
+  { path: '/ai/version-consistency-report.json', desc: { en: 'Cross-file protocol-version consistency report', zh: '跨檔案協議版本一致性報告' } },
   { path: '/ai/protocol-index.json', desc: { en: 'Protocol registry index', zh: '協議索引' } },
   { path: '/.well-known/aicr.json', desc: { en: 'AICR policy of this site', zh: '本站 AICR 政策' } },
   { path: '/.well-known/aicl.json', desc: { en: 'AICL license catalog of this site', zh: '本站 AICL 授權目錄' } },
@@ -176,6 +178,11 @@ const liveFiles = [
             {pick({ en: 'False-standard-claim lint', zh: '虛假標準宣稱檢查' }, lang)}:{' '}
             <span class="font-mono">{overclaimLint.status}</span>{' '}
             ({overclaimLint.authorial_candidates_found} {pick({ en: 'checked, 0 overclaims', zh: '項已查核,0 項誇大宣稱' }, lang)})
+          </p>
+          <p>
+            {pick({ en: 'Version-consistency check', zh: '版本一致性檢查' }, lang)}:{' '}
+            <span class:list={['font-mono', versionConsistency.status === 'PASS' ? 'text-primary' : 'text-accent']}>{versionConsistency.status}</span>{' '}
+            ({versionConsistency.checks_run} {pick({ en: 'cross-file checks, 0 mismatches', zh: '項跨檔案檢查,0 項不一致' }, lang)})
           </p>
         </div>
         <a href="/ai/conformance-report.json" class="mt-4 inline-block font-mono text-[0.78rem] text-spec hover:text-navy transition-colors duration-200" download>

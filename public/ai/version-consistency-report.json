@@ -1,0 +1,26 @@
+{
+  "report_version": "0.1",
+  "publisher": "AGIRight.org",
+  "check": "version_consistency",
+  "source_of_truth": "src/data/protocols.ts (Protocol.status field)",
+  "truth_versions": {
+    "aicr": "0.1.1",
+    "aicl": "0.1.1",
+    "airs": "0.1.1",
+    "ailp": "0.1.1",
+    "aars": "0.1",
+    "aadp": "0.1"
+  },
+  "files_checked": [
+    "public/ai/registry.json",
+    "public/ai/protocol-index.json",
+    "src/pages/ai/manifest.json.ts",
+    "src/data/papers.ts (aicr-aicl-content-licensing)",
+    "src/data/papers.ts (ai-rights-spectrum)"
+  ],
+  "checks_run": 22,
+  "mismatches_found": 0,
+  "mismatches": [],
+  "status": "PASS",
+  "note": "Cross-checks every protocol version stated outside protocols.ts against protocols.ts itself, which is the page a visitor actually sees. Run this at the start of any future phase that touches protocol versions, not only after a manual catch."
+}
