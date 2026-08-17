@@ -22,7 +22,7 @@ export function listedPapers(): Paper[] {
 export const PAPERS: Paper[] = [
   {
     slug: 'aicr-aicl-content-licensing',
-    sourceFile: 'AICR-AICL_AI_Content_Licensing_and_Agentic_Payment_Layer_EN.md',
+    sourceFile: 'AICR_AICL_v0.1.1_Authority_Reference_Patch.md',
     lang: 'en',
     title: {
       en: 'AICR / AICL as an AI Content Licensing and Agentic Payment Connection Layer',
@@ -33,17 +33,17 @@ export const PAPERS: Paper[] = [
       zh: '一個宣告 AI 內容權利與授權工作流的機器可讀規範層——從 AI 爬取與內容權利,走向機器可交易的知識網路。',
     },
     abstract: {
-      en: 'AICR declares what AI systems may do with content — reading, summarization, transformation, RAG, training, commercial use, redistribution, attribution. AICL converts those rights into executable flows: authorization, payment, credentials, usage logs, and revocation. Rather than forcing a binary between total prohibition and free extraction, AICR/AICL enables tiered licensing markets, interoperating with emerging machine-payment mechanisms (HTTP 402, pay-per-crawl) while keeping agentic payment inside human-approved budgets and audit trails.',
-      zh: 'AICR 宣告 AI 系統可以對內容做什麼——讀取、摘要、轉換、RAG、訓練、商用、再分發與署名。AICL 將這些權利轉換為可執行流程:授權、支付、憑證、使用紀錄與撤銷。AICR/AICL 不強迫「全面禁止或免費萃取」的二元選擇,而是開啟分級授權市場,並與 HTTP 402、pay-per-crawl 等機器支付機制互通,同時讓代理支付處於人類核准的預算與稽核軌跡之內。',
+      en: 'AICR declares what AI systems may do with content — reading, summarization, transformation, RAG, training, commercial use, redistribution, attribution. AICL converts those rights into executable flows: authorization, payment, credentials, usage logs, and revocation. Rather than forcing a binary between total prohibition and free extraction, AICR/AICL enables tiered licensing markets, interoperating with emerging machine-payment mechanisms (HTTP 402, pay-per-crawl) while keeping agentic payment inside human-approved budgets and audit trails. The v0.1.1 patch adds an explicit, non-breaking boundary: a content license is not Agent action authority, and valid Agent authority (AADP) is not a content license — the two planes compose but never substitute for each other. It also adds optional principal/actor/authority_reference/aadp_authority_id fields so a license can reference the AADP authority context under which an Agent requested it.',
+      zh: 'AICR 宣告 AI 系統可以對內容做什麼——讀取、摘要、轉換、RAG、訓練、商用、再分發與署名。AICL 將這些權利轉換為可執行流程:授權、支付、憑證、使用紀錄與撤銷。AICR/AICL 不強迫「全面禁止或免費萃取」的二元選擇,而是開啟分級授權市場,並與 HTTP 402、pay-per-crawl 等機器支付機制互通,同時讓代理支付處於人類核准的預算與稽核軌跡之內。v0.1.1 patch 新增一條明確、非破壞性的邊界:內容授權不是 Agent 行動權力,有效的 Agent 權力(AADP)也不是內容授權——兩個層面可以組合評估,但永遠不能互相替代。同時新增選填的 principal/actor/authority_reference/aadp_authority_id 欄位,讓一筆授權可以引用 Agent 請求它時所處的 AADP 權力脈絡。',
     },
-    keyConcepts: ['AICR', 'AICL', 'HTTP 402', 'pay-per-crawl', 'license token', 'audit log', 'agentic payment'],
-    protocols: ['aicr', 'aicl'],
-    version: 'v0.1 Public Draft',
-    date: '2026-07',
+    keyConcepts: ['AICR', 'AICL', 'HTTP 402', 'pay-per-crawl', 'license token', 'audit log', 'agentic payment', 'authority_reference'],
+    protocols: ['aicr', 'aicl', 'aars', 'aadp'],
+    version: 'v0.1.1 Authority Reference Patch',
+    date: '2026-08-15',
   },
   {
     slug: 'ai-rights-spectrum',
-    sourceFile: 'AI Rights Spectrum From robots.txt to an AI Learning Permission Protocol.md',
+    sourceFile: 'AIRS_AILP_v0.1.1_Scope_Boundary_Patch.md',
     lang: 'en',
     title: {
       en: 'AI Rights Spectrum: From robots.txt to an AI Learning Permission Protocol',
@@ -54,13 +54,13 @@ export const PAPERS: Paper[] = [
       zh: 'AIRS 與 AILP 讓 AI 學習許可超越二元的允許/禁止——AI 能學什麼、學到什麼深度、用於什麼用途、以什麼補償條件。',
     },
     abstract: {
-      en: 'robots.txt and llms.txt govern access and visibility, not learning depth or use permissions. AIRS proposes expressing AI rights as a proportional, use-specific spectrum across ten dimensions — access, indexing, inference input, embedding, training, fine-tuning, distillation, memory, output, attribution/compensation. AILP translates this into /ai/rights-spectrum.json, letting creators declare granular permissions with compensation models ranging from free through license-required to revenue share.',
-      zh: 'robots.txt 與 llms.txt 治理的是存取與可見性,不是學習深度與用途許可。AIRS 提出以比例化、分用途的光譜表達 AI 權利,涵蓋十個維度——存取、索引、推論輸入、嵌入、訓練、微調、蒸餾、記憶、輸出、署名/補償。AILP 將其落實為 /ai/rights-spectrum.json,讓創作者宣告細粒度許可,補償模式從免費、需授權到收益分潤。',
+      en: 'robots.txt and llms.txt govern access and visibility, not learning depth or use permissions. AIRS proposes expressing AI rights as a proportional, use-specific spectrum across ten dimensions — access, indexing, inference input, embedding, training, fine-tuning, distillation, memory, output, attribution/compensation. AILP translates this into /ai/rights-spectrum.json, letting creators declare granular permissions with compensation models ranging from free through license-required to revenue share. The v0.1.1 patch adds one boundary that became necessary as AI increasingly participates in Agent/MCP workflows: content permission does not imply Agent action permission. AIRS/AILP governs the content-and-learning rights plane; AARS governs the action-rights plane; AADP governs the authority plane — a valid Agent workflow may require independent compatibility across all three.',
+      zh: 'robots.txt 與 llms.txt 治理的是存取與可見性,不是學習深度與用途許可。AIRS 提出以比例化、分用途的光譜表達 AI 權利,涵蓋十個維度——存取、索引、推論輸入、嵌入、訓練、微調、蒸餾、記憶、輸出、署名/補償。AILP 將其落實為 /ai/rights-spectrum.json,讓創作者宣告細粒度許可,補償模式從免費、需授權到收益分潤。v0.1.1 patch 新增一條隨著 AI 越來越深入參與 Agent/MCP 工作流而變得必要的邊界:內容許可不代表 Agent 行動許可。AIRS/AILP 治理內容與學習權利平面;AARS 治理行動權利平面;AADP 治理權力平面——一個有效的 Agent 工作流可能需要同時滿足這三個平面各自獨立的相容性。',
     },
-    keyConcepts: ['AIRS', 'AILP', 'learning depth', 'TDM reservation', 'license_required', 'verbatim memory'],
-    protocols: ['airs', 'ailp'],
-    version: 'v0.1 Draft',
-    date: '2026-06-30',
+    keyConcepts: ['AIRS', 'AILP', 'learning depth', 'TDM reservation', 'license_required', 'verbatim memory', 'scope boundary'],
+    protocols: ['airs', 'ailp', 'aars', 'aadp'],
+    version: 'v0.1.1 Scope Boundary Patch',
+    date: '2026-08-15',
   },
   {
     slug: 'protocolized-openness',

@@ -1,5 +1,5 @@
 ---
-title: "AI Rights Spectrum: From robots.txt to an AI Learning Permission Protocol"
+title: "AI Rights Spectrum: From robots.txt to an AI Learning Permission Protocol (v0.1.1)"
 ---
 
 # AI Rights Spectrum: From robots.txt to an AI Learning Permission Protocol
@@ -7,9 +7,10 @@ title: "AI Rights Spectrum: From robots.txt to an AI Learning Permission Protoco
 ## AI Rights Spectrum and AI Learning Permission Protocol: Toward a Machine-Readable Contract Layer for AI Learning
 
 **Author**: Neo.K / EVEMISSLAB\
-**Version**: v0.1 Draft\
+**Version**: v0.1.1 Scope Boundary Patch\
 **Type**: General Markdown Paper / Technical White Paper / Protocol Draft\
-**Date**: 2026-06-30
+**Original Date**: 2026-06-30\
+**Patched**: 2026-08-15
 **Suggested Abbreviations**: AIRS / AILP\
 **Chinese Names**: AI 權利光譜 / AI 學習許可協議\
 **Keywords**: AI learning permission, AI rights spectrum, robots.txt, llms.txt, TDM, AI crawler, AI training license, creator compensation, machine-readable licensing, AI base space, knowledge governance
@@ -27,6 +28,87 @@ This paper argues that the current “cleaning” model is not a long-term answe
 Furthermore, from the perspective of the _Base Space and Manager_ framework, AI learning is not merely the copying of text. It is the transformation of external knowledge into routable structures within a model’s base space. The completeness of the base space and the routing quality of the manager jointly affect an AI system’s ability to reason, express, and process knowledge in depth. Therefore, AI learning permission should not only ask “Can this be crawled?” but also “Can this enter the base space, at what depth, with what retention rights, under what commercial conditions, and with what output restrictions?”
 
 The core thesis of this paper is: **the AI era requires a machine-readable rights layer more detailed than robots.txt.** This layer should not serve only AI companies, nor only creators. It should establish a clearer rule space in which creators, rights holders, AI systems, users, and platforms can interact.
+
+***
+
+## v0.1.1 Scope Boundary Patch
+
+Version v0.1.1 does not change the ten-dimensional content-learning rights model introduced in v0.1. It adds an explicit boundary that became necessary as AI systems increasingly participate in API, tool, MCP, and autonomous Agent workflows.
+
+The key clarification is:
+
+$$
+\boxed{
+\text{Content Permission}
+\not\Rightarrow
+\text{Agent Action Permission}
+}
+$$
+
+AIRS / AILP governs how content may be accessed, indexed, used as inference input, embedded, retained, trained on, fine-tuned from, distilled from, generated from, attributed, and compensated.
+
+It does **not**, by itself, grant an Agent authority to:
+
+```text
+write to a database
+modify a file
+send an email
+publish content
+execute code
+change permissions
+initiate a transaction
+create a persistent task
+delegate authority to another Agent
+```
+
+Those operational questions belong to the AGIRIGHT Agent & Protocol Rights family:
+
+```text
+AARS = Agent Action Rights Spectrum
+AADP = Agent Authority & Delegation Protocol
+```
+
+Therefore:
+
+$$
+\boxed{
+AIRS/AILP
+=
+\text{Content and Learning Rights Plane}
+}
+$$
+
+$$
+\boxed{
+AARS
+=
+\text{Action Rights Plane}
+}
+$$
+
+$$
+\boxed{
+AADP
+=
+\text{Authority Plane}
+}
+$$
+
+When an Agent workflow both uses governed content and changes external state, a valid workflow may require independent compatibility across all applicable planes:
+
+$$
+\boxed{
+Allow
+=
+ContentCompatibility
+\land
+ActionCompatibility
+\land
+AuthorityValidity
+}
+$$
+
+This patch is intentionally non-breaking. It narrows interpretation rather than expanding AIRS / AILP into a general-purpose Agent authorization protocol.
 
 ***
 
@@ -385,6 +467,67 @@ manifest.json: what AI-readable resources exist in this system?
 rights-spectrum.json: how may AI systems learn, use, retain, and compensate?
 ```
 
+### 5.3 AILP Does Not Grant Agent Operational Authority
+
+AILP is a declaration and licensing layer for AI learning and content use. It is not a general Agent capability or authorization system.
+
+For example:
+
+```json
+{
+  "rag_retrieval": 1.0,
+  "summary_generation": 1.0
+}
+```
+
+means that an AI system may use the governed content for those declared content uses, subject to the rest of the policy.
+
+It does **not** mean:
+
+```text
+database_write = allowed
+external_publish = allowed
+send_email = allowed
+execute_tool = allowed
+transaction = allowed
+delegation = allowed
+```
+
+Formally:
+
+$$
+AILP(Resource,ContentUse)=Allow
+$$
+
+does not imply:
+
+$$
+AARS(Actor,Action)=Allow
+$$
+
+and does not imply:
+
+$$
+AADP(Principal,Actor,Authority)=Valid
+$$
+
+A system that exposes both content and tools should evaluate them separately.
+
+A minimal conceptual sequence is:
+
+```text
+Content request
+  -> AIRS / AILP
+
+Tool or external action request
+  -> AARS
+
+Question of who authorized the actor
+  -> AADP
+```
+
+A single Agent workflow may pass through all three layers.
+
 ***
 
 ## 6. Ten Dimensions of AI Learning Rights
@@ -582,7 +725,7 @@ How should compensation be calculated?
 
 ```json
 {
-  "version": "0.1",
+  "version": "0.1.1",
   "protocol": "AILP",
   "name": "AI Learning Permission Protocol",
   "rights_holder": "Example Author / Organization",
@@ -616,7 +759,7 @@ How should compensation be calculated?
 
 ```json
 {
-  "version": "0.1",
+  "version": "0.1.1",
   "protocol": "AILP",
   "rights_holder": "Example Author / Organization",
   "canonical_domain": "example.com",
@@ -667,7 +810,7 @@ How should compensation be calculated?
 
 ```json
 {
-  "version": "0.1",
+  "version": "0.1.1",
   "protocol": "AILP",
   "licensing_options": [
     {
@@ -1095,12 +1238,63 @@ creator dashboard
 audit logs
 ```
 
+### 15.6 Integration with AARS / AADP in Agent Workflows
+
+When AIRS / AILP is consumed inside an Agent or MCP workflow, the implementation SHOULD keep three questions separate:
+
+```text
+1. May this content be used in this way?
+   -> AIRS / AILP
+
+2. May this Agent perform this external action?
+   -> AARS
+
+3. Does this actor have valid authority from the relevant principal?
+   -> AADP
+```
+
+Example:
+
+```text
+Agent reads a licensed research paper through RAG
+-> AIRS / AILP evaluation
+
+Agent creates a draft summary in local reversible state
+-> AARS action evaluation
+
+Agent publishes the summary to an external website
+-> AARS external-action evaluation
+-> AADP authority evaluation
+```
+
+The fact that RAG is permitted does not grant publication authority.
+
+Similarly, the fact that an Agent is authorized to publish does not grant training rights over the source material.
+
+Thus:
+
+$$
+ContentGrant
+\not\Rightarrow
+ActionGrant
+$$
+
+and:
+
+$$
+ActionGrant
+\not\Rightarrow
+ContentGrant
+$$
+
+These rights planes are composable but non-substitutable.
+
 ***
 
 ## 16. Agent Implementation Prompt Template
 
 ```text
-Implement AIRS / AILP v0.1 for this website.
+Implement AIRS / AILP v0.1.1 for this website.
 
 Goal:
 Create a machine-readable AI rights spectrum file that declares how AI systems may crawl, index, retrieve, embed, train, fine-tune, distill, quote, summarize, remember, and commercialize content.
@@ -1146,6 +1340,9 @@ Requirements:
 6. Do not implement enforcement yet.
 7. This is a declaration layer, not an access-control system.
 8. Keep human UI unchanged.
+9. Do not interpret AIRS / AILP content permission as permission to invoke tools or mutate external state.
+10. If the website exposes Agent / MCP capabilities, reference AARS for action rights and AADP for principal / actor / delegation authority.
+11. Do not convert `rag_retrieval`, `ai_answer_input`, or `training` permission into database-write, publish, transaction, execution, or delegation authority.
 ```
 
 ***
@@ -1154,7 +1351,7 @@ Requirements:
 
 ```json
 {
-  "version": "0.1",
+  "version": "0.1.1",
   "protocol": "AILP",
   "rights_holder": "Neo.K / EVEMISSLAB",
   "canonical_domain": "example.com",
@@ -1238,6 +1435,71 @@ Without clear licensing, AI companies tend to choose between cleaning and risky 
 
 ***
 
+## 18.5 Agent / MCP Boundary Cases
+
+### Case A — RAG Allowed, Database Write Not Granted
+
+A policy may declare:
+
+```text
+rag_retrieval = allowed
+embedding_storage = allowed
+```
+
+An Agent may therefore retrieve or embed the content within the declared conditions.
+
+This does not grant permission to write arbitrary records back into the source database.
+
+---
+
+### Case B — Read Allowed, External Publication Requires Separate Authority
+
+AIRS may allow an AI to read and summarize a document.
+
+Publishing that summary to an external website is a separate action because it changes the external information environment.
+
+The content use and the publication action therefore require separate evaluation.
+
+---
+
+### Case C — Agent Has Tool Authority, Training Still Prohibited
+
+An Agent may have valid AADP authority to invoke a document-processing tool.
+
+If the underlying content policy states:
+
+```text
+commercial_training = prohibited
+```
+
+the Agent's operational authority does not override that content restriction.
+
+---
+
+### Case D — MCP Tool Available, No Automatic Grant
+
+The existence or discovery of an MCP tool does not itself constitute an AIRS / AILP permission, an AARS action grant, or an AADP authority statement.
+
+Therefore:
+
+$$
+ToolAvailable
+\not\Rightarrow
+ToolAuthorized
+$$
+
+and:
+
+$$
+ToolAuthorized
+\not\Rightarrow
+ContentUseAuthorized
+$$
+
+These distinctions prevent protocol capability from silently bypassing content rights.
+
+***
+
 ## 19. Relationship to Future Law
 
 AIRS / AILP should not be designed as a mere appendix to any one country’s legal system. It should function as a cross-jurisdictional machine-readable declaration layer.
@@ -1301,6 +1563,40 @@ AILP: AI Learning Permission Protocol
 ```
 
 Its core purpose is not to prevent AI from learning, but to move AI learning into a rule space that authors, rights holders, platforms, users, and AI companies can all understand.
+
+Version v0.1.1 adds one further boundary: content-learning permission is not an operational Agent mandate.
+
+AIRS / AILP answers:
+
+```text
+How may this content be used or learned from?
+```
+
+AARS answers:
+
+```text
+What external action may this Agent perform?
+```
+
+AADP answers:
+
+```text
+Who has authority to let this actor perform that action?
+```
+
+Therefore:
+
+$$
+\boxed{
+\text{Content Rights}
+\neq
+\text{Action Rights}
+\neq
+\text{Authority Rights}
+}
+$$
+
+They may be evaluated together, but must not silently substitute for one another.
 
 The real question is not:
 
@@ -1402,7 +1698,7 @@ pay_per_training_use
 
 ```json
 {
-  "version": "0.1",
+  "version": "0.1.1",
   "protocol": "AILP",
   "rights_holder": "Your Name or Organization",
   "canonical_domain": "example.com",
@@ -1429,3 +1725,46 @@ pay_per_training_use
   }
 }
 ```
+
+***
+
+## Appendix D: Cross-Protocol Boundary Template
+
+A website or service MAY publish cross-references such as:
+
+```json
+{
+  "version": "0.1.1",
+  "protocol": "AILP",
+  "related_protocols": {
+    "agent_action_rights": {
+      "protocol": "AARS",
+      "policy": "/ai/agent-actions.json"
+    },
+    "agent_authority": {
+      "protocol": "AADP",
+      "policy": "/ai/agent-authority.json"
+    }
+  }
+}
+```
+
+This object is illustrative.
+
+It does not mean AIRS / AILP depends technically on MCP, OAuth, AARS, or AADP.
+
+It only makes the semantic boundary discoverable:
+
+```text
+AIRS / AILP
+= content / learning rights
+
+AARS
+= action rights
+
+AADP
+= authority / delegation rights
+```
+
+A system that implements only AIRS / AILP remains conformant to the content-learning scope of this draft without implementing Agent authorization.
+

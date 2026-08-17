@@ -44,10 +44,10 @@ export const PROTOCOLS: Protocol[] = [
       en: 'A machine-readable declaration of what AI systems may do with your content.',
       zh: '以機器可讀方式宣告:AI 系統可以對你的內容做什麼。',
     },
-    status: 'Draft v0.1',
+    status: 'Draft v0.1.1',
     definition: {
-      en: 'AICR is a machine-readable rights declaration layer. It lets a publisher state — per site, per path, or per resource — whether AI systems may read, summarize, quote, retrieve (RAG), transform, train on, commercially use, or redistribute content, and under which conditions such as attribution, retention limits, or contact-based licensing. Where robots.txt only says "crawl or don\'t", AICR carries the semantics of rights.',
-      zh: 'AICR 是機器可讀的權利宣告層。發布者可以針對整站、路徑或單一資源,宣告 AI 系統是否可以讀取、摘要、引用、檢索(RAG)、轉換、訓練、商業使用或再分發內容,以及附帶條件——例如需標註出處、保存期限、或需聯絡授權。robots.txt 只能說「爬或不爬」,AICR 承載的是權利的語意。',
+      en: 'AICR is a machine-readable rights declaration layer. It lets a publisher state — per site, per path, or per resource — whether AI systems may read, summarize, quote, retrieve (RAG), transform, train on, commercially use, or redistribute content, and under which conditions such as attribution, retention limits, or contact-based licensing. Where robots.txt only says "crawl or don\'t", AICR carries the semantics of rights. Content Permission ⇏ Agent Action Authority: an AICR grant over content does not by itself authorize an Agent to write to a database, publish, execute code, or transact — see AARS and AADP.',
+      zh: 'AICR 是機器可讀的權利宣告層。發布者可以針對整站、路徑或單一資源,宣告 AI 系統是否可以讀取、摘要、引用、檢索(RAG)、轉換、訓練、商業使用或再分發內容,以及附帶條件——例如需標註出處、保存期限、或需聯絡授權。robots.txt 只能說「爬或不爬」,AICR 承載的是權利的語意。內容權利 ⇏ Agent 行動權力:AICR 對內容的許可本身不代表授權 Agent 寫入資料庫、發布、執行程式碼或交易——見 AARS 與 AADP。',
     },
     purpose: {
       en: [
@@ -126,17 +126,19 @@ export const PROTOCOLS: Protocol[] = [
         'It is an open research draft, not an adopted industry or legal standard.',
         'It does not by itself resolve copyright disputes or define the legal weight of a declaration.',
         'Field names and semantics may change between draft versions.',
+        'v0.1.1: an AICR grant does not imply Agent action or authority — content, action, and authority are three separately evaluable planes (AICR/AICL, AARS, AADP).',
       ],
       zh: [
         'AICR 是宣告層,不是強制機制——效力取決於 AI 系統選擇(或被要求)遵守。',
         '目前為開放研究草案,尚非業界或法律採納的標準。',
         '它本身不解決著作權爭議,也不定義宣告的法律效力。',
         '欄位名稱與語意可能在草案版本間調整。',
+        'v0.1.1:AICR 的許可不代表 Agent 行動或權力——內容、行動、權力是三個各自獨立評估的平面(AICR/AICL、AARS、AADP)。',
       ],
     },
     schemaUrl: '/schemas/aicr.schema.json',
     wellKnownUrl: '/.well-known/aicr.json',
-    relatedPapers: ['aicr-aicl-content-licensing', 'protocolized-openness'],
+    relatedPapers: ['aicr-aicl-content-licensing', 'protocolized-openness', 'from-crawler-rights-to-agent-authority'],
   },
   {
     id: 'aicl',
@@ -154,10 +156,10 @@ export const PROTOCOLS: Protocol[] = [
       en: 'Turns declared rights into executable licensing: quote, pay, verify, audit, revoke.',
       zh: '把宣告的權利變成可執行的授權流程:報價、支付、驗證、稽核、撤銷。',
     },
-    status: 'Draft v0.1',
+    status: 'Draft v0.1.1',
     definition: {
-      en: 'AICL is the licensing and transaction layer built on top of AICR. Where AICR declares what is allowed, AICL defines how permission is actually obtained: license tiers and prices, quote and payment endpoints, signed license tokens, usage and audit logs, and revocation. It is designed to interoperate with emerging machine-payment mechanisms such as HTTP 402 flows and pay-per-crawl schemes, with agentic payment kept inside human-approved budgets and audit trails.',
-      zh: 'AICL 是建立在 AICR 之上的授權與交易層。AICR 宣告「什麼被允許」,AICL 則定義「如何實際取得許可」:授權級距與價格、報價與支付端點、簽章授權憑證(license token)、使用與稽核紀錄、以及撤銷機制。設計上可與 HTTP 402、pay-per-crawl 等新興機器支付機制互通,且 Agent 支付必須處於人類核准的預算與稽核軌跡之內。',
+      en: 'AICL is the licensing and transaction layer built on top of AICR. Where AICR declares what is allowed, AICL defines how permission is actually obtained: license tiers and prices, quote and payment endpoints, signed license tokens, usage and audit logs, and revocation. It is designed to interoperate with emerging machine-payment mechanisms such as HTTP 402 flows and pay-per-crawl schemes, with agentic payment kept inside human-approved budgets and audit trails. Content License ⇏ Agent Action Authority, and the reverse also holds — valid Agent Authority (AADP) ⇏ Content License: an AICL credential proves content-use permission, not a general Agent authorization token.',
+      zh: 'AICL 是建立在 AICR 之上的授權與交易層。AICR 宣告「什麼被允許」,AICL 則定義「如何實際取得許可」:授權級距與價格、報價與支付端點、簽章授權憑證(license token)、使用與稽核紀錄、以及撤銷機制。設計上可與 HTTP 402、pay-per-crawl 等新興機器支付機制互通,且 Agent 支付必須處於人類核准的預算與稽核軌跡之內。內容授權 ⇏ Agent 行動權力,反方向也成立——有效的 Agent 權力(AADP)⇏ 內容授權:AICL 憑證證明的是內容使用許可,不是通用的 Agent 授權令牌。',
     },
     purpose: {
       en: [
@@ -181,6 +183,7 @@ export const PROTOCOLS: Protocol[] = [
         'Usage logs and audit trails',
         'HTTP 402 "Payment Required" interoperability',
         'Safety rules: no AI handling of raw card data, human approval thresholds',
+        'principal / actor / authority_reference / aadp_authority_id — optional fields (v0.1.1) linking a license to the AADP authority context an Agent acted under, without making the license itself an authorization token',
       ],
       zh: [
         '授權目錄——權利組合的級距、價格與條件',
@@ -189,6 +192,7 @@ export const PROTOCOLS: Protocol[] = [
         '使用紀錄與稽核軌跡',
         '與 HTTP 402「Payment Required」互通',
         '安全規則:AI 不得接觸明文卡號、設定人類核准門檻',
+        'principal / actor / authority_reference / aadp_authority_id — 選填欄位(v0.1.1),讓授權可以連結到 Agent 行動當下所處的 AADP 權力脈絡,但不因此讓授權本身變成一張授權令牌',
       ],
     },
     exampleTitle: {
@@ -234,12 +238,14 @@ export const PROTOCOLS: Protocol[] = [
         'AICL is a protocol proposal — it does not guarantee that AI companies will pay.',
         'Payment compliance, tax, and financial regulation are out of scope for this draft.',
         'Token formats and endpoint semantics are experimental and may change.',
+        'v0.1.1: an AICL license credential must not be interpreted as a general Agent authorization token, and a valid OAuth/MCP/AADP credential must not be interpreted as an automatic content-use license.',
       ],
       zh: [
         '本站不營運支付網關;v0.1 的商業授權採聯絡洽談。',
         'AICL 是協議提案——不保證 AI 公司必然付費。',
         '支付合規、稅務與金融監管不在本草案範圍內。',
         '憑證格式與端點語意屬實驗性質,可能調整。',
+        'v0.1.1:AICL 授權憑證不得被解讀為通用的 Agent 授權令牌,有效的 OAuth/MCP/AADP 憑證也不得被解讀為自動的內容使用授權。',
       ],
     },
     namingNote: {
@@ -248,7 +254,7 @@ export const PROTOCOLS: Protocol[] = [
     },
     schemaUrl: '/schemas/aicl.schema.json',
     wellKnownUrl: '/.well-known/aicl.json',
-    relatedPapers: ['aicr-aicl-content-licensing', 'ai-content-payment-democratic-economy', 'aicl-ai-ingestion-capability-layer'],
+    relatedPapers: ['aicr-aicl-content-licensing', 'ai-content-payment-democratic-economy', 'aicl-ai-ingestion-capability-layer', 'from-crawler-rights-to-agent-authority'],
   },
   {
     id: 'airs',
@@ -266,10 +272,10 @@ export const PROTOCOLS: Protocol[] = [
       en: 'AI rights over content are not binary — they form a graduated, licensable spectrum.',
       zh: 'AI 對內容的權利不是二元的——而是一道可分級、可授權的光譜。',
     },
-    status: 'Draft v0.1',
+    status: 'Draft v0.1.1',
     definition: {
-      en: 'AIRS is the conceptual model underneath AICR and AILP: it holds that AI use of content cannot be governed by a single allow/deny bit. Reading, summarizing, retrieving, transforming, fine-tuning, training, and redistributing are different acts with different depths, uses, and economic weight. AIRS arranges them as a spectrum of levels, each of which can be separately permitted, priced, conditioned, and audited — making rights proportional, use-specific, and trackable.',
-      zh: 'AIRS 是 AICR 與 AILP 底層的概念模型:AI 對內容的使用無法用單一的允許/禁止位元治理。讀取、摘要、檢索、轉換、微調、訓練、再分發是不同深度、不同用途、不同經濟重量的行為。AIRS 將它們排列為分級光譜,每一級都能被獨立許可、定價、附加條件與稽核——讓權利做到比例化、用途化、可追蹤化。',
+      en: 'AIRS is the conceptual model underneath AICR and AILP: it holds that AI use of content cannot be governed by a single allow/deny bit. Reading, summarizing, retrieving, transforming, fine-tuning, training, and redistributing are different acts with different depths, uses, and economic weight. AIRS arranges them as a spectrum of levels, each of which can be separately permitted, priced, conditioned, and audited — making rights proportional, use-specific, and trackable. AIRS governs the content-and-learning rights plane only; it does not extend into whether an Agent may act on external systems (AARS) or who authorized that Agent (AADP).',
+      zh: 'AIRS 是 AICR 與 AILP 底層的概念模型:AI 對內容的使用無法用單一的允許/禁止位元治理。讀取、摘要、檢索、轉換、微調、訓練、再分發是不同深度、不同用途、不同經濟重量的行為。AIRS 將它們排列為分級光譜,每一級都能被獨立許可、定價、附加條件與稽核——讓權利做到比例化、用途化、可追蹤化。AIRS 只治理內容與學習權利這一個平面,不延伸到 Agent 能否對外部系統採取行動(AARS)、或這個 Agent 由誰授權(AADP)。',
     },
     purpose: {
       en: [
@@ -330,15 +336,17 @@ export const PROTOCOLS: Protocol[] = [
         'The eight levels are a research model — real-world rights may need finer or different partitions.',
         'Level ordering encodes typical depth/economic weight, not a legal hierarchy.',
         'AIRS describes rights semantics; it does not itself enforce or verify compliance.',
+        'v0.1.1: reaching Level 7 on this spectrum still says nothing about Agent action rights or authority — a full Agent workflow may need independent compatibility across AIRS/AILP, AARS, and AADP.',
       ],
       zh: [
         '八個層級是研究模型——真實世界的權利可能需要更細或不同的切分。',
         '層級順序表達的是典型深度與經濟重量,不是法律位階。',
         'AIRS 描述權利語意,本身不執行也不驗證合規。',
+        'v0.1.1:即使在這個光譜上達到 Level 7,也完全不代表任何 Agent 行動權利或權力——一個完整的 Agent 工作流可能需要同時滿足 AIRS/AILP、AARS、AADP 各自獨立的相容性。',
       ],
     },
     schemaUrl: '/schemas/airs.schema.json',
-    relatedPapers: ['ai-rights-spectrum', 'protocolized-openness'],
+    relatedPapers: ['ai-rights-spectrum', 'protocolized-openness', 'from-crawler-rights-to-agent-authority'],
   },
   {
     id: 'ailp',
@@ -356,10 +364,10 @@ export const PROTOCOLS: Protocol[] = [
       en: 'Can AI learn from this? To what depth, for which uses, with what obligations?',
       zh: 'AI 能不能學?學到什麼深度?用於什麼用途?附帶什麼義務?',
     },
-    status: 'Draft v0.1',
+    status: 'Draft v0.1.1',
     definition: {
-      en: 'AILP operationalizes the AIRS spectrum for the specific question of learning. It distinguishes acts that binary crawler rules collapse together: being read is not being learned from; being retrieved is not being trained on; fine-tuning is not distillation; verbatim memorization is different from statistical internalization. AILP lets a publisher declare, in a single machine-readable file, per-dimension permissions — access, indexing, inference input, embedding, training, fine-tuning, distillation, memory, output, attribution and compensation — each as allowed, denied, or license-required.',
-      zh: 'AILP 把 AIRS 光譜落實到「學習」這個具體問題上。它區分了被二元爬蟲規則混為一談的行為:被讀取不等於被學習;被檢索不等於被訓練;微調不是蒸餾;逐字記憶不同於統計性內化。AILP 讓發布者在單一機器可讀檔案中,逐維度宣告許可——存取、索引、推論輸入、嵌入、訓練、微調、蒸餾、記憶、輸出、署名與補償——每一項皆可為允許、拒絕或需授權。',
+      en: 'AILP operationalizes the AIRS spectrum for the specific question of learning. It distinguishes acts that binary crawler rules collapse together: being read is not being learned from; being retrieved is not being trained on; fine-tuning is not distillation; verbatim memorization is different from statistical internalization. AILP lets a publisher declare, in a single machine-readable file, per-dimension permissions — access, indexing, inference input, embedding, training, fine-tuning, distillation, memory, output, attribution and compensation — each as allowed, denied, or license-required. An AILP grant answers "may AI learn from this content?" only — it does not answer "may this Agent invoke a tool, write to a database, or publish?" (AARS), nor "who authorized this Agent?" (AADP).',
+      zh: 'AILP 把 AIRS 光譜落實到「學習」這個具體問題上。它區分了被二元爬蟲規則混為一談的行為:被讀取不等於被學習;被檢索不等於被訓練;微調不是蒸餾;逐字記憶不同於統計性內化。AILP 讓發布者在單一機器可讀檔案中,逐維度宣告許可——存取、索引、推論輸入、嵌入、訓練、微調、蒸餾、記憶、輸出、署名與補償——每一項皆可為允許、拒絕或需授權。AILP 的許可只回答「AI 能不能學習這份內容」——不回答「這個 Agent 能不能呼叫工具、寫入資料庫、或發布內容」(AARS 的問題),也不回答「這個 Agent 是誰授權的」(AADP 的問題)。',
     },
     purpose: {
       en: [
@@ -421,15 +429,17 @@ export const PROTOCOLS: Protocol[] = [
         'Learning-permission semantics are the hardest to verify technically — AILP declares intent, it cannot yet prove compliance.',
         'The dimension list is a draft; boundaries between training, fine-tuning, and distillation are still debated.',
         'Legal recognition of learning permissions varies by jurisdiction and is unresolved.',
+        'v0.1.1: AILP(Resource,ContentUse)=Allow does not imply AARS(Actor,Action)=Allow, and does not imply AADP(Principal,Actor,Authority)=Valid — a system exposing both content and tools must evaluate them separately.',
       ],
       zh: [
         '學習許可的語意在技術上最難驗證——AILP 宣告意圖,尚無法證明合規。',
         '維度清單仍是草案;訓練、微調、蒸餾之間的邊界仍有爭論。',
         '學習許可的法律效力因法域而異,尚無定論。',
+        'v0.1.1:AILP(Resource,ContentUse)=Allow 不代表 AARS(Actor,Action)=Allow,也不代表 AADP(Principal,Actor,Authority)=Valid——同時提供內容與工具的系統,必須分開評估這兩者。',
       ],
     },
     schemaUrl: '/schemas/ailp.schema.json',
-    relatedPapers: ['ai-rights-spectrum', 'protocolized-openness'],
+    relatedPapers: ['ai-rights-spectrum', 'protocolized-openness', 'from-crawler-rights-to-agent-authority'],
   },
   {
     id: 'aars',

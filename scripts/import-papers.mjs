@@ -16,13 +16,13 @@ const DEST = join(here, '..', 'src', 'content', 'whitepapers');
 const PAPERS = [
   {
     slug: 'aicr-aicl-content-licensing',
-    file: 'AICR-AICL_AI_Content_Licensing_and_Agentic_Payment_Layer_EN.md',
-    title: 'AICR / AICL as an AI Content Licensing and Agentic Payment Connection Layer',
+    file: 'AICR_AICL_v0.1.1_Authority_Reference_Patch.md',
+    title: 'AICR / AICL as an AI Content Licensing and Agentic Payment Connection Layer (v0.1.1)',
   },
   {
     slug: 'ai-rights-spectrum',
-    file: 'AI Rights Spectrum From robots.txt to an AI Learning Permission Protocol.md',
-    title: 'AI Rights Spectrum: From robots.txt to an AI Learning Permission Protocol',
+    file: 'AIRS_AILP_v0.1.1_Scope_Boundary_Patch.md',
+    title: 'AI Rights Spectrum: From robots.txt to an AI Learning Permission Protocol (v0.1.1)',
   },
   {
     slug: 'protocolized-openness',
