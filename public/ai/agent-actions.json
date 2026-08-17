@@ -1,0 +1,66 @@
+{
+  "aars_version": "0.1",
+  "policy_version": "2026-08-17",
+  "resource": "https://agiright.org",
+  "default_decision": "conditional",
+  "actions": {
+    "read_page": {
+      "decision": "allow",
+      "level": "A1",
+      "effects": { "read": "bounded" },
+      "modifiers": {
+        "reversibility": "full",
+        "idempotency": "true",
+        "open_world": "closed",
+        "sensitivity": "public",
+        "privilege": "none",
+        "confidence": "self_declared"
+      },
+      "description": "AI agents, crawlers, and automated systems may read any public page, machine-readable file, or schema on this site."
+    },
+    "call_demo_api": {
+      "decision": "allow",
+      "level": "A2",
+      "effects": { "read": "bounded", "execute": "bounded" },
+      "modifiers": {
+        "reversibility": "full",
+        "idempotency": "true",
+        "open_world": "bounded_external",
+        "sensitivity": "public",
+        "privilege": "none",
+        "confidence": "self_declared"
+      },
+      "description": "The two live demo endpoints (GET /api/mock/402, GET /api/crawler-check) are safe for agents to call. Both simulate a response and process no real payment, credential, or private data."
+    },
+    "submit_form": {
+      "decision": "deny",
+      "level": "A0",
+      "description": "This site has no form that accepts AI-agent-submitted data; the contact channel is a mailto link addressed to a human."
+    },
+    "make_payment": {
+      "decision": "unavailable",
+      "level": "A0",
+      "effects": { "transaction": "none" },
+      "description": "No real payment or transaction capability exists anywhere on this site. /api/mock/402 is a simulation of what an AICL-style 402 response looks like, not a live payment path."
+    },
+    "modify_content": {
+      "decision": "deny",
+      "level": "A0",
+      "effects": { "write": "none" },
+      "description": "This is a static, read-only site with no agent-writable surface -- no comments, submissions, or editable state."
+    }
+  },
+  "composition_rules": [
+    {
+      "if": ["read_page", "call_demo_api"],
+      "decision": "allow",
+      "description": "Combining page-reading with the two demo-API calls unlocks no additional capability -- both stay bounded to public, simulated responses; neither composes into a write, transaction, or delegation surface."
+    }
+  ],
+  "metadata": {
+    "publisher": "AGIRight.org",
+    "protocol_page": "https://agiright.org/protocols/aars",
+    "schema": "https://agiright.org/schemas/aars.schema.json",
+    "note": "This file is AGIRight.org's own AARS self-declaration -- a live example instance of the protocol it publishes, not a claim that AARS is an adopted external standard. See /ai/rights-spectrum.json (AIRS) for the separate content-permission dimension and /ai/agent-authority.json (AADP) for who this action grant applies to."
+  }
+}

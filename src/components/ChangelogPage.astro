@@ -14,6 +14,23 @@ const intro =
 
 const ENTRIES = [
   {
+    version: "v0.8.38",
+    date: "2026-08-17",
+    tag: { en: "Agent & Protocol Rights — Phase C", zh: "Agent 與協議權利——C 階段" },
+    items: {
+      en: [
+        "New machine-readable declarations at /ai/agent-actions.json (AARS: what an AI agent may DO on this site -- reading and the two demo endpoints are allowed, everything write/transactional is denied or unavailable) and /ai/agent-authority.json (AADP: the standing public authority this site's principal grants for those actions -- no redelegation, minimal I0-I1 inspection, one-year renewal). Both validate against their published schemas.",
+        "/ai/protocol-index.json restructured to group all six protocols into two families (content_learning_rights, agent_protocol) and gained aars/aadp entries; /ai/registry.json, /ai/manifest.json, /.well-known/ai-rights.json, and /llms.txt all now reference the two new protocols and their live instances.",
+        "This closes Phase C of the Agent & Protocol Rights integration (see v0.8.36's Phase A+B). Phase D -- non-breaking scope patches to the four existing protocols (AIRS/AILP, AICR/AICL) -- is next.",
+      ],
+      zh: [
+        "新增機器可讀宣告:/ai/agent-actions.json(AARS——本站上 AI agent 可以「做」什麼:讀取與兩個示範端點被允許,其餘寫入/交易類一律拒絕或不可用)與 /ai/agent-authority.json(AADP——本站 principal 就這些行動授予的常態公開授權——不可再委派、僅 I0-I1 最小檢查、一年一次更新)。兩者皆通過對應 schema 驗證。",
+        "/ai/protocol-index.json 重整為兩個協議家族(內容與學習權利、Agent 與協議權利)分組,新增 aars/aadp 條目;/ai/registry.json、/ai/manifest.json、/.well-known/ai-rights.json 與 /llms.txt 均已同步指向這兩個新協議與其即時實例。",
+        "這完成了 Agent 與協議權利整合的 C 階段(見 v0.8.36 的 A+B 階段)。接下來是 D 階段——對既有四個協議(AIRS/AILP、AICR/AICL)的非破壞性範圍 patch。",
+      ],
+    },
+  },
+  {
     version: "v0.8.37",
     date: "2026-08-17",
     tag: { en: "Daily cadence", zh: "每日常態流程" },

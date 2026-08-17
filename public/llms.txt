@@ -68,6 +68,8 @@ Status: all protocols are open research drafts, version 0.1.
 - https://agiright.org/protocols/aicl : AICL — AI Content License / AI Content Licensing Layer
 - https://agiright.org/protocols/airs : AIRS — AI Rights Spectrum
 - https://agiright.org/protocols/ailp : AILP — AI Learning Permission Protocol
+- https://agiright.org/protocols/aars : AARS — Agent Action Rights Spectrum (what an agent may DO, separate from content permission)
+- https://agiright.org/protocols/aadp : AADP — Agent Authority & Delegation Protocol (who authorized the action and how far that authority reaches)
 - https://agiright.org/research : research areas index
 - https://agiright.org/research/ai-network-democratic-economy : AI network democratic economy
 - https://agiright.org/docs : whitepapers index
@@ -83,6 +85,10 @@ Status: all protocols are open research drafts, version 0.1.
 - https://agiright.org/docs/whitepapers/aicl-ai-ingestion-capability-layer
 - https://agiright.org/docs/whitepapers/ai-content-payment-democratic-economy
 - https://agiright.org/docs/whitepapers/ai-minimum-ethical-protection
+- https://agiright.org/docs/whitepapers/from-crawler-rights-to-agent-authority
+- https://agiright.org/docs/whitepapers/aars-agent-action-rights-spectrum
+- https://agiright.org/docs/whitepapers/aadp-agent-authority-delegation-protocol
+- https://agiright.org/docs/whitepapers/agiright-technical-whitepaper-v0-2
 
 ## Machine-Readable Specs
 
@@ -92,11 +98,15 @@ Status: all protocols are open research drafts, version 0.1.
 - https://agiright.org/ai/manifest.json : AI-facing site manifest
 - https://agiright.org/ai/rights-spectrum.json : AIRS rights spectrum declaration
 - https://agiright.org/ai/content-policy.json : content policy summary
-- https://agiright.org/ai/protocol-index.json : protocol registry index
+- https://agiright.org/ai/agent-actions.json : AARS agent action rights declaration for this site
+- https://agiright.org/ai/agent-authority.json : AADP agent authority declaration for this site
+- https://agiright.org/ai/protocol-index.json : protocol registry index (now grouped into two families)
 - https://agiright.org/schemas/aicr.schema.json
 - https://agiright.org/schemas/aicl.schema.json
 - https://agiright.org/schemas/airs.schema.json
 - https://agiright.org/schemas/ailp.schema.json
+- https://agiright.org/schemas/aars.schema.json
+- https://agiright.org/schemas/aadp.schema.json
 - https://agiright.org/ai/registry.json : protocol registry with version history
 - https://agiright.org/ai/openapi.json : OpenAPI 3.1 for the live demo API
 

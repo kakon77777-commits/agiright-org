@@ -1,7 +1,7 @@
 {
-  "registry_version": "0.1",
+  "registry_version": "0.2",
   "publisher": "AGIRight.org",
-  "updated": "2026-07-10",
+  "updated": "2026-08-17",
   "description": "Protocol registry: every protocol draft published by AGIRight.org, with version history, status, schemas, and live instances. Status values: draft | experimental | proposal | stable | deprecated.",
   "protocols": [
     {
@@ -73,6 +73,42 @@
           "version": "0.1",
           "date": "2026-07-04",
           "changes": "Initial public draft: dimension-level learning permissions (access, indexing, inference_input, embedding, training, fine_tuning, distillation, verbatim_memory, attribution, compensation) with allowed | denied | license_required | proportional values."
+        }
+      ]
+    },
+    {
+      "id": "aars",
+      "abbr": "AARS",
+      "name": "Agent Action Rights Spectrum",
+      "current_version": "0.1",
+      "status": "draft",
+      "since": "2026-08-16",
+      "spec_page": "https://agiright.org/protocols/aars",
+      "schema": "https://agiright.org/schemas/aars.schema.json",
+      "live_instance": "https://agiright.org/ai/agent-actions.json",
+      "versions": [
+        {
+          "version": "0.1",
+          "date": "2026-08-16",
+          "changes": "Initial public draft: A0-A7 human-readable action spectrum plus a machine-readable action vector (read/write/execute/external/transaction/delegation/persistence), effect modifiers (reversibility, blast radius, sensitivity, etc.), composition-risk rules, and decision states beyond allow/deny (conditional, approval_required, step_up_required, unavailable, unknown)."
+        }
+      ]
+    },
+    {
+      "id": "aadp",
+      "abbr": "AADP",
+      "name": "Agent Authority & Delegation Protocol",
+      "current_version": "0.1",
+      "status": "draft",
+      "since": "2026-08-16",
+      "spec_page": "https://agiright.org/protocols/aadp",
+      "schema": "https://agiright.org/schemas/aadp.schema.json",
+      "live_instance": "https://agiright.org/ai/agent-authority.json",
+      "versions": [
+        {
+          "version": "0.1",
+          "date": "2026-08-16",
+          "changes": "Initial public draft: principal vs. actor, delegation chains with attenuation (child authority can only narrow), an 8-level Inspection Depth Spectrum (I0-I7) with separate required/ceiling fields, and named failure modes (authority laundering, confused deputy, cross-principal leakage)."
         }
       ]
     }

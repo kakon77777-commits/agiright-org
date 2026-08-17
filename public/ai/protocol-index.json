@@ -1,11 +1,24 @@
 {
-  "version": "0.1",
+  "version": "0.2",
   "publisher": "AGIRight.org",
-  "updated": "2026-07-04",
+  "updated": "2026-08-17",
+  "protocol_families": [
+    {
+      "id": "content_learning_rights",
+      "name": "Content & Learning Rights",
+      "protocols": ["aicr", "aicl", "airs", "ailp"]
+    },
+    {
+      "id": "agent_protocol",
+      "name": "Agent & Protocol Rights",
+      "protocols": ["aars", "aadp"]
+    }
+  ],
   "protocols": [
     {
       "id": "aicr",
       "abbr": "AICR",
+      "family": "content_learning_rights",
       "name": "AI Content Rights / AI Content Rules",
       "status": "draft-0.1",
       "page": "https://agiright.org/protocols/aicr",
@@ -16,6 +29,7 @@
     {
       "id": "aicl",
       "abbr": "AICL",
+      "family": "content_learning_rights",
       "name": "AI Content License / AI Content Licensing Layer",
       "status": "draft-0.1",
       "page": "https://agiright.org/protocols/aicl",
@@ -26,6 +40,7 @@
     {
       "id": "airs",
       "abbr": "AIRS",
+      "family": "content_learning_rights",
       "name": "AI Rights Spectrum",
       "status": "draft-0.1",
       "page": "https://agiright.org/protocols/airs",
@@ -36,11 +51,34 @@
     {
       "id": "ailp",
       "abbr": "AILP",
+      "family": "content_learning_rights",
       "name": "AI Learning Permission Protocol",
       "status": "draft-0.1",
       "page": "https://agiright.org/protocols/ailp",
       "schema": "https://agiright.org/schemas/ailp.schema.json",
       "summary": "Dimension-level learning permissions: access, indexing, inference input, embedding, training, fine-tuning, distillation, memory, attribution, compensation."
+    },
+    {
+      "id": "aars",
+      "abbr": "AARS",
+      "family": "agent_protocol",
+      "name": "Agent Action Rights Spectrum",
+      "status": "draft-0.1",
+      "page": "https://agiright.org/protocols/aars",
+      "schema": "https://agiright.org/schemas/aars.schema.json",
+      "live_instance": "https://agiright.org/ai/agent-actions.json",
+      "summary": "What an AI agent may DO once it holds tool or API capability -- an A0-A7 action spectrum plus a machine-readable action vector (read/write/execute/external/transaction/delegation/persistence), independent of content permission."
+    },
+    {
+      "id": "aadp",
+      "abbr": "AADP",
+      "family": "agent_protocol",
+      "name": "Agent Authority & Delegation Protocol",
+      "status": "draft-0.1",
+      "page": "https://agiright.org/protocols/aadp",
+      "schema": "https://agiright.org/schemas/aadp.schema.json",
+      "live_instance": "https://agiright.org/ai/agent-authority.json",
+      "summary": "Who authorized an agent's action and how far that authority reaches -- principal vs. actor, delegation that can only narrow, and a bounded inspection ceiling (I0-I7)."
     }
   ],
   "related_tracks": [

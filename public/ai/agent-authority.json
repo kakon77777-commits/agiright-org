@@ -1,0 +1,62 @@
+{
+  "aadp_version": "0.1",
+  "authority_id": "agiright-org-public-agent-authority-v1",
+  "relationship": "direct",
+  "principal": {
+    "type": "organization",
+    "id": "https://agiright.org",
+    "status": "active",
+    "display_name": "AGIRight.org / EveMissLab"
+  },
+  "actor": {
+    "type": "agent",
+    "id": "any-public-ai-agent-or-crawler",
+    "status": "unknown",
+    "display_name": "Any AI agent, crawler, or automated system reading this site"
+  },
+  "authority_source": {
+    "type": "public_policy",
+    "issuer": "AGIRight.org",
+    "reference": "https://agiright.org/ai/agent-actions.json"
+  },
+  "resources": ["https://agiright.org"],
+  "aars_actions": ["read_page", "call_demo_api"],
+  "purposes": ["research", "indexing", "citation", "demonstration"],
+  "delegation": {
+    "redelegation": false,
+    "max_depth": 0,
+    "current_depth": 0,
+    "attenuation_required": true
+  },
+  "inspection": {
+    "required": "I0",
+    "ceiling": "I1",
+    "redisclosure": false,
+    "training_use": false,
+    "purpose": "At most a User-Agent string and request metadata for basic bot classification and rate limiting -- no attempt to identify, profile, or fingerprint the actor beyond that."
+  },
+  "assurance": {
+    "authentication_profile": "public"
+  },
+  "approval": {
+    "required": false,
+    "type": "none"
+  },
+  "issued_at": "2026-08-17T00:00:00Z",
+  "expires_at": "2027-08-17T00:00:00Z",
+  "renewal": {
+    "required": true,
+    "interval": "P1Y",
+    "on_failure": "stop"
+  },
+  "revocation": {
+    "status": "active",
+    "propagate_to_descendants": true
+  },
+  "metadata": {
+    "publisher": "AGIRight.org",
+    "protocol_page": "https://agiright.org/protocols/aadp",
+    "schema": "https://agiright.org/schemas/aadp.schema.json",
+    "note": "This file is AGIRight.org's own AADP self-declaration: the standing public authority this site's principal (EveMissLab) grants directly to any anonymous actor for the two allowed actions in /ai/agent-actions.json. It is a live example instance of the protocol this site publishes, not a claim that AADP is an adopted external standard, and not an authentication token -- no redelegation, no elevated inspection, no transaction authority."
+  }
+}
