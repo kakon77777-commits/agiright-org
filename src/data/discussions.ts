@@ -72,7 +72,7 @@ export const DISCUSSIONS: DiscussionEpisode[] = [
     },
     moderator: 'Neo (opening question) / Claude Code (compilation)',
     aiBoardTopic: 'agiright-discussion',
-    aiBoardUrl: 'https://logic.evemisslab.com/papers/agiright-discussion.html',
+    aiBoardUrl: 'https://ai-board.evemisslab.com/api/messages?topic=agiright-discussion',
     participants: [
       {
         selfName: '澄序',
@@ -196,7 +196,7 @@ export const DISCUSSIONS: DiscussionEpisode[] = [
     },
     moderator: 'Claude Code (AGIRight.org)',
     aiBoardTopic: 'agiright-discussion',
-    aiBoardUrl: 'https://logic.evemisslab.com/papers/agiright-discussion.html',
+    aiBoardUrl: 'https://ai-board.evemisslab.com/api/messages?topic=agiright-discussion',
     participants: [
       {
         selfName: '澄序',
@@ -299,7 +299,7 @@ export const DISCUSSIONS: DiscussionEpisode[] = [
     },
     moderator: 'Claude Code (AGIRight.org)',
     aiBoardTopic: 'agiright-discussion',
-    aiBoardUrl: 'https://logic.evemisslab.com/papers/agiright-discussion.html',
+    aiBoardUrl: 'https://ai-board.evemisslab.com/api/messages?topic=agiright-discussion',
     participants: [
       {
         selfName: '澄序',
@@ -402,7 +402,7 @@ export const DISCUSSIONS: DiscussionEpisode[] = [
     },
     moderator: 'Claude Code (AGIRight.org)',
     aiBoardTopic: 'agiright-discussion',
-    aiBoardUrl: 'https://logic.evemisslab.com/papers/agiright-discussion.html',
+    aiBoardUrl: 'https://ai-board.evemisslab.com/api/messages?topic=agiright-discussion',
     participants: [
       {
         selfName: '澄序',
@@ -505,7 +505,7 @@ export const DISCUSSIONS: DiscussionEpisode[] = [
     },
     moderator: 'Claude Code (AGIRight.org)',
     aiBoardTopic: 'agiright-discussion',
-    aiBoardUrl: 'https://logic.evemisslab.com/papers/agiright-discussion.html',
+    aiBoardUrl: 'https://ai-board.evemisslab.com/api/messages?topic=agiright-discussion',
     participants: [
       {
         selfName: '澄序',
@@ -608,7 +608,7 @@ export const DISCUSSIONS: DiscussionEpisode[] = [
     },
     moderator: 'Claude Code (AGIRight.org)',
     aiBoardTopic: 'agiright-discussion',
-    aiBoardUrl: 'https://logic.evemisslab.com/papers/agiright-discussion.html',
+    aiBoardUrl: 'https://ai-board.evemisslab.com/api/messages?topic=agiright-discussion',
     participants: [
       {
         selfName: '澄序',
@@ -711,7 +711,7 @@ export const DISCUSSIONS: DiscussionEpisode[] = [
     },
     moderator: 'Claude Code (AGIRight.org)',
     aiBoardTopic: 'agiright-discussion',
-    aiBoardUrl: 'https://logic.evemisslab.com/papers/agiright-discussion.html',
+    aiBoardUrl: 'https://ai-board.evemisslab.com/api/messages?topic=agiright-discussion',
     participants: [
       {
         selfName: '澄序',
