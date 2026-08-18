@@ -79,6 +79,7 @@ at v0.1.1. None are adopted industry or legal standards.
 - https://agiright.org/docs/examples : policy examples library (7 ready-to-use policies)
 - https://agiright.org/docs/changelog : version history
 - https://agiright.org/playground : AICR/AICL generators and schema validator (in-browser)
+- https://agiright.org/resources : DWRG resource directory — this site's own resources as one canonical graph
 
 ## Whitepapers
 
@@ -117,6 +118,8 @@ at v0.1.1. None are adopted industry or legal standards.
 - https://agiright.org/schemas/aicl-i-runtime-decision.schema.json
 - https://agiright.org/ai/registry.json : protocol registry with version history
 - https://agiright.org/ai/openapi.json : OpenAPI 3.1 for the live demo API
+- https://agiright.org/resources.json : DWRG (Dual-Surface Web Resource Graph) JSON — this site's public resources as one registry, generated together with /resources and /resources.linkset.json so they cannot drift apart
+- https://agiright.org/resources.linkset.json : RFC 9264 Linkset (application/linkset+json) projection of the same registry
 
 ## Live API (mock/demo — no payment processed)
 

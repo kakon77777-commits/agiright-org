@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from './PageHeader.astro';
+import { langPrefix, type Lang, pick } from '../data/site';
+import { DWRG_RESOURCES, type DwrgResourceType } from '../data/resources';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const prefix = langPrefix(lang);
+
+const title = pick({ en: 'Resource Directory', zh: '資源目錄' }, lang);
+const intro = pick(
+  {
+    en: 'This site’s public resources — protocols, dataset, repository — as one canonical graph, projected three ways: this page, /resources.json, and an RFC 9264 Linkset. Prototype of the DWRG (Dual-Surface Web Resource Graph) architecture (Neo.K / EveMissLab, GPT-5.6 Sol, v0.1) applied to AGIRight.org itself.',
+    zh: '本站的公開資源——協議、資料集、原始碼庫——以單一 canonical graph 呈現,投影成三種形式:這一頁、/resources.json,以及一份 RFC 9264 Linkset。這是 DWRG(雙端網頁資源圖)架構(Neo.K／EveMissLab、GPT-5.6 Sol,v0.1)套用在 AGIRight.org 自己身上的原型。',
+  },
+  lang
+);
+
+const TYPE_LABEL: Record<DwrgResourceType, { en: string; zh: string }> = {
+  website: { en: 'Website', zh: '網站' },
+  protocol: { en: 'Protocols', zh: '協議' },
+  dataset: { en: 'Dataset', zh: '資料集' },
+  repository: { en: 'Repository', zh: '原始碼庫' },
+};
+const TYPE_ORDER: DwrgResourceType[] = ['website', 'protocol', 'dataset', 'repository'];
+
+const grouped = TYPE_ORDER.map((type) => ({
+  type,
+  label: TYPE_LABEL[type],
+  items: DWRG_RESOURCES.filter((r) => r.type === type),
+})).filter((g) => g.items.length > 0);
+---
+
+<BaseLayout lang={lang} title={title} description={intro}>
+  <PageHeader kicker={pick({ en: 'DWRG prototype', zh: 'DWRG 原型' }, lang)} title={title} intro={intro} badges={['DWRG v0.1']} />
+  <div class="container-site py-14 md:py-20 space-y-14">
+    {
+      grouped.map((group) => (
+        <section>
+          <h2 class="spec-label !text-accent" data-reveal>
+            {pick(group.label, lang)}
+          </h2>
+          <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2" data-reveal>
+            {group.items.map((r) => (
+              <a
+                href={r.canonical_url.startsWith('https://agiright.org') ? r.canonical_url.replace('https://agiright.org', prefix) || '/' : r.canonical_url}
+                class="card group flex flex-col gap-2 p-6 no-underline cursor-pointer"
+                {...(r.canonical_url.startsWith('https://agiright.org') ? {} : { target: '_blank', rel: 'noopener' })}
+              >
+                <div class="flex items-center justify-between gap-3">
+                  <span class="font-serif text-lg font-semibold text-navy group-hover:text-primary transition-colors duration-200">{r.name}</span>
+                  <span class="badge badge-draft">{r.status}</span>
+                </div>
+                <p class="text-[0.85rem] text-muted">{pick(r.description, lang)}</p>
+                {r.links.length > 0 && (
+                  <p class="mt-1 font-mono text-[0.72rem] text-spec">
+                    {r.links.map((l) => l.rel).join(' · ')}
+                  </p>
+                )}
+              </a>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+
+    <section class="rounded-md border-l-2 border-line-strong bg-surface px-5 py-4" data-reveal>
+      <p class="spec-label">{pick({ en: 'Machine-readable projections', zh: '機器可讀投影' }, lang)}</p>
+      <p class="mt-2 max-w-2xl text-[0.85rem] text-ink-soft">
+        {pick(
+          {
+            en: 'Same registry, two more surfaces — generated together, never hand-edited separately, so they cannot drift from this page.',
+            zh: '同一份 registry,另外兩種呈現方式——一起產生,不分開手改,所以不會跟這一頁漂移不一致。',
+          },
+          lang
+        )}
+      </p>
+      <div class="mt-3 flex flex-wrap gap-x-6 gap-y-1">
+        <a href="/resources.json" class="font-mono text-[0.78rem] text-spec hover:text-navy transition-colors duration-200" download>
+          resources.json ↓
+        </a>
+        <a href="/resources.linkset.json" class="font-mono text-[0.78rem] text-spec hover:text-navy transition-colors duration-200" download>
+          resources.linkset.json (RFC 9264) ↓
+        </a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

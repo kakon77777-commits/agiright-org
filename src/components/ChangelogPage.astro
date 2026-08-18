@@ -14,6 +14,25 @@ const intro =
 
 const ENTRIES = [
   {
+    version: "v0.8.43",
+    date: "2026-08-18",
+    tag: { en: "DWRG prototype — /resources, /resources.json, /resources.linkset.json", zh: "DWRG 原型——/resources、/resources.json、/resources.linkset.json" },
+    items: {
+      en: [
+        "Prototyped DWRG (Dual-Surface Web Resource Graph, Neo.K / EveMissLab / GPT-5.6 Sol, v0.1) on this site itself, as a side-experiment distinct from the six rights protocols -- not a new AI-rights protocol, but a web-discovery architecture (its own invariants explicitly say \"Discoverable != Authoritative\" and \"DiscoveryPolicy != AccessControl\"). Source package checksummed and independently verified, including its two most load-bearing citations (RFC 8288 Web Linking, RFC 9264 Linkset) read directly against the RFC text before use.",
+        "New: src/data/resources.ts, ONE canonical registry (nine real resources -- the site itself, all six protocols, the /topics dataset, and the GitHub repo -- no example.com placeholders) generated into three surfaces that cannot drift apart because none of them is hand-edited separately: /resources (human-readable hub), /resources.json (DWRG JSON), and /resources.linkset.json (RFC 9264 application/linkset+json, using only IANA-registered relation types -- custom relations like \"documentation\" are kept out of the Linkset rather than misrepresented as standard, per the whitepaper's own §12).",
+        "New: scripts/dwrg-validate.mjs -- duplicate-id/URL checks, malformed-URL checks, a non-public-leak invariant, HTML/JSON cross-surface drift detection against the actual built output, and a check that every Linkset relation is genuinely IANA-registered. Deliberately broken on purpose and confirmed to fail before being trusted green (9/9 resources currently pass).",
+        "Scope note: v1 only covers the whitepaper's own Phase 0 (\"Static Public Registry\"). It does not yet enumerate the site's ~20 other /ai/*.json and /.well-known/*.json files as separate graph nodes -- those stay attached as typed links on the resource they document, and whether to eventually generate them FROM this registry (closing the exact cross-file drift class this session already caught three times) is a separate decision, not made today.",
+      ],
+      zh: [
+        "在本站自己身上原型化 DWRG(雙端網頁資源圖,Neo.K／EveMissLab、GPT-5.6 Sol,v0.1)——這是跟六個權利協議刻意分開的番外篇實驗,不是新的 AI 權利協議,而是網頁探索架構(它自己的不變項明講「找得到不等於有權威」「能否發現不等於能否存取」)。來源檔包做過 checksum 驗證,其中最關鍵的兩條引用(RFC 8288 Web Linking、RFC 9264 Linkset)在使用前直接對照 RFC 原文查證過。",
+        "新增:`src/data/resources.ts`,唯一的 canonical registry(九個真實資源——本站本身、全部六個協議、/topics 資料集、GitHub repo,沒有 example.com 佔位符),產生成三個不會互相漂移的投影(因為沒有任何一個是分開手改的):`/resources`(人類可讀首頁)、`/resources.json`(DWRG JSON)、`/resources.linkset.json`(RFC 9264 application/linkset+json,只用 IANA 註冊過的 relation type——像「documentation」這類自訂 relation 刻意不放進 Linkset,而不是假裝它已是標準,依照白皮書自己的 §12)。",
+        "新增:`scripts/dwrg-validate.mjs`——重複 id/URL 檢查、URL 格式檢查、非公開洩漏不變項、對照實際建置輸出的 HTML/JSON 跨層漂移偵測,以及每個 Linkset relation 是否真的有 IANA 註冊的檢查。故意破壞過並確認會失敗,才信任它顯示綠燈(目前 9/9 資源通過)。",
+        "範圍說明:v1 只涵蓋白皮書自己的 Phase 0(「靜態公開 Registry」)。還沒有把本站其他約 20 個 `/ai/*.json`、`/.well-known/*.json` 檔案都列成獨立的 graph 節點——那些暫時維持掛在對應資源底下的 typed link;未來要不要真的改成從這份 registry 產生那些檔案(徹底關掉這個 session 已經連續抓到三次的跨檔案版本漂移那一類問題),是之後另外的決定,今天沒有做。",
+      ],
+    },
+  },
+  {
     version: "v0.8.42",
     date: "2026-08-18",
     tag: { en: "Daily: 3 new /topics articles (111 -> 114)", zh: "每日常態:新增 3 篇 /topics 文章(111 -> 114)" },

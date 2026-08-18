@@ -1,0 +1,19 @@
+{
+  "report_version": "0.1",
+  "publisher": "AGIRight.org",
+  "check": "dwrg_validation",
+  "profile_reference": "DWRG_Dual_Surface_Web_Resource_Graph_Technical_Whitepaper_v0.1 §29",
+  "resources_checked": 9,
+  "checks_run": [
+    "duplicate_resource_id",
+    "duplicate_canonical_url",
+    "invalid_url",
+    "missing_required_metadata",
+    "non_public_leak",
+    "html_json_drift",
+    "unregistered_linkset_relation"
+  ],
+  "findings_count": 0,
+  "findings": [],
+  "status": "PASS"
+}

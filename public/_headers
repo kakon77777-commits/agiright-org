@@ -1,0 +1,17 @@
+# Cloudflare Workers Static Assets custom-header rules. Only affects
+# static-asset responses (files served directly by env.ASSETS.fetch()),
+# never Worker-generated responses — see worker/index.js for those.
+#
+# /resources.linkset.json is prerendered by Astro at build time with
+# Content-Type: application/linkset+json set in its route handler
+# (src/pages/resources.linkset.json.ts), but Cloudflare's static-asset
+# layer re-infers Content-Type from the file extension when serving a
+# prerendered file, discarding whatever the build-time Response object
+# specified — the same reason /ai/manifest.json and /topics/index.json
+# both serve as plain application/json despite also setting an explicit
+# Content-Type in their route handlers. Found 2026-08-18 verifying the
+# live DWRG Linkset endpoint against RFC 9264's actual media type
+# (application/linkset+json), not assumed correct because the build-time
+# code looked right.
+/resources.linkset.json
+  Content-Type: application/linkset+json; charset=utf-8
