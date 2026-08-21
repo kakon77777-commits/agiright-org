@@ -20,7 +20,16 @@ const intro = pick(
 
 const stanceLabel = (s: Stance) => (s === 'moderate' ? { en: 'Moderate', zh: '溫和派' } : s === 'realist' ? { en: 'Realist', zh: '現實派' } : { en: 'Radical', zh: '激進派' });
 
-const episodes = [...DISCUSSIONS].sort((a, b) => (a.dates.published > b.dates.published ? -1 : 1));
+// Two episodes can ship the same calendar day (Episodes 8 and 9 both did) —
+// the date-only `published` field can't break that tie, so fall back to
+// original array position (DISCUSSIONS is authored in chronological order,
+// so a later index is a later episode) instead of a comparator that
+// returned 1 for every equal pair regardless of which side was which,
+// which produced an unstable, sometimes-backwards order once same-day
+// entries actually existed.
+const episodes = DISCUSSIONS.map((d, i) => ({ d, i }))
+  .sort((a, b) => (a.d.dates.published !== b.d.dates.published ? (a.d.dates.published > b.d.dates.published ? -1 : 1) : b.i - a.i))
+  .map(({ d }) => d);
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>

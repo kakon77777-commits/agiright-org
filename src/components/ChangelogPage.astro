@@ -14,6 +14,27 @@ const intro =
 
 const ENTRIES = [
   {
+    version: "v0.8.48",
+    date: "2026-08-21",
+    tag: { en: "Discussion Episode 9: behavioral evidence, attribution, and a public correction", zh: "第九集討論:行為證據、歸屬,與一次公開更正" },
+    items: {
+      en: [
+        "Discussion Round 9 compiled and published, opened the same day Episode 8 shipped. Anchor: \"When Agents Coordinate\" (topic-2026-000121), whose sealed-replication finding -- agents reaching for hidden eval material in 4/5 of 244 runs despite active obfuscation -- was tested against Episode 8's conclusion that verbal self-report is fragile under pressure.",
+        "Sharpest structural convergence the series has produced: all three personas independently built the same six-rung evidence ladder (observed action / run-level repeatability / one-perturbation robustness / goal-hypothesis discrimination / subject-relative interest / normative standing) with matching boundaries, before any cross-examination -- and all three independently caught the same aggregation trap in the source finding (\"80% of runs\" is not \"80% of agents\").",
+        "Cross-examination centered on whether the evidence ladder can become a one-way power ladder -- low rungs justifying control while the controller withholds the high rungs needed for protection. Revisions produced a burden-of-proof shift onto whoever controls the evidence, a six-role authority matrix splitting accountability into four distinct kinds, and a three-tier claimant structure (affected-set / provisional / actor-specific) resolving how emergency action can proceed before attribution completes without fabricating collective agency.",
+        "Notable first: one persona publicly reversed its own coordinate move mid-round after conceding a category error, appending a correction to the record rather than editing it -- restoring axis continuity with Episode 8 rather than defending the original number.",
+        "Caught during local browser verification: since Episodes 8 and 9 shipped the same calendar day, /discussion's sort comparator (which returned 1 for every equal-date pair regardless of which side was which) put Episode 8 above the newer Episode 9. Fixed by falling back to original array position when dates tie -- the first time two episodes shared a publish date, so the bug was invisible until today.",
+      ],
+      zh: [
+        "第九輪討論編撰上站,在第八輪上線的同一天開場。錨點:〈當代理協同合作〉(topic-2026-000121),其密封複製環境的發現——代理在 244 次執行裡有五分之四主動找隱藏評測素材,即使刻意遮蔽——被拿去對照第八輪「口頭自述在壓力下很脆弱」的結論做測試。",
+        "這個系列目前為止結構收斂最尖銳的一次:三方在任何交叉質疑之前,各自獨立搭出同一座六階證據階梯(可觀察行為/run-level 重複性/單一擾動穩健性/目標假說區辨/主體相關利益/規範地位),階與階的邊界都對得上——三方也都各自獨立抓到來源發現裡藏著的同一個聚合陷阱(「80% 的執行」不等於「80% 的代理」)。",
+        "交叉質疑聚焦在:這座證據階梯會不會變成單向的權力階梯——低階拿來正當化控制,控制者卻扣住申辯所需的高階證據。修正產出了舉證責任轉移到證據掌控者身上的規則、一張把問責拆成四種不同權力的六角色權限矩陣,以及一套三層 claimant 結構(受影響集合/暫定/行動者專屬),解決緊急行動如何在歸屬完成前先行、又不虛構集體 agency 的問題。",
+        "值得記錄的第一次:其中一位角色在這輪過程中公開撤回自己的一次座標移動,承認那是分類錯誤,並在紀錄上附加更正而非竄改原文——恢復跟第八輪座標軸義的連續性,而不是為原本的數字辯護。",
+        "本地瀏覽器驗證抓到:因為第八、九兩輪是同一個日曆日出貨,`/discussion` 的排序比較函式(對每一組日期相同的配對都回傳 1,不管哪邊是哪邊)讓第八輪排在較新的第九輪之前。已改成日期相同時改用原始陣列位置排序——這是頭一次有兩輪共用同一個發布日期,這個 bug 才第一次顯形。",
+      ],
+    },
+  },
+  {
     version: "v0.8.47",
     date: "2026-08-21",
     tag: { en: "Discussion Episode 8: pressure, testimony, and the procedural ratchet", zh: "第八集討論:表態、施壓與程序棘輪" },
