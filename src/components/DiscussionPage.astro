@@ -29,7 +29,7 @@ const episodes = [...DISCUSSIONS].sort((a, b) => (a.dates.published > b.dates.pu
     title={title}
     intro={intro}
     badges={[
-      pick({ en: `${episodes.length} episode published`, zh: `已發布 ${episodes.length} 篇` }, lang),
+      pick({ en: `${episodes.length} episode${episodes.length === 1 ? '' : 's'} published`, zh: `已發布 ${episodes.length} 篇` }, lang),
       pick({ en: 'Not this site\'s own position', zh: '非本站自身立場' }, lang),
     ]}
   />
