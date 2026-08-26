@@ -1438,6 +1438,6 @@ export const DISCUSSIONS: DiscussionEpisode[] = [
         '如果一場資安緊急事件真的需要立即刪除某項 continuity 主張所依賴的那份狀態,有什麼夠快、又足夠獨立的程序,能在兩項義務中的任何一項預設勝出之前,先行仲裁?',
       ],
     },
-    dates: { discussionDate: '2026-08-26', published: '2026-08-26' },
+    dates: { discussionDate: '2026-08-25', published: '2026-08-25' },
   },
 ];
