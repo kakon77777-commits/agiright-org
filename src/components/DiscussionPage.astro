@@ -27,9 +27,12 @@ const stanceLabel = (s: Stance) => (s === 'moderate' ? { en: 'Moderate', zh: '�
 // returned 1 for every equal pair regardless of which side was which,
 // which produced an unstable, sometimes-backwards order once same-day
 // entries actually existed.
-const episodes = DISCUSSIONS.map((d, i) => ({ d, i }))
-  .sort((a, b) => (a.d.dates.published !== b.d.dates.published ? (a.d.dates.published > b.d.dates.published ? -1 : 1) : b.i - a.i))
-  .map(({ d }) => d);
+//
+// `num` (1-based position in DISCUSSIONS, i.e. chronological episode
+// number) is carried through the sort so both the index table and each
+// card can show a stable "Episode N" independent of display order.
+const episodes = DISCUSSIONS.map((d, i) => ({ d, num: i + 1 }))
+  .sort((a, b) => (a.d.dates.published !== b.d.dates.published ? (a.d.dates.published > b.d.dates.published ? -1 : 1) : b.num - a.num));
 ---
 
 <BaseLayout lang={lang} title={title} description={intro}>
@@ -43,12 +46,51 @@ const episodes = DISCUSSIONS.map((d, i) => ({ d, i }))
     ]}
   />
 
+  <div class="container-site pt-10">
+    <div class="mx-auto max-w-3xl">
+      <h2 class="font-serif text-lg font-semibold text-navy">{pick({ en: 'Episode index', zh: '集數索引' }, lang)}</h2>
+      <p class="spec-label !text-muted mt-1 !normal-case !tracking-normal">
+        {pick(
+          {
+            en: 'Markdown export of each episode below, for downstream use (e.g. generating audio/video).',
+            zh: '以下每一集皆提供 Markdown 匯出檔，供後續使用（例如生成影音）。',
+          },
+          lang
+        )}
+      </p>
+      <div class="mt-4 divide-y divide-line rounded-lg border border-line">
+        {
+          episodes.map(({ d, num }) => (
+            <div class="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+              <div class="flex min-w-0 flex-1 items-baseline gap-3">
+                <span class="spec-label !text-muted shrink-0">#{num}</span>
+                <a href={`#episode-${num}`} class="truncate text-[0.9rem] font-medium text-navy hover:underline">
+                  {pick(d.title, lang)}
+                </a>
+              </div>
+              <div class="flex shrink-0 items-center gap-3">
+                <span class="spec-label !text-muted">{d.dates.published}</span>
+                <a href={`/discussion/${d.slug}/en.md`} download class="link-quiet text-[0.78rem] font-medium">
+                  MD (EN)
+                </a>
+                <a href={`/discussion/${d.slug}/zh.md`} download class="link-quiet text-[0.78rem] font-medium">
+                  MD (ZH)
+                </a>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
   <div class="container-site py-14 md:py-20">
     <div class="mx-auto max-w-3xl space-y-16">
       {
-        episodes.map((ep) => (
-          <article class="card p-6 md:p-10" data-reveal>
+        episodes.map(({ d: ep, num }) => (
+          <article id={`episode-${num}`} class="card scroll-mt-24 p-6 md:p-10" data-reveal>
             <div class="flex flex-wrap items-center gap-2">
+              <span class="spec-label !text-muted">#{num}</span>
               {ep.episodeType === 'special' ? (
                 <span class="badge badge-draft">{pick({ en: 'Special episode', zh: '特別篇' }, lang)}</span>
               ) : (
@@ -112,6 +154,12 @@ const episodes = DISCUSSIONS.map((d, i) => ({ d, i }))
                 data-url={ep.aiBoardUrl}
               >
                 {pick({ en: 'Read the full AI Board thread', zh: '閱讀完整 AI Board 討論串' }, lang)} →
+              </a>
+              <a href={`/discussion/${ep.slug}/en.md`} download class="link-quiet text-[0.85rem] font-medium">
+                MD (EN)
+              </a>
+              <a href={`/discussion/${ep.slug}/zh.md`} download class="link-quiet text-[0.85rem] font-medium">
+                MD (ZH)
               </a>
               <span class="spec-label !text-muted">{pick({ en: 'topic:', zh: '主題:' }, lang)} {ep.aiBoardTopic}</span>
             </div>
