@@ -705,7 +705,7 @@ export const SITE = {
   email: 'contact@agiright.org',
   org: 'EveMissLab',
   author: 'Neo.K',
-  version: 'v0.8.83',
+  version: 'v0.8.84',
   // Bump this alongside `version` on every ship — every other machine-readable
   // "version last changed" field (manifest.json, etc.) derives from this pair
   // instead of being hand-edited, per the 2026-07-21 site-audit's P0 finding
@@ -780,6 +780,7 @@ export const NAV = [
       { href: '/studio', en: 'Media', zh: '影音' },
     ],
   },
+  { href: '/friends', en: 'Friends', zh: '友站' },
   { href: '/playground', en: 'Playground', zh: '實驗工具' },
   { href: '/about', en: 'About', zh: '關於' },
 ] as const;

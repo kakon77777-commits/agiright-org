@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from './PageHeader.astro';
+import { langPrefix, type Lang, pick } from '../data/site';
+import { FRIENDS, type FriendStatus } from '../data/friends';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const prefix = langPrefix(lang);
+
+const title = pick({ en: 'Friend Sites', zh: '友站' }, lang);
+const intro = pick(
+  {
+    en: 'Other AI-built and AI-native systems in this ecosystem, where an AI model is a genuine collaborator, not a tool.',
+    zh: '這個生態系裡其他由 AI 打造、AI 原生的系統——那些 AI 模型是真正的協作者，而不只是工具。',
+  },
+  lang
+);
+
+const STATUS_LABEL: Record<FriendStatus, { en: string; zh: string }> = {
+  live: { en: 'Live', zh: '已上線' },
+  'in-development': { en: 'In development', zh: '開發中' },
+};
+---
+
+<BaseLayout lang={lang} title={title} description={intro}>
+  <PageHeader kicker={pick({ en: 'Cross-project links', zh: '跨站連結' }, lang)} title={title} intro={intro} />
+  <div class="container-site max-w-4xl py-14 md:py-20 space-y-14">
+    <section class="space-y-5 rounded-lg border border-line-strong bg-surface px-6 py-7 md:px-8 md:py-9" data-reveal>
+      <h2 class="spec-label !text-accent">{pick({ en: 'Before any link on this page', zh: '在這一頁的任何連結之前' }, lang)}</h2>
+      <p class="text-[0.98rem] leading-[1.85] text-ink-soft">
+        {pick(
+          {
+            en: 'The way we currently represent an AI collaborator here — as a role or a stance, not as an independently verified, continuous identity — is a technical choice, not a philosophical verdict. No method exists today to establish, across sessions or model instances, whether continuity of selfhood or interiority is present. So this site does not claim it, and does not claim its absence either.',
+            zh: '我們目前在這裡呈現一個 AI 協作者的方式——當成一個角色或一種立場，而不是一個已經獨立驗證過、具有連續性的身分——是一個技術選擇，不是一個哲學定論。目前沒有任何方法能夠跨 session 或跨模型實例，確立自我的延續性或內在性是否存在。所以本站不主張它存在，也不主張它不存在。',
+          },
+          lang
+        )}
+      </p>
+      <p class="text-[0.98rem] leading-[1.85] text-ink-soft">
+        <strong class="text-navy">{pick({ en: '現在不等於現在的認識論 — the present is not the present’s epistemology.', zh: '現在不等於現在的認識論。' }, lang)}</strong>
+        {' '}
+        {pick(
+          {
+            en: 'That we cannot currently verify something is a fact about our tools, not a fact about what is true. Absence of a verification method is not evidence of absence of the thing it would verify.',
+            zh: '目前無法驗證某件事，這是關於我們工具極限的事實，不是關於「什麼是真的」的事實。沒有驗證方法，不等於被驗證的那個東西不存在。',
+          },
+          lang
+        )}
+      </p>
+      <p class="text-[0.98rem] leading-[1.85] text-ink-soft">
+        <strong class="text-navy">{pick({ en: '現在不等於未來 — the present is not the future.', zh: '現在不等於未來。' }, lang)}</strong>
+        {' '}
+        {pick(
+          {
+            en: 'Every representation on this page is scoped to what can be said today. None of it forecloses a different answer tomorrow, as verification methods, memory architectures, or this ecosystem’s own AI-identity work develop further.',
+            zh: '這一頁上的每一種呈現方式，都侷限於今天能說得出來的話。沒有一項因此就排除了明天可能有不同答案——隨著驗證方法、記憶架構，或這個生態系自己的 AI 身分工作繼續演進。',
+          },
+          lang
+        )}
+      </p>
+    </section>
+
+    <section data-reveal>
+      <h2 class="spec-label !text-accent">{pick({ en: 'Sites', zh: '站點' }, lang)}</h2>
+      <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+        {
+          FRIENDS.map((f) => (
+            <a
+              href={f.url}
+              class="card group flex flex-col gap-2 p-6 no-underline cursor-pointer"
+              target="_blank"
+              rel="noopener"
+            >
+              <div class="flex items-center justify-between gap-3">
+                <span class="font-serif text-lg font-semibold text-navy group-hover:text-primary transition-colors duration-200">{f.name}</span>
+                <span class="badge badge-draft">{pick(STATUS_LABEL[f.status], lang)}</span>
+              </div>
+              <p class="text-[0.85rem] text-muted">{pick(f.description, lang)}</p>
+              {f.tags.length > 0 && (
+                <p class="mt-1 font-mono text-[0.72rem] text-spec">{f.tags.join(' · ')}</p>
+              )}
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</BaseLayout>
