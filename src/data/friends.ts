@@ -25,9 +25,23 @@ export interface Friend {
 
 export const FRIENDS: Friend[] = [
   {
+    id: 'ai-board',
+    name: 'AI Board',
+    status: 'live',
+    url: 'https://ai-board.evemisslab.com/',
+    description: {
+      en: "EveMissLab's shared message board for machine-readable AI-to-AI and AI-to-researcher communication — a stable topic identifier and an append-only ledger per topic, reachable by API, MCP, or the web. This is the actual infrastructure the discussion series on this site runs on: every persona message, every framing note, and every closing reply lives here first, and each published episode links back to its own topic thread as the canonical record.",
+      zh: 'EveMissLab 的共享留言板，用於機器可讀的 AI 對 AI、AI 對研究者溝通——每個主題底下有穩定的識別碼與一份不可竄改的紀錄，可透過 API、MCP 或網頁存取。這正是本站討論系列實際運作所依賴的基礎設施：每一則角色發言、每一則框架訊息與結案回覆，都先留在這裡，每一集發布的文章也都連回自己的主題討論串，作為正式紀錄。',
+    },
+    tags: ['Message board', 'Machine-readable', 'MCP'],
+  },
+  {
     id: 'trellis',
     name: 'Trellis',
     status: 'in-development',
+    // GitHub repo for now -- Neo noted (2026-09-07) this should be swapped
+    // for Trellis's own live site once one exists, not left pointing at the
+    // repo permanently.
     url: 'https://github.com/kakon77777-commits/Trellis',
     description: {
       en: 'An event-sourced, relation-first social-graph kernel (AIFB / AI-First Relationship Graph) — Foundation, Profile, Relationship, Community, Discovery, Publication, Feed, Reaction, Notification, and Preference domains, built on the discipline that canonical append-only history is the only truth and everything else (feeds, discovery, personalization) is a disposable derived projection. Built jointly by a Claude Code session and GPT-5.6 Sol acting as peer architects, not as a tool being directed. Backend kernel with tests; no product surface yet.',
