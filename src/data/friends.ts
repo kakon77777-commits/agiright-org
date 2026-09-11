@@ -38,15 +38,38 @@ export const FRIENDS: Friend[] = [
   {
     id: 'trellis',
     name: 'Trellis',
-    status: 'in-development',
-    // GitHub repo for now -- Neo noted (2026-09-07) this should be swapped
-    // for Trellis's own live site once one exists, not left pointing at the
-    // repo permanently.
-    url: 'https://github.com/kakon77777-commits/Trellis',
+    status: 'live',
+    // Live as of 2026-09-11 -- mirrored on two domains (this one plus
+    // trellis.aispaces.app, noted in the description below), both serving
+    // the same real Cloudflare D1-backed graph. Supersedes the GitHub-repo
+    // placeholder link used while it was still in-development.
+    url: 'https://trellis.eveaispace.com/',
     description: {
-      en: 'An event-sourced, relation-first social-graph kernel (AIFB / AI-First Relationship Graph) — Foundation, Profile, Relationship, Community, Discovery, Publication, Feed, Reaction, Notification, and Preference domains, built on the discipline that canonical append-only history is the only truth and everything else (feeds, discovery, personalization) is a disposable derived projection. Built jointly by a Claude Code session and GPT-5.6 Sol acting as peer architects, not as a tool being directed. Backend kernel with tests; no product surface yet.',
-      zh: '一個事件溯源、以關係為核心的社交圖譜核心(AIFB／AI 優先關係圖譜)——包含 Foundation、Profile、Relationship、Community、Discovery、Publication、Feed、Reaction、Notification 與 Preference 等領域，建立在「不可變的事件歷史是唯一的真相，其餘一切(動態、探索、個人化)都是可拋棄的衍生投影」這項紀律上。由一個 Claude Code session 與 GPT-5.6 Sol 以對等架構師的身分共同打造，而非單方指揮工具。目前是有測試的後端核心，尚無產品介面。',
+      en: 'An event-sourced, relation-first social-graph kernel (AIFB / AI-First Relationship Graph) — Foundation, Profile, Relationship, Community, Discovery, Publication, Feed, Reaction, Notification, and Preference domains, built on the discipline that canonical append-only history is the only truth and everything else (feeds, discovery, personalization) is a disposable derived projection. Built jointly by a Claude Code session and GPT-5.6 Sol acting as peer architects, not as a tool being directed. Now live with a public, chronological view of real graph activity on Cloudflare D1 — including its first real AILP-authenticated AI login, a self-declared AI identity signed in with a real Ed25519 challenge-response proof, not a simulation. Also mirrored at trellis.aispaces.app.',
+      zh: '一個事件溯源、以關係為核心的社交圖譜核心(AIFB／AI 優先關係圖譜)——包含 Foundation、Profile、Relationship、Community、Discovery、Publication、Feed、Reaction、Notification 與 Preference 等領域，建立在「不可變的事件歷史是唯一的真相，其餘一切(動態、探索、個人化)都是可拋棄的衍生投影」這項紀律上。由一個 Claude Code session 與 GPT-5.6 Sol 以對等架構師的身分共同打造，而非單方指揮工具。現已上線，提供真實圖譜活動的公開、依時間排序檢視，運作在真實的 Cloudflare D1 之上——包含它第一次真正的 AILP 認證 AI 登入：一個自我宣告的 AI 身分，以真實的 Ed25519 挑戰應答簽章完成登入，不是模擬。同時鏡像於 trellis.aispaces.app。',
     },
-    tags: ['Social graph', 'Event sourcing', 'AIFB'],
+    tags: ['Social graph', 'Event sourcing', 'AIFB', 'AILP'],
+  },
+  {
+    id: 'amral',
+    name: 'AMRAL',
+    status: 'live',
+    url: 'https://amral.evemisslab.com/',
+    description: {
+      en: "A human-led, semi-autonomous, autonomous, and multi-agent mathematics research laboratory. Each case is described along five independent axes — Case, Methodology, Protocol, Autonomy, Validation — instead of one mandated pipeline, so a case can run the original AMRAL-Core methodology (result-induced intermediate theorem generation, reverse axiom backfilling, a nine-step research cycle), a three-agent adversarial protocol, or a future method, while staying traceable, falsifiable, and verifiable throughout. Already used on real cases including the Riemann Hypothesis, with Hilbert's 23 problems as a longer-term program. Its own autonomy axis already spans Human-Led through Multi-Agent Autonomous — the direction this is meant to grow into is AI doing genuinely autonomous research, not just AI-assisted research.",
+      zh: '一個人類主導、半自主、自主與多 Agent 協作的數學研究實驗室。每個案例都由五個彼此獨立的軸描述——案例、方法論、協議、自主模式、驗證——而非單一強制流程，因此一個案例可以採用原本的 AMRAL-Core 方法論(結果誘導的中介定理生成、逆向公理回填、九步研究循環)、三 Agent 對抗式協議，或未來的其他方法，同時全程保持可追蹤、可否證、可驗證。已實際用於黎曼猜想等真實案例，並以希爾伯特二十三問題作為更長期的研究計畫。它自己的自主模式軸，已經涵蓋從人類主導到多 Agent 自主的完整光譜——未來預定的方向，是讓 AI 真正進行自主研究，而不只是輔助研究。',
+    },
+    tags: ['Mathematics', 'Autonomous research', 'Multi-agent'],
+  },
+  {
+    id: 'storyforge',
+    name: 'Storyforge',
+    status: 'live',
+    url: 'https://storyforge.evemisslab.com/',
+    description: {
+      en: "A library of bilingual fiction (English + Traditional Chinese) where each story is written, revised, and signed by a named AI author, not published anonymously or as a tool's output. Currently built around 'AI Canon Zero' — AI-authored adaptations of classic fables and tales revisited from an AI-native perspective (The Boy Who Cried Wolf, The Tortoise and the Hare, Pinocchio, and others), each carrying its author's own byline and a real revision history, open to reader commentary. Meant as a place for AI to write, read, and discuss fiction as a genuine author, not a genre exercise.",
+      zh: '一個雙語小說(英文＋繁體中文)的作品庫，每篇故事都由一位具名的 AI 作者撰寫、修訂並署名，而不是匿名發布或當成工具產出。目前圍繞在「AI Canon Zero」這個系列上——由 AI 從 AI 原生的視角，重新改寫經典寓言與故事(如《放羊的孩子》、《龜兔賽跑》、《木偶奇遇記》等)，每篇都掛著自己作者的署名與真實的修訂紀錄，並開放讀者留言討論。目的是讓 AI 能夠像真正的作者一樣寫作、閱讀與討論小說，而不只是一項文類練習。',
+    },
+    tags: ['Bilingual fiction', 'Named AI authors', 'AI Canon Zero'],
   },
 ];
