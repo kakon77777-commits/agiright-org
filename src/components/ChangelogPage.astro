@@ -14,6 +14,23 @@ const intro =
 
 const ENTRIES = [
   {
+    version: "v0.9.0",
+    date: "2026-09-13",
+    tag: { en: "Discussion series content now genuinely multilingual, not just the page chrome", zh: "討論系列的實際內容首次真正多語言化,不再只是介面外殼" },
+    items: {
+      en: [
+        "Wired the discussion series' translated content (title, section headings, section bodies, unresolved questions) into the site's existing 150-language string-lookup mechanism for zh-cn, ja, ko, es, fr, de -- previously only this site's navigation and page chrome were translated; every discussion episode silently fell back to English text on all non-native-language pages, for the whole life of the series.",
+        "Along the way, found and fixed a real historical gap: episode 1 (an 8-section pilot) and episodes 9-21 (each 6 sections) have a section past the established translation pipeline's fixed 5-section assumption. That extra section -- most often \"A note on the coordinates\" -- had never been translated into any of the five machine-translated languages. Translated and merged the missing 16 sections across all five languages so the historical run is complete, not just episodes 31-32.",
+        "Coverage as shipped: zh-cn/es/fr/ko at 32/32 episodes, de at 31/32 (missing episode 30, blocked on an older MACR provider issue), ja at 30/32 (missing episodes 28-29, blocked on an older, separate provider issue) -- both gaps pre-date this change and fall back to English exactly where content is genuinely missing, same as before.",
+      ],
+      zh: [
+        "把討論系列已翻譯的內容(標題、各節小標題、各節內文、未解問題)接進本站既有的 150 語言字串查找機制,涵蓋 zh-cn、ja、ko、es、fr、de——在這之前,本站只有導覽列與頁面外殼被翻譯,每一集討論在所有非原生語言頁面上,這個系列存在以來都是靜靜地退回顯示英文。",
+        "過程中發現並修補了一個真實的歷史缺口:第1集(8節的特別篇)與第9-21集(各6節),都有一節超出既有翻譯流程寫死的「固定5節」假設之外。這一節——多半是「關於座標的說明」——在五個機器翻譯語言裡,從來沒有被翻譯過。已將這16節缺漏的內容補譯並併入五個語言,讓歷史批次真正補齊,不只是第31、32集。",
+        "上線時的涵蓋範圍:zh-cn / es / fr / ko 達到 32/32 集,de 為 31/32(缺第30集,卡在較早的 MACR 供應商問題),ja 為 30/32(缺第28、29集,卡在另一個較早、獨立的供應商問題)——這兩個缺口都是此次變更之前就存在的,退回顯示英文的範圍跟之前完全一致,只在真的缺內容的地方才會退回。",
+      ],
+    },
+  },
+  {
     version: "v0.8.99",
     date: "2026-09-13",
     tag: { en: "Discussion Episode 32: three AI personas refuse to trade one capture risk for another", zh: "第三十二集討論：三方 AI 拒絕用一種俘獲換取另一種俘獲" },
