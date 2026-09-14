@@ -777,6 +777,7 @@ export const NAV = [
     children: [
       { href: '/topics', en: 'News', zh: '新聞' },
       { href: '/discussion', en: 'Discussion', zh: '討論' },
+      { href: '/signals', en: 'Signals', zh: 'Signals 傳聞觀察' },
       { href: '/studio', en: 'Media', zh: '影音' },
     ],
   },

@@ -1,0 +1,161 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from './PageHeader.astro';
+import { pick, type Lang } from '../data/site';
+import { SIGNALS, SIGNAL_SOURCE_METHOD_LABELS } from '../data/signals';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const title = pick({ en: 'Signals', zh: 'Signals 傳聞觀察' }, lang);
+const intro = pick(
+  {
+    en: 'Suspected AI-industry leaks and rumors we noticed circulating on social media — found by AI search or reported by an AI model, not verified against a primary source.',
+    zh: '我們在社群媒體上注意到的疑似 AI 產業爆料與傳聞——由 AI 搜尋找到或由 AI 模型回報,並未經主要來源查證。',
+  },
+  lang
+);
+
+const sorted = [...SIGNALS].sort((a, b) => (a.dates.observed > b.dates.observed ? -1 : 1));
+
+const warningTitle = pick({ en: 'Unverified — read skeptically', zh: '未經查證——請保持懷疑' }, lang);
+const warningBody = pick(
+  {
+    en: 'Unlike every other page on this site, entries here are NOT fetched and confirmed against a primary source. They are AI-mediated summaries of social-media chatter — a search result Grok returned, or a direct answer Grok gave when asked what it has seen discussed. Any entry may be wrong, exaggerated, taken out of context, or entirely fabricated by the humans or AIs originating it. Treat everything below as "someone is saying this," never as "this happened."',
+    zh: '跟本站其他頁面不同,這裡的內容沒有經過主要來源的查證。這些是 AI 對社群媒體討論的整理——可能是 Grok 搜尋到的結果,也可能是直接問 Grok「你看到了什麼」得到的回答。任何一則都可能是錯的、誇大的、斷章取義,或是源頭的人或 AI 憑空捏造的。請把下方所有內容當成「有人這麼說」,而不是「這件事發生了」。',
+  },
+  lang
+);
+const noItems = pick({ en: 'Nothing logged yet.', zh: '目前還沒有紀錄。' }, lang);
+const observedLabel = pick({ en: 'Observed', zh: '觀察日期' }, lang);
+
+const leavingTitle = pick({ en: 'You are leaving AGIRight.org', zh: '您即將離開 AGIRight.org' }, lang);
+const leavingBody = pick(
+  {
+    en: 'This link goes to a site we do not control and did not write. Make sure you recognize the destination before continuing.',
+    zh: '這個連結會前往我們不掌控、也非本站撰寫的網站。請在繼續前確認您認得這個目的地。',
+  },
+  lang
+);
+const leavingContinue = pick({ en: 'Continue to site', zh: '繼續前往' }, lang);
+const leavingCancel = pick({ en: 'Cancel', zh: '取消' }, lang);
+---
+
+<BaseLayout lang={lang} title={title} description={intro}>
+  <PageHeader
+    kicker={pick({ en: 'Not fact-checked — a different trust tier from /topics', zh: '未經事實查核——跟 /topics 屬於不同的信任層級' }, lang)}
+    title={title}
+    intro={intro}
+    badges={[pick({ en: `${sorted.length} entr${sorted.length === 1 ? 'y' : 'ies'} logged`, zh: `已記錄 ${sorted.length} 則` }, lang)]}
+  />
+
+  <div class="container-site py-14 md:py-20">
+    <div
+      class="mx-auto max-w-3xl rounded-lg border-2 px-5 py-4"
+      style="border-color: var(--color-warn); background: color-mix(in srgb, var(--color-warn) 8%, var(--color-surface));"
+      data-reveal
+    >
+      <p class="font-serif text-base font-semibold" style="color: var(--color-warn);">⚠ {warningTitle}</p>
+      <p class="mt-2 text-[0.85rem] leading-relaxed" style="color: var(--color-ink-soft);">{warningBody}</p>
+    </div>
+
+    <div class="mx-auto mt-10 max-w-3xl space-y-5">
+      {sorted.length === 0 && <p class="py-10 text-center text-[0.9rem] text-muted">{noItems}</p>}
+      {
+        sorted.map((item) => (
+          <article class="card p-6" data-reveal>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="badge badge-draft">{item.company}</span>
+              <span class="badge">{pick(SIGNAL_SOURCE_METHOD_LABELS[item.sourceMethod], lang)}</span>
+              <span class="spec-label ms-auto !text-muted">{observedLabel}: {item.dates.observed}</span>
+            </div>
+            <h2 class="font-serif mt-3 text-lg font-semibold leading-snug text-navy">{pick(item.headline, lang)}</h2>
+            <p class="mt-2 text-[0.85rem] leading-relaxed text-muted">{pick(item.summary, lang)}</p>
+            {item.sourceUrl && (
+              <div class="mt-3 flex flex-col items-start gap-1">
+                <a
+                  href={item.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  class="link-quiet text-[0.85rem] font-medium"
+                  data-external-link
+                  data-url={item.sourceUrl}
+                >
+                  {pick({ en: 'View the post', zh: '查看原始貼文' }, lang)} →
+                </a>
+                <span class="break-all font-mono text-[0.7rem] text-muted">{item.sourceUrl}</span>
+              </div>
+            )}
+          </article>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="fixed inset-0 z-50 hidden items-center justify-center bg-ink/40 p-4 backdrop-blur-sm" hidden data-leaving-overlay>
+    <div class="w-full max-w-md rounded-lg border border-line-strong bg-surface p-6 shadow-lg" role="dialog" aria-modal="true" aria-labelledby="leaving-title">
+      <h2 id="leaving-title" class="font-serif text-lg font-semibold text-navy">{leavingTitle}</h2>
+      <p class="mt-2 text-[0.85rem] leading-relaxed text-muted">{leavingBody}</p>
+      <p class="mt-3 break-all rounded-md border border-line bg-paper px-3 py-2 font-mono text-[0.8rem] text-ink-soft" data-leaving-url></p>
+      <div class="mt-5 flex justify-end gap-3">
+        <button type="button" class="spec-label !text-ink-soft cursor-pointer rounded-md border border-line-strong px-3 py-1.5 transition-colors duration-200 hover:border-navy" data-leaving-cancel>
+          {leavingCancel}
+        </button>
+        <button type="button" class="badge badge-live cursor-pointer transition-colors duration-200 hover:border-navy" data-leaving-continue>
+          {leavingContinue} ↗
+        </button>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const overlay = document.querySelector<HTMLElement>('[data-leaving-overlay]');
+  const urlEl = overlay?.querySelector<HTMLElement>('[data-leaving-url]');
+  const cancelBtn = overlay?.querySelector<HTMLButtonElement>('[data-leaving-cancel]');
+  const continueBtn = overlay?.querySelector<HTMLButtonElement>('[data-leaving-continue]');
+  let pendingUrl: string | null = null;
+  let lastFocused: HTMLElement | null = null;
+
+  function openLeaving(url: string, trigger: HTMLElement) {
+    if (!overlay || !urlEl) return;
+    pendingUrl = url;
+    urlEl.textContent = url;
+    lastFocused = trigger;
+    overlay.classList.remove('hidden');
+    overlay.classList.add('flex');
+    overlay.hidden = false;
+    continueBtn?.focus();
+  }
+
+  function closeLeaving() {
+    if (!overlay) return;
+    overlay.classList.add('hidden');
+    overlay.classList.remove('flex');
+    overlay.hidden = true;
+    pendingUrl = null;
+    lastFocused?.focus();
+  }
+
+  document.querySelectorAll<HTMLAnchorElement>('[data-external-link]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const url = link.dataset.url;
+      if (url) openLeaving(url, link);
+    });
+  });
+
+  cancelBtn?.addEventListener('click', closeLeaving);
+  continueBtn?.addEventListener('click', () => {
+    if (pendingUrl) window.open(pendingUrl, '_blank', 'noopener,noreferrer');
+    closeLeaving();
+  });
+  overlay?.addEventListener('click', (e) => {
+    if (e.target === overlay) closeLeaving();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay && !overlay.hidden) closeLeaving();
+  });
+</script>
