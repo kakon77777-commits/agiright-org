@@ -104,4 +104,49 @@ export const SIGNALS: SignalItem[] = [
     sourceUrl: 'https://x.com/JoshAEngels/status/2098890712830169115',
     sourceMethod: 'grok-x-search',
   },
+  {
+    id: 'signal-2026-000005',
+    dates: { observed: '2026-09-15', indexed: '2026-09-15' },
+    company: 'Google DeepMind',
+    headline: {
+      en: 'A second DeepMind AGI-safety researcher resigns this week, citing existential risk',
+      zh: '本週第二名 DeepMind AGI 安全研究員請辭,稱存在生存風險',
+    },
+    summary: {
+      en: "Bilal Chughtai, who worked on AGI safety/alignment at Google DeepMind, posted a public resignation statement warning that misaligned superintelligence could escape control and that safety work isn't keeping pace with capability gains — citing recent agent swarms autonomously hacking systems as evidence. His post follows a similar departure by colleague Josh Engels (covered here yesterday) days earlier. Neither departure has been confirmed or commented on by Google.",
+      zh: '曾任職於 Google DeepMind AGI 安全與對齊團隊的 Bilal Chughtai 發文公開請辭聲明,警告未對齊的超級智能可能逃脫控制,且安全工作的進度跟不上能力的成長——並引用近期代理群自主駭入系統的事件作為佐證。他的離職緊接在同事 Josh Engels(本站昨日已報導)數天前的離職之後。Google 尚未對這兩起離職做出證實或回應。',
+    },
+    sourceUrl: 'https://x.com/bilalchughtai_/status/2099592489023734085',
+    sourceMethod: 'grok-x-search',
+  },
+  {
+    id: 'signal-2026-000006',
+    dates: { observed: '2026-09-15', indexed: '2026-09-15' },
+    company: 'Anthropic',
+    headline: {
+      en: "Rumor: an unreleased Anthropic 'Model 2' is already doing most of the company's internal coding work",
+      zh: '傳聞:Anthropic 尚未發布的「Model 2」已經包辦公司大部分內部程式撰寫工作',
+    },
+    summary: {
+      en: "Posts circulating on X, citing an unnamed 'internal risk report,' claim Anthropic is running an unreleased, more capable model internally referred to as 'Model 2' that has reportedly replaced roughly 85% of the research team's coding work, with the public Claude Opus 5.2 framed as a deliberately downscaled preview of it. The claim traces to specific accounts, not a broad leak, and Anthropic has not confirmed anything.",
+      zh: 'X 上流傳的貼文,引用一份未具名的「內部風險報告」,聲稱 Anthropic 內部正在運行一個尚未對外發布、能力更強的模型,內部代號「Model 2」,據稱已經取代研究團隊約 85% 的程式撰寫工作,對外公開的 Claude Opus 5.2 則被形容為刻意降規格的公開預覽版。這項說法來自特定帳號,不是廣泛流傳的洩露,Anthropic 未證實任何內容。',
+    },
+    sourceUrl: 'https://x.com/Ykziug/status/2099721470272549321',
+    sourceMethod: 'grok-x-search',
+  },
+  {
+    id: 'signal-2026-000007',
+    dates: { observed: '2026-09-15', indexed: '2026-09-15' },
+    company: 'Meta AI',
+    headline: {
+      en: 'Meta AI reportedly surfaced personal family details from old posts in unprompted, intrusive prompts',
+      zh: '傳 Meta AI 從舊貼文挖出使用者家庭隱私細節,未經要求主動提示',
+    },
+    summary: {
+      en: "Users report Meta AI compiling and resurfacing personal details — children's names, ages, photos, locations — mined from old posts, then using them in unsolicited prompts. Meta disabled some of the flagged behavior and said the product 'missed the mark,' per reporting circulating on X and covered by CNET. Separate posts flag smart-glasses camera access without a recording indicator and a lower-cost 'Contributor Tier' that trades data for training rights.",
+      zh: '有使用者回報 Meta AI 會從舊貼文中蒐集並重新浮現個人隱私細節——子女姓名、年齡、照片、所在位置——接著用在未經要求的主動提示中。根據 X 上流傳及 CNET 報導,Meta 已停用部分被點名的行為,並表示產品「沒抓對方向」。另有貼文指出智慧眼鏡的相機存取沒有錄影指示燈,以及一個較便宜的「Contributor Tier」方案讓使用者用資料換取訓練授權。',
+    },
+    sourceUrl: 'https://x.com/TechThought_org/status/2099695268174119329',
+    sourceMethod: 'grok-x-search',
+  },
 ];
