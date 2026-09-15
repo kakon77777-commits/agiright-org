@@ -12,6 +12,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--", "--port", "4332"],
       "port": 4332
+    },
+    {
+      "name": "agiright-wrangler",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["wrangler", "dev", "--port", "4333"],
+      "port": 4333
     }
   ]
 }

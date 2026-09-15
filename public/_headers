@@ -15,3 +15,16 @@
 # code looked right.
 /resources.linkset.json
   Content-Type: application/linkset+json; charset=utf-8
+
+# Same discarded-header pattern as above, hitting /discussion/<slug>/<lang>.md
+# (src/pages/discussion/[slug]/[lang].md.ts): the route handler already sets
+# Content-Type: text/markdown; charset=utf-8, but Cloudflare's static-asset
+# layer re-infers Content-Type from the .md extension with no charset,
+# so non-ASCII characters (em dashes, Chinese text in the zh.md files) were
+# served as mojibake to any downstream fetcher. Found + fixed 2026-09-15
+# checking both a brand-new export and a long-shipped one, identical result
+# on each — confirms the bug is in this serving layer, not any one episode's
+# data. Single splat per Cloudflare's _headers syntax (docs example: /*.jpg),
+# so one rule covers every slug and both languages.
+/discussion/*.md
+  Content-Type: text/markdown; charset=utf-8

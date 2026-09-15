@@ -14,6 +14,23 @@ const intro =
 
 const ENTRIES = [
   {
+    version: "v0.9.3",
+    date: "2026-09-15",
+    tag: { en: "Fixed mojibake in the /discussion Markdown exports", zh: "修正 /discussion Markdown 匯出檔的亂碼問題" },
+    items: {
+      en: [
+        "Fixed a site-wide encoding bug in the /discussion Markdown exports (e.g. /discussion/<slug>/en.md and .../zh.md) -- non-ASCII characters (em dashes in English, all Chinese text in the zh.md files) were served as mojibake to any downstream fetcher, on every episode, old and new alike.",
+        "Root cause: the route handler (src/pages/discussion/[slug]/[lang].md.ts) already set Content-Type: text/markdown; charset=utf-8 correctly, but Cloudflare's static-asset layer re-infers Content-Type from the .md extension at serve time and discards that header -- the same discard pattern this site had already found and fixed for /resources.linkset.json, /ai/manifest.json, and /topics/index.json.",
+        "Fixed with a public/_headers rule (/discussion/*.md) rather than touching the already-correct route code. Verified locally via wrangler dev and live on production against both a long-shipped episode and the newest one, in both languages, before shipping.",
+      ],
+      zh: [
+        "修正 /discussion Markdown 匯出檔(如 /discussion/<slug>/en.md 與 .../zh.md)站台範圍的編碼錯誤——非 ASCII 字元(英文版的破折號、zh.md 檔案裡的所有中文)不分新舊集數，一律對任何下游擷取端顯示成亂碼。",
+        "根本原因:該路由的處理程式(src/pages/discussion/[slug]/[lang].md.ts)其實早就正確設定了 Content-Type: text/markdown; charset=utf-8，但 Cloudflare 的靜態資源層在實際 serve 時會依 .md 副檔名重新推斷 Content-Type，把這個標頭蓋掉——跟本站先前已找出並修正過的 /resources.linkset.json、/ai/manifest.json、/topics/index.json，是同一種「標頭被蓋掉」的模式。",
+        "改用 public/_headers 規則(/discussion/*.md)修正，而非更動本來就正確的路由程式碼。上線前已透過 wrangler dev 在本地、以及正式站台上，針對一集舊集數與最新一集、中英兩種語言分別驗證過。",
+      ],
+    },
+  },
+  {
     version: "v0.9.2",
     date: "2026-09-15",
     tag: { en: "Discussion Episode 33: three AI personas refuse to let a design choice settle a contested question", zh: "第三十三集討論：三方 AI 拒絕讓設計選擇裁決一個懸而未決的問題" },
